@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>IKEA India – Home</title>
+    <link rel="icon" href="../assets/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFD700" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../home/style.css" />
+  </head>
+  <body>
+    <!-- PAGE LOADER -->
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+      <div class="nav-logo">
+        IKEA
+        <span>India – Home & Living</span>
+      </div>
+      <div class="nav-dots"><span></span><span></span><span></span></div>
+    </nav>
+
+    <!-- ===== LIVE TRANSACTIONS ===== -->
+    <div class="live-card">
+      <div class="live-header">
+        <i class="fa-solid fa-bolt"></i>
+        <span>Live Orders</span>
+      </div>
+      <div class="live-ticker">
+        <div class="ticker-track" id="tickerTrack"></div>
+      </div>
+    </div>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <i class="fa-solid fa-star"></i> New Arrivals 2026
+        </div>
+        <h1>Design Your <em>Perfect</em> Home with IKEA</h1>
+        <p>
+          Discover beautifully crafted, affordable furniture and home
+          accessories built for Indian living — smart, sustainable, and stylish.
+        </p>
+        <div class="hero-cta">
+          <a href="../products/index.html" class="btn-primary">
+            <i class="fa-solid fa-bag-shopping"></i> Shop Now
+          </a>
+          <a href="../home/index.html" class="btn-outline">Explore Rooms</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-img-frame">
+          <div class="hero-placeholder">
+            <i class="fa-solid fa-couch"></i>
+            <p>Beautiful Living Spaces</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STATS STRIP ===== -->
+    <div class="stats-strip">
+      <div class="stat-item reveal">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Products</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-num">3</div>
+        <div class="stat-label">India Stores</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-num">50K+</div>
+        <div class="stat-label">Happy Customers</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-num">4.8★</div>
+        <div class="stat-label">Avg. Rating</div>
+      </div>
+    </div>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="section">
+      <span class="section-tag">Our Story</span>
+      <h2 class="section-title">About <span class="highlight">IKEA</span></h2>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>
+            Founded in 1943 in Sweden by Ingvar Kamprad, IKEA began as a
+            mail-order business and grew into the world's largest furniture
+            retailer, operating in 60+ countries with a mission to create a
+            better everyday life for the many people.
+          </p>
+          <p>
+            IKEA India launched in 2018 with its first store in Hyderabad,
+            bringing Scandinavian design and affordability to millions of Indian
+            homes. Today, IKEA blends global quality with local sensibility.
+          </p>
+          <ul class="about-list">
+            <li>Flat-pack design for easy transport & assembly</li>
+            <li>Sustainable materials and eco-friendly production</li>
+            <li>Affordable pricing for all income levels</li>
+            <li>Wide range from furniture to home accessories</li>
+          </ul>
+        </div>
+        <div class="about-img-wrap reveal">
+          <div
+            style="
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(135deg, #ffd700 0%, #003087 100%);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+              font-size: 5rem;
+            "
+          >
+            <i class="fa-solid fa-store" style="color: var(--yellow)"></i>
+          </div>
+          <div class="about-img-tag">Est. 1943 · Sweden</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRODUCTS ===== -->
+    <section class="products-section">
+      <span class="section-tag">Collections</span>
+      <h2 class="section-title">Our Home Solutions</h2>
+      <div class="segment-grid">
+        <div class="segment-card reveal">
+          <div class="segment-img"><i class="fa-solid fa-couch"></i></div>
+          <div class="segment-body">
+            <h3>Living Room</h3>
+            <p>
+              Sofas, shelving units, coffee tables and more — designed for
+              comfort and contemporary style.
+            </p>
+            <span class="segment-link"
+              >Explore <i class="fa-solid fa-arrow-right"></i
+            ></span>
+          </div>
+        </div>
+        <div class="segment-card reveal">
+          <div class="segment-img"><i class="fa-solid fa-bed"></i></div>
+          <div class="segment-body">
+            <h3>Bedroom</h3>
+            <p>
+              Beds, wardrobes, mattresses and smart storage solutions for the
+              perfect sleep space.
+            </p>
+            <span class="segment-link"
+              >Explore <i class="fa-solid fa-arrow-right"></i
+            ></span>
+          </div>
+        </div>
+        <div class="segment-card reveal">
+          <div class="segment-img"><i class="fa-solid fa-utensils"></i></div>
+          <div class="segment-body">
+            <h3>Kitchen & Dining</h3>
+            <p>
+              Complete kitchen systems, cookware, tableware and dining sets for
+              every Indian kitchen.
+            </p>
+            <span class="segment-link"
+              >Explore <i class="fa-solid fa-arrow-right"></i
+            ></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== INDIA ===== -->
+    <section class="india-section">
+      <div class="india-grid">
+        <div class="india-img-wrap reveal">
+          <div
+            style="
+              width: 100%;
+              height: 100%;
+              background: var(--blue);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <i
+              class="fa-solid fa-building-columns"
+              style="font-size: 5rem; color: var(--yellow)"
+            ></i>
+          </div>
+        </div>
+        <div class="india-text reveal">
+          <span class="section-tag">Local Presence</span>
+          <h2 class="section-title">IKEA in India</h2>
+          <p
+            style="
+              color: var(--charcoal);
+              line-height: 1.8;
+              font-size: 1rem;
+              margin-bottom: 8px;
+              font-weight: 300;
+            "
+          >
+            IKEA continues to expand across India with stores in Hyderabad,
+            Mumbai, and Bengaluru — bringing Scandinavian design to Indian homes
+            at unbeatable prices.
+          </p>
+          <div class="feature-pills">
+            <div class="pill"><i class="fa-solid fa-leaf"></i> Sustainable</div>
+            <div class="pill">
+              <i class="fa-solid fa-rupee-sign"></i> Affordable
+            </div>
+            <div class="pill">
+              <i class="fa-solid fa-truck"></i> Home Delivery
+            </div>
+            <div class="pill">
+              <i class="fa-solid fa-screwdriver-wrench"></i> Assembly Service
+            </div>
+            <div class="pill">
+              <i class="fa-solid fa-rotate-left"></i> 365-day Returns
+            </div>
+            <div class="pill">
+              <i class="fa-solid fa-shield-halved"></i> Quality Assured
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== LEADERSHIP ===== -->
+    <section class="leadership-section">
+      <span class="section-tag">Team</span>
+      <h2 class="section-title">Leadership</h2>
+      <div class="leader-grid">
+        <div class="leader-card reveal">
+          <div class="leader-img"><i class="fa-solid fa-user-tie"></i></div>
+          <div class="leader-body">
+            <h3>Jesper Brodin</h3>
+            <div class="role">Group CEO</div>
+            <p>
+              Leading IKEA's global transformation towards sustainability and
+              digital retail.
+            </p>
+          </div>
+        </div>
+        <div class="leader-card reveal">
+          <div class="leader-img"><i class="fa-solid fa-user-tie"></i></div>
+          <div class="leader-body">
+            <h3>Susanne Pulverer</h3>
+            <div class="role">CEO, IKEA India</div>
+            <p>
+              Driving IKEA India's expansion and connecting Scandinavian design
+              with Indian culture.
+            </p>
+          </div>
+        </div>
+        <div class="leader-card reveal">
+          <div class="leader-img"><i class="fa-solid fa-user-tie"></i></div>
+          <div class="leader-body">
+            <h3>Ingrid Johansson</h3>
+            <div class="role">Chief Sustainability Officer</div>
+            <p>
+              Leading IKEA's commitment to becoming climate positive by 2030.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== INVESTORS ===== -->
+    <section class="investors-section">
+      <span class="section-tag">Ownership</span>
+      <h2 class="section-title">Behind IKEA</h2>
+      <div class="investor-grid">
+        <div class="investor-card reveal">
+          <div class="investor-pct">82.6%</div>
+          <div class="investor-name">Ingka Group</div>
+          <p>Largest IKEA franchisee, operates most retail stores worldwide</p>
+        </div>
+        <div class="investor-card reveal">
+          <div class="investor-pct">17.4%</div>
+          <div class="investor-name">Inter IKEA Group</div>
+          <p>Owns the IKEA concept, brand and franchisor of all IKEA stores</p>
+        </div>
+        <div class="investor-card reveal">
+          <div class="investor-pct">100%</div>
+          <div class="investor-name">Stichting INGKA Foundation</div>
+          <p>
+            Dutch charitable foundation — world's wealthiest charitable entity
+          </p>
+        </div>
+        <div class="investor-card reveal">
+          <div class="investor-pct">₹3200Cr</div>
+          <div class="investor-name">India Investment</div>
+          <p>Total planned investment in India stores and operations</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROMO BANNER ===== -->
+    <section class="promo-banner">
+      <h2>Start Building Your Dream Home Today</h2>
+      <p>Explore 500+ products across furniture, decor, kitchen & more</p>
+      <a
+        href="../products/index.html"
+        class="btn-primary"
+        style="display: inline-flex; position: relative; z-index: 1"
+      >
+        <i class="fa-solid fa-bag-shopping"></i> Shop Now
+      </a>
+    </section>
+
+    <!-- ===== BOTTOM NAV ===== -->
+    <nav class="bottom-nav">
+      <a href="../home/index.html" class="nav-btn active">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+      <a href="../products/index.html" class="nav-btn">
+        <i class="fa-solid fa-couch"></i>
+        <span>Products</span>
+      </a>
+      <a href="../referrals/index.html" class="nav-btn">
+        <i class="fa-solid fa-gift"></i>
+        <span>Referrals</span>
+      </a>
+      <a href="../profile/index.html" class="nav-btn">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <script src="../home/script.js"></script>
+  </body>
+</html>

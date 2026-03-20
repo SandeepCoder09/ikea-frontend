@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Referrals | IKEA India</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFD700" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../referrals/style.css" />
+  </head>
+  <body>
+    <!-- PAGE LOADER -->
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="toastMsg">Copied!</span>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="nav-logo">IKEA <span>India – Home & Living</span></div>
+      <a href="./my-team/my-team.html" class="view-team-btn">
+        <i class="fa-solid fa-people-group"></i> My Team
+      </a>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="breadcrumb">
+        <a href="../home/index.html">Home</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>Referrals</span>
+      </div>
+      <h1>Referral Center</h1>
+      <p>Invite friends & earn commission on every plan they buy</p>
+    </div>
+
+    <!-- STATS STRIP -->
+    <div class="stats-strip">
+      <div class="stat-box">
+        <div class="stat-box-num" id="statTotalRefs">0</div>
+        <div class="stat-box-label">Total Referrals</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-num" id="statTotalEarned">₹0</div>
+        <div class="stat-box-label">Total Earned</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-num" id="statActiveRefs">0</div>
+        <div class="stat-box-label">Active Refs</div>
+      </div>
+    </div>
+
+    <!-- CONTAINER -->
+    <div class="container">
+      <div class="page-title">
+        <i class="fa-solid fa-gift"></i> Referral Center
+      </div>
+
+      <!-- CARD 1: REFERRAL LINK -->
+      <div class="card" style="animation-delay: 0.05s">
+        <div class="card-header">
+          <i class="fa-solid fa-link"></i>
+          <span>Your Referral Link</span>
+        </div>
+        <div class="referral-box">
+          <div class="referral-input-wrap">
+            <i class="fa-solid fa-link"></i>
+            <input
+              type="text"
+              id="referralLink"
+              readonly
+              placeholder="Loading your referral link…"
+            />
+          </div>
+          <button id="copyBtn" onclick="copyReferralLink()">
+            <i class="fa-solid fa-copy"></i> Copy
+          </button>
+        </div>
+        <div class="share-row">
+          <button class="share-btn whatsapp" onclick="shareWhatsApp()">
+            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+          </button>
+          <button class="share-btn telegram" onclick="shareTelegram()">
+            <i class="fa-brands fa-telegram"></i> Telegram
+          </button>
+          <button class="share-btn" onclick="shareNative()">
+            <i class="fa-solid fa-share-nodes"></i> Share
+          </button>
+        </div>
+        <div class="qr-section">
+          <div class="qr-box">
+            <i class="fa-solid fa-qrcode"></i>
+            <span>Your QR</span>
+          </div>
+          <div class="qr-info">
+            <p>
+              Share your QR code with friends so they can scan and register
+              instantly using your referral link.
+            </p>
+            <button
+              class="qr-download"
+              onclick="showToast('QR downloaded!','fa-download')"
+            >
+              <i class="fa-solid fa-download"></i> Download QR
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2: HOW COMMISSION WORKS -->
+      <div class="card" style="animation-delay: 0.1s">
+        <div class="card-header">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+          <span>How Commission Works</span>
+        </div>
+        <div class="reward-item">
+          <div class="reward-item-head">
+            <div class="reward-icon yellow">
+              <i class="fa-solid fa-gift"></i>
+            </div>
+            <strong>🎁 First Referral Activation</strong>
+          </div>
+          <p>
+            When your referral purchases a product and activates daily income,
+            you become eligible for commission.
+          </p>
+        </div>
+        <div class="reward-item">
+          <div class="reward-item-head">
+            <div class="reward-icon blue">
+              <i class="fa-solid fa-calendar-day"></i>
+            </div>
+            <strong>💰 Daily Commission System</strong>
+          </div>
+          <p>
+            Commission is calculated from your referral's daily income, credited
+            automatically every day.
+          </p>
+        </div>
+        <div class="reward-item">
+          <div class="reward-item-head">
+            <div class="reward-icon green">
+              <i class="fa-solid fa-chart-bar"></i>
+            </div>
+            <strong>📊 Example</strong>
+          </div>
+          <div class="level-pills">
+            <div class="level-pill l1">
+              <span>Level 1</span><span class="pct">3%</span>
+            </div>
+            <div class="level-pill l2">
+              <span>Level 2</span><span class="pct">1%</span>
+            </div>
+            <div class="level-pill l3">
+              <span>Level 3</span><span class="pct">1%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3: HOW IT WORKS -->
+      <div class="card" style="animation-delay: 0.15s">
+        <div class="card-header">
+          <i class="fa-solid fa-list-ol"></i>
+          <span>How It Works</span>
+        </div>
+        <div class="steps-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Copy Your Referral Link</div>
+              <div class="step-desc">
+                Share your unique link or QR code with friends and family.
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Friend Registers & Buys a Plan</div>
+              <div class="step-desc">
+                Your friend signs up using your link and purchases any IKEA
+                investment plan.
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">You Earn Daily Commission</div>
+              <div class="step-desc">
+                As soon as their plan is active you automatically earn daily
+                commission in your wallet.
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Withdraw Anytime</div>
+              <div class="step-desc">
+                Withdraw your commission earnings directly to your bank account
+                or UPI.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4: MY REFERRALS -->
+      <div class="card" style="animation-delay: 0.2s">
+        <div class="card-header">
+          <i class="fa-solid fa-people-group"></i>
+          <span>My Referrals</span>
+        </div>
+        <div class="referral-list" id="referralList"></div>
+      </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+      <a href="../home/index.html" class="nav-btn"
+        ><i class="fa-solid fa-house"></i><span>Home</span></a
+      >
+      <a href="../products/index.html" class="nav-btn"
+        ><i class="fa-solid fa-couch"></i><span>Products</span></a
+      >
+      <a href="../referrals/index.html" class="nav-btn active"
+        ><i class="fa-solid fa-gift"></i><span>Referrals</span></a
+      >
+      <a href="../profile/index.html" class="nav-btn"
+        ><i class="fa-solid fa-user"></i><span>Profile</span></a
+      >
+    </nav>
+
+    <script src="../referrals/script.js"></script>
+  </body>
+</html>

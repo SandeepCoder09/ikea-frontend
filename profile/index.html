@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFD700" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>Profile | IKEA India</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../profile/style.css" />
+  </head>
+  <body>
+    <!-- LOADER -->
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="toastMsg">Done!</span>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="nav-logo">IKEA <span>India – Home & Living</span></div>
+      <button class="logout-btn" onclick="logout()" title="Logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </nav>
+
+    <!-- ══ COVER ══ -->
+    <div class="profile-cover">
+      <div class="cover-inner">
+        <div class="avatar-ring">
+          <div class="avatar-circle" id="avatarCircle">
+            <img
+              src="../assets/profile.jpg"
+              onerror="this.style.display='none'; document.getElementById('avatarInitials').style.display='flex';"
+              alt="Profile"
+              id="avatarImg"
+            />
+            <span
+              id="avatarInitials"
+              style="
+                display: none;
+                position: absolute;
+                font-family: var(--font-display);
+                font-size: 2rem;
+                font-weight: 800;
+                color: var(--blue);
+              "
+              >AK</span
+            >
+          </div>
+        </div>
+        <div class="cover-name" id="coverName">Loading…</div>
+        <div class="cover-meta">
+          <div class="cover-meta-row">
+            <i class="fa-solid fa-id-card"></i> ID: <span id="coverUid">—</span>
+          </div>
+          <div class="cover-meta-row">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+            <span id="coverMobile">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ WALLET CARD ══ -->
+    <div class="wallet-card-wrap">
+      <div class="wallet-card">
+        <div class="wallet-top">
+          <div class="wallet-label">
+            <i class="fa-solid fa-wallet"></i> Current Balance
+          </div>
+          <button
+            class="refresh-btn"
+            id="refreshBtn"
+            onclick="refreshWallet()"
+            title="Refresh"
+          >
+            <i class="fa-solid fa-rotate-right"></i>
+          </button>
+        </div>
+        <div class="wallet-balance">
+          <sup>₹</sup><span id="walletBalance">0.00</span>
+        </div>
+        <div class="wallet-actions">
+          <a
+            href="../wallet/recharge.html"
+            class="wallet-action-btn btn-deposit"
+          >
+            <i class="fa-solid fa-plus"></i> Deposit
+          </a>
+          <a
+            href="../wallet/withdraw.html"
+            class="wallet-action-btn btn-withdraw"
+          >
+            <i class="fa-solid fa-arrow-up-from-bracket"></i> Withdraw
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ QUICK STATS ══ -->
+    <div class="quick-stats">
+      <div class="qs-item">
+        <div class="qs-icon">🛋️</div>
+        <div class="qs-num" id="qsPlans">0</div>
+        <div class="qs-lbl">Plans</div>
+      </div>
+      <div class="qs-item">
+        <div class="qs-icon">👥</div>
+        <div class="qs-num" id="qsTeam">0</div>
+        <div class="qs-lbl">Team</div>
+      </div>
+      <div class="qs-item">
+        <div class="qs-icon">💰</div>
+        <div class="qs-num" id="qsEarned">₹0</div>
+        <div class="qs-lbl">Earned</div>
+      </div>
+    </div>
+
+    <!-- ══ MENU ══ -->
+    <div class="section-head"><h3>My Account</h3></div>
+
+    <div class="menu-list">
+      <a
+        href="../wallet/bind-card.html"
+        class="menu-item"
+        style="animation-delay: 0.05s"
+      >
+        <div class="menu-icon ic-blue">
+          <i class="fa-solid fa-credit-card"></i>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">My Bank Cards</div>
+          <div class="menu-sub">Manage linked bank accounts</div>
+        </div>
+        <div class="menu-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+      </a>
+
+      <a
+        href="../wallet/transactions.html"
+        class="menu-item"
+        style="animation-delay: 0.1s"
+      >
+        <div class="menu-icon ic-yellow">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Transaction History</div>
+          <div class="menu-sub">View all deposits & withdrawals</div>
+        </div>
+        <div class="menu-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+      </a>
+
+      <a
+        href="../products/my-products.html"
+        class="menu-item"
+        style="animation-delay: 0.15s"
+      >
+        <div class="menu-icon ic-green">
+          <i class="fa-solid fa-box-open"></i>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">My Plans</div>
+          <div class="menu-sub">Track earnings & claim returns</div>
+        </div>
+        <div class="menu-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+      </a>
+
+      <a
+        href="../gift/gift.html"
+        class="menu-item"
+        style="animation-delay: 0.2s"
+      >
+        <div class="menu-icon ic-orange"><i class="fa-solid fa-gift"></i></div>
+        <div class="menu-text">
+          <div class="menu-title">Redeem Gift Code</div>
+          <div class="menu-sub">Enter your promo or gift code</div>
+        </div>
+        <div class="menu-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+      </a>
+    </div>
+
+    <div class="section-head" style="padding-top: 20px"><h3>Support</h3></div>
+
+    <div class="menu-list">
+      <a
+        href="https://t.me/officialikea"
+        target="_blank"
+        class="menu-item"
+        style="animation-delay: 0.25s"
+      >
+        <div class="menu-icon ic-teal">
+          <i class="fa-brands fa-telegram"></i>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Join Official Channel</div>
+          <div class="menu-sub">Latest updates & announcements</div>
+        </div>
+        <div class="menu-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+      </a>
+
+      <a
+        href="https://t.me/ikeamanager"
+        target="_blank"
+        class="menu-item"
+        style="animation-delay: 0.3s"
+      >
+        <div class="menu-icon ic-purple">
+          <i class="fa-solid fa-headset"></i>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Customer Service</div>
+          <div class="menu-sub">24/7 support via Telegram</div>
+        </div>
+        <div class="menu-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+      </a>
+    </div>
+
+    <!-- ══ LOGOUT BANNER ══ -->
+    <div class="logout-banner" onclick="logout()">
+      <div class="logout-icon">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </div>
+      <div class="logout-text">
+        <div class="logout-title">Logout</div>
+        <div class="logout-sub">Sign out of your IKEA account</div>
+      </div>
+      <i class="fa-solid fa-chevron-right logout-arrow"></i>
+    </div>
+
+    <!-- version -->
+    <div class="version-tag">
+      IKEA India &nbsp;·&nbsp; <strong>v1.0.0</strong>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+      <a href="../home/index.html" class="nav-btn"
+        ><i class="fa-solid fa-house"></i><span>Home</span></a
+      >
+      <a href="../products/index.html" class="nav-btn"
+        ><i class="fa-solid fa-couch"></i><span>Products</span></a
+      >
+      <a href="../referrals/index.html" class="nav-btn"
+        ><i class="fa-solid fa-gift"></i><span>Referrals</span></a
+      >
+      <a href="../profile/index.html" class="nav-btn active"
+        ><i class="fa-solid fa-user"></i><span>Profile</span></a
+      >
+    </nav>
+
+    <script src="../profile/script.js"></script>
+  </body>
+</html>

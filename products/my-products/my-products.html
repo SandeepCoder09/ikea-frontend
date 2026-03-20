@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFD700" />
+    <title>My Plans | IKEA India</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../products/my-products/my-products.css" />
+  </head>
+  <body>
+    <!-- PAGE LOADER -->
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="toastMsg">Success!</span>
+    </div>
+
+    <!-- PROCESSING SCREEN -->
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loader-ring"></div>
+      <p>Processing Claim</p>
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- ACTION MODAL -->
+    <div class="modal-overlay" id="actionModal">
+      <div class="action-modal-box">
+        <div class="action-icon success" id="actionIcon">
+          <i class="fa-solid fa-check" id="actionIconSymbol"></i>
+        </div>
+        <div class="action-title" id="actionTitle">Title</div>
+        <div class="action-msg" id="actionMessage">Message</div>
+        <div class="action-buttons">
+          <button class="action-close" onclick="closeActionModal()">
+            Close
+          </button>
+          <button
+            class="action-ok"
+            id="actionOkBtn"
+            onclick="closeActionModal()"
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="nav-logo">IKEA <span>India – Home & Living</span></div>
+      <a href="../index.html" class="nav-back-btn">
+        <i class="fa-solid fa-arrow-left"></i> Buy Plans
+      </a>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="breadcrumb">
+        <a href="../home/index.html">Home</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <a href="../products/index.html">Plans</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>My Plans</span>
+      </div>
+      <h1>My Investment Plans</h1>
+      <p>Track your earnings and claim daily returns</p>
+    </div>
+
+    <!-- SUMMARY STRIP -->
+    <div class="summary-strip" id="summaryStrip">
+      <div class="summary-card total-inv">
+        <div class="summary-icon"><i class="fa-solid fa-wallet"></i></div>
+        <div class="summary-num" id="sumTotalInvested">₹0</div>
+        <div class="summary-label">Total Invested</div>
+      </div>
+      <div class="summary-card total-earn">
+        <div class="summary-icon">
+          <i class="fa-solid fa-circle-dollar-to-slot"></i>
+        </div>
+        <div class="summary-num" id="sumTotalEarned">₹0</div>
+        <div class="summary-label">Total Earned</div>
+      </div>
+      <div class="summary-card active-plans">
+        <div class="summary-icon"><i class="fa-solid fa-bolt"></i></div>
+        <div class="summary-num" id="sumActivePlans">0</div>
+        <div class="summary-label">Active Plans</div>
+      </div>
+      <div class="summary-card pending-earn">
+        <div class="summary-icon">
+          <i class="fa-solid fa-hourglass-half"></i>
+        </div>
+        <div class="summary-num" id="sumPendingEarnings">₹0</div>
+        <div class="summary-label">Claimable Today</div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs-row">
+      <button class="tab-btn active" onclick="switchTab('all',this)">
+        All Plans <span class="count-badge" id="tabCountAll">0</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('active',this)">
+        Active <span class="count-badge" id="tabCountActive">0</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('expired',this)">
+        Expired <span class="count-badge" id="tabCountExpired">0</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('pending',this)">
+        Pending <span class="count-badge" id="tabCountPending">0</span>
+      </button>
+    </div>
+
+    <!-- PLANS AREA -->
+    <div class="plans-area">
+      <div class="plans-grid" id="plansGrid"></div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+      <a href="../home/index.html" class="nav-btn"
+        ><i class="fa-solid fa-house"></i><span>Home</span></a
+      >
+      <a href="../products/index.html" class="nav-btn active"
+        ><i class="fa-solid fa-couch"></i><span>Products</span></a
+      >
+      <a href="../referrals/index.html" class="nav-btn"
+        ><i class="fa-solid fa-gift"></i><span>Referrals</span></a
+      >
+      <a href="../profile/index.html" class="nav-btn"
+        ><i class="fa-solid fa-user"></i><span>Profile</span></a
+      >
+    </nav>
+
+    <script src="../../products/my-products/my-products.js"></script>
+  </body>
+</html>

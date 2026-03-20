@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFD700" />
+    <title>Investment Plans | IKEA India</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../products/style.css" />
+  </head>
+  <body>
+    <!-- PAGE LOADER -->
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="toastMsg">Success!</span>
+    </div>
+
+    <!-- PAYMENT LOADING SCREEN -->
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loader-ring"></div>
+      <p>Processing Payment</p>
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- BUY MODAL -->
+    <div class="modal-overlay" id="buyModal">
+      <div class="modal-box">
+        <div class="modal-top">
+          <div class="modal-plan-icon" id="modalIcon">
+            <i class="fa-solid fa-box"></i>
+          </div>
+          <div class="modal-plan-name" id="modalProductName">Plan Name</div>
+          <div class="modal-plan-sub" id="modalPlanSub">Investment Plan</div>
+        </div>
+        <div class="modal-body">
+          <div class="modal-row">
+            <span><i class="fa-solid fa-tag"></i> Plan Price</span>
+            <strong>₹<span id="modalPrice">0</span></strong>
+          </div>
+          <div class="modal-row">
+            <span><i class="fa-solid fa-calendar-day"></i> Daily Return</span>
+            <strong>₹<span id="modalDaily">0</span></strong>
+          </div>
+          <div class="modal-row">
+            <span><i class="fa-solid fa-clock"></i> Validity</span>
+            <strong><span id="modalValidity">0</span> Days</strong>
+          </div>
+          <div class="modal-row">
+            <span
+              ><i class="fa-solid fa-hourglass-half"></i> Remaining
+              Balance</span
+            >
+            <strong><span id="modalRemaining">Checking…</span></strong>
+          </div>
+          <div class="modal-total-row">
+            <span><i class="fa-solid fa-trophy"></i> Total Return</span>
+            <strong>₹<span id="modalTotal">0</span></strong>
+          </div>
+        </div>
+        <div class="modal-buttons">
+          <button class="modal-close-btn" onclick="closeModal('buyModal')">
+            Cancel
+          </button>
+          <button
+            class="modal-buy-btn"
+            id="confirmBuyBtn"
+            onclick="confirmPurchase()"
+          >
+            <i class="fa-solid fa-lock"></i> Confirm Buy
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTION MODAL -->
+    <div class="modal-overlay" id="actionModal">
+      <div class="action-modal-box">
+        <div class="action-icon success" id="actionIcon">
+          <i class="fa-solid fa-check" id="actionIconSymbol"></i>
+        </div>
+        <div class="action-title" id="actionTitle">Title</div>
+        <div class="action-msg" id="actionMessage">Message</div>
+        <div class="action-buttons">
+          <button class="action-close" onclick="closeModal('actionModal')">
+            Close
+          </button>
+          <button
+            class="action-ok"
+            id="actionRightBtn"
+            onclick="closeModal('actionModal')"
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="nav-logo">IKEA <span>India – Home & Living</span></div>
+      <button
+        class="my-products-btn"
+        onclick="window.location.href='../products/my-products/my-products.html'"
+      >
+        <i class="fa-solid fa-box"></i> My Plans
+      </button>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <section class="pricing-header">
+      <div class="badge"><i class="fa-solid fa-star"></i> Exclusive Plans</div>
+      <h1>Our Premium Investment Plans</h1>
+      <p>Select the perfect plan and start earning daily returns</p>
+      <div class="header-stats">
+        <div class="header-stat">
+          <div class="header-stat-num">6</div>
+          <div class="header-stat-label">Plans Available</div>
+        </div>
+        <div class="header-stat">
+          <div class="header-stat-num">₹80</div>
+          <div class="header-stat-label">Min Daily Return</div>
+        </div>
+        <div class="header-stat">
+          <div class="header-stat-num">50K+</div>
+          <div class="header-stat-label">Active Members</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTER TABS -->
+    <div class="filter-tabs" id="filterTabs">
+      <button class="tab-btn active" onclick="filterPlans('all', this)">
+        All Plans
+      </button>
+      <button class="tab-btn" onclick="filterPlans('starter', this)">
+        Starter
+      </button>
+      <button class="tab-btn" onclick="filterPlans('mid', this)">
+        Mid Range
+      </button>
+      <button class="tab-btn" onclick="filterPlans('premium', this)">
+        Premium
+      </button>
+    </div>
+
+    <!-- PLANS CONTAINER -->
+    <section class="pricing-container" id="productsContainer"></section>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+      <a href="../home/index.html" class="nav-btn"
+        ><i class="fa-solid fa-house"></i><span>Home</span></a
+      >
+      <a href="../products/index.html" class="nav-btn active"
+        ><i class="fa-solid fa-couch"></i><span>Products</span></a
+      >
+      <a href="../referrals/index.html" class="nav-btn"
+        ><i class="fa-solid fa-gift"></i><span>Referrals</span></a
+      >
+      <a href="../profile/index.html" class="nav-btn"
+        ><i class="fa-solid fa-user"></i><span>Profile</span></a
+      >
+    </nav>
+
+    <script src="../products/script.js"></script>
+  </body>
+</html>

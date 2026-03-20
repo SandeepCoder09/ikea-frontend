@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Team | IKEA India</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFD700" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../my-team/my-team.css" />
+  </head>
+  <body>
+    <!-- LOADER -->
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+
+    <!-- TOP NAV -->
+    <div class="top-nav">
+      <button class="back-btn" onclick="history.back()">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </button>
+      <span class="nav-title">My Team</span>
+      <div class="nav-spacer"></div>
+    </div>
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+      <div class="hero-top">
+        <div class="hero-avatar" id="heroAvatar">IK</div>
+        <div>
+          <div class="hero-user-name" id="heroName">IKEA Member</div>
+          <div class="hero-user-id" id="heroId">ID: IKEA-0000</div>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hs-item">
+          <div class="hs-num" id="hsTotalMembers">0</div>
+          <div class="hs-lbl">Members</div>
+        </div>
+        <div class="hs-item">
+          <div class="hs-num" id="hsTotalRecharge">₹0</div>
+          <div class="hs-lbl">Recharge</div>
+        </div>
+        <div class="hs-item">
+          <div class="hs-num" id="hsTotalComm">₹0</div>
+          <div class="hs-lbl">Commission</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOATING CARD -->
+    <div class="float-card-wrap">
+      <div class="float-card">
+        <!-- Qualification -->
+        <div class="qual-strip" id="qualStrip">
+          <div class="qual-dot" id="qualDot"></div>
+          <span class="qual-text" id="qualText">Checking…</span>
+          <span class="qual-badge" id="qualBadge">–</span>
+        </div>
+
+        <!-- Income Overview -->
+        <div class="income-grid">
+          <div class="ig-item span2">
+            <div class="ig-label">
+              <i class="fa-solid fa-trophy"></i> Total Income
+            </div>
+            <div class="ig-value" id="igTotal">₹0</div>
+          </div>
+          <div class="ig-item green">
+            <div class="ig-label"><i class="fa-solid fa-sun"></i> Today</div>
+            <div class="ig-value" id="igToday">₹0</div>
+          </div>
+          <div class="ig-item">
+            <div class="ig-label">
+              <i class="fa-solid fa-moon"></i> Yesterday
+            </div>
+            <div class="ig-value" id="igYesterday">₹0</div>
+          </div>
+          <div class="ig-item yellow">
+            <div class="ig-label">
+              <i class="fa-solid fa-calendar-week"></i> This Week
+            </div>
+            <div class="ig-value" id="igWeek">₹0</div>
+          </div>
+          <div class="ig-item">
+            <div class="ig-label">
+              <i class="fa-solid fa-calendar"></i> This Month
+            </div>
+            <div class="ig-value" id="igMonth">₹0</div>
+          </div>
+        </div>
+
+        <!-- Level Income -->
+        <div class="level-row-wrap">
+          <div class="level-row-title">Level-wise Income</div>
+          <div class="level-row">
+            <div class="lvl-card l1">
+              <div class="lvl-pct">3%</div>
+              <div class="lvl-name">Level 1</div>
+              <div class="lvl-amt" id="lvl1Amt">₹0</div>
+            </div>
+            <div class="lvl-card l2">
+              <div class="lvl-pct">1%</div>
+              <div class="lvl-name">Level 2</div>
+              <div class="lvl-amt" id="lvl2Amt">₹0</div>
+            </div>
+            <div class="lvl-card l3">
+              <div class="lvl-pct">1%</div>
+              <div class="lvl-name">Level 3</div>
+              <div class="lvl-amt" id="lvl3Amt">₹0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="members-section">
+          <div class="ms-top">
+            <span class="ms-title">Team Members</span>
+            <span class="ms-count" id="msCount">0</span>
+          </div>
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search by User ID…"
+              oninput="filterMembers()"
+            />
+          </div>
+          <div class="level-pills">
+            <button class="lp-btn active" onclick="setLevel('all',this)">
+              All Levels
+            </button>
+            <button class="lp-btn" onclick="setLevel('1',this)">Level 1</button>
+            <button class="lp-btn" onclick="setLevel('2',this)">Level 2</button>
+            <button class="lp-btn" onclick="setLevel('3',this)">Level 3</button>
+          </div>
+        </div>
+      </div>
+      <!-- /float-card -->
+    </div>
+
+    <!-- MEMBER LIST -->
+    <div class="member-list" id="memberList"></div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+      <a href="../home/index.html" class="nav-btn"
+        ><i class="fa-solid fa-house"></i><span>Home</span></a
+      >
+      <a href="../products/index.html" class="nav-btn"
+        ><i class="fa-solid fa-couch"></i><span>Products</span></a
+      >
+      <a href="../referrals/index.html" class="nav-btn active"
+        ><i class="fa-solid fa-gift"></i><span>Referrals</span></a
+      >
+      <a href="../profile/index.html" class="nav-btn"
+        ><i class="fa-solid fa-user"></i><span>Profile</span></a
+      >
+    </nav>
+
+    <script src="../my-team/my-team.js"></script>
+  </body>
+</html>
