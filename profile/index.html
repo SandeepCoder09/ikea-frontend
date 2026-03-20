@@ -36,9 +36,11 @@
     <!-- NAVBAR -->
     <nav class="navbar">
       <div class="nav-logo">IKEA <span>India – Home & Living</span></div>
-      <!-- <button class="logout-btn" onclick="logout()" title="Logout">
-        <i class="fa-solid fa-right-from-bracket"></i>
-      </button> -->
+      <div class="nav-actions">
+        <button class="settings-btn" id="settingsBtn">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
     </nav>
 
     <!-- ══ COVER ══ -->
@@ -69,10 +71,11 @@
         <div class="cover-name" id="coverName">Loading…</div>
         <div class="cover-meta">
           <div class="cover-meta-row">
-            <i class="fa-solid fa-id-card"></i> ID: <span id="coverUid">—</span>
+            <i class="fa-solid fa-fingerprint"></i>UID:
+            <span id="coverUid">—</span>
           </div>
           <div class="cover-meta-row">
-            <i class="fa-solid fa-mobile-screen-button"></i>
+            <i class="fa-solid fa-mobile-button"></i>
             <span id="coverMobile">—</span>
           </div>
         </div>
@@ -92,7 +95,7 @@
             onclick="refreshWallet()"
             title="Refresh"
           >
-            <!-- <i class="fa-solid fa-rotate-right"></i> -->
+            <i class="fa-solid fa-arrows-rotate"></i>
           </button>
         </div>
         <div class="wallet-balance">
@@ -118,10 +121,7 @@
     <!-- ══ QUICK STATS ══ -->
     <div class="quick-stats">
       <div class="qs-item">
-        <a
-          href="../products/my-products/my-products.html"
-          class="view-team-btn"
-        >
+        <a href="../products/my-plans/my-products.html" class="view-team-btn">
           <i class="fa-solid fa-box"></i>
           <div class="qs-num" id="qsPlans">0</div>
           <div class="qs-lbl">Plans</div>
@@ -177,7 +177,7 @@
       </a>
 
       <a
-        href="../products/my-products/my-products.html"
+        href="../products/my-plans/my-products.html"
         class="menu-item"
         style="animation-delay: 0.15s"
       >
@@ -267,10 +267,10 @@
         ><i class="fa-solid fa-couch"></i><span>Products</span></a
       >
       <a href="../referrals/index.html" class="nav-btn"
-        ><i class="fa-solid fa-gift"></i><span>Referrals</span></a
+        ><i class="fa-solid fa-user-plus"></i><span>Referrals</span></a
       >
       <a href="../profile/index.html" class="nav-btn active"
-        ><i class="fa-solid fa-user"></i><span>Profile</span></a
+        ><i class="fa-solid fa-circle-user"></i><span>Profile</span></a
       >
     </nav>
 

@@ -22,6 +22,10 @@ function init() {
     document.getElementById('qsEarned').textContent = '₹' + USER.earned.toLocaleString('en-IN');
 }
 
+document.getElementById("settingsBtn").addEventListener("click", () => {
+    window.location.href = "../settings/index.html";
+});
+
 /* ── REFRESH WALLET ── */
 function refreshWallet() {
     const btn = document.getElementById('refreshBtn');

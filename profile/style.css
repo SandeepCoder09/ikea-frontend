@@ -155,7 +155,43 @@ button {
     margin-top: -4px;
 }
 
-.logout-btn {
+/* RIGHT SIDE */
+.nav-actions {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* SETTINGS BUTTON */
+  .settings-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 88, 163, 0.1); /* IKEA blue tint */
+    color: #0058a3;
+    font-size: 18px;
+    cursor: pointer;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    transition: all 0.25s ease;
+  }
+  
+  /* HOVER */
+  .settings-btn:hover {
+    background: var(--blue);
+    color: #fff;
+    transform: rotate(30deg) scale(1.1);
+  }
+  
+  /* ACTIVE CLICK */
+  .settings-btn:active {
+    transform: scale(0.95);
+  }
+
+/* .logout-btn {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -171,7 +207,7 @@ button {
 .logout-btn:hover {
     transform: scale(1.1);
     box-shadow: 0 4px 16px rgba(0, 48, 135, 0.3);
-}
+} */
 
 /* ══════════════════════════════════════════
        COVER SECTION  —  big diagonal yellow block

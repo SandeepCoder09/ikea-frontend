@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IKEA Settings</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../settings/style.css" />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+    <div class="navbar">
+      <span class="back-btn" id="backBtn">
+        <i class="fas fa-arrow-left"></i>
+      </span>
+
+      <div class="logo">IKEA Settings</div>
+
+      <div></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="container">
+      <h2>Account Settings</h2>
+
+      <!-- PASSWORD -->
+      <div class="card">
+        <h4>Change Password</h4>
+
+        <input type="password" id="newPassword" placeholder="New Password" />
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirm Password"
+        />
+
+        <!-- CAPTCHA -->
+        <div class="captcha-box">
+          <span id="captchaText"></span>
+          <button id="refreshCaptcha">↻</button>
+        </div>
+
+        <input
+          type="text"
+          id="captchaInputPassword"
+          placeholder="Enter Captcha"
+        />
+
+        <button class="btn" id="updatePasswordBtn">Update Password</button>
+      </div>
+
+      <!-- PIN -->
+      <div class="card">
+        <h4>Change Withdraw PIN</h4>
+
+        <input type="password" id="newPin" placeholder="New PIN (4 digit)" />
+
+        <!-- CAPTCHA -->
+        <div class="captcha-box">
+          <span id="captchaTextPin"></span>
+          <button id="refreshCaptchaPin">↻</button>
+        </div>
+
+        <input type="text" id="captchaInputPin" placeholder="Enter Captcha" />
+
+        <button class="btn" id="updatePinBtn">Update PIN</button>
+      </div>
+
+      <!-- SESSION -->
+      <div class="card">
+        <h4>Session</h4>
+        <button class="btn danger" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+
+    <!-- JS -->
+    <script src="../settings/script.js"></script>
+  </body>
+</html>
