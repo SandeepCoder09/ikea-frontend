@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFD700" />
+    <title>Withdraw | IKEA India</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../withdrawal/style.css" />
+  </head>
+  <body>
+    <!-- LOADER -->
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+
+    <!-- PROCESSING -->
+    <div class="processing-screen" id="processingScreen">
+      <div class="proc-ring"></div>
+      <p class="proc-text">Processing…</p>
+      <div class="proc-dots"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modal">
+      <div class="modal-box" id="modalBox"></div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="toastMsg">Done!</span>
+    </div>
+
+    <!-- TOP NAV -->
+    <div class="top-nav">
+      <button class="back-btn" onclick="history.back()">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </button>
+      <span class="nav-title">Withdraw</span>
+      <div class="nav-spacer"></div>
+    </div>
+
+    <div class="page-wrap">
+      <!-- ══ BALANCE CARD ══ -->
+      <div class="balance-card">
+        <div class="bc-label">
+          <i class="fa-solid fa-wallet"></i> Available Balance
+        </div>
+        <div class="bc-balance">
+          <sup>₹</sup><span id="displayBalance">12,480.50</span>
+        </div>
+      </div>
+
+      <!-- ══ QUICK AMOUNTS ══ -->
+      <div class="section-label">Quick Select Amount</div>
+      <div class="quick-amounts">
+        <button class="qa-btn" onclick="setQuick(500,this)">₹500</button>
+        <button class="qa-btn" onclick="setQuick(1000,this)">
+          ₹1,000<span class="qa-sub">Popular</span>
+        </button>
+        <button class="qa-btn" onclick="setQuick(2000,this)">₹2,000</button>
+        <button class="qa-btn" onclick="setQuick(5000,this)">₹5,000</button>
+        <button class="qa-btn" onclick="setQuick(10000,this)">₹10,000</button>
+        <button class="qa-btn" onclick="setQuickAll(this)">
+          All<span class="qa-sub">Max</span>
+        </button>
+      </div>
+
+      <!-- ══ AMOUNT INPUT ══ -->
+      <div>
+        <div class="amount-wrap">
+          <span class="amount-prefix">₹</span>
+          <input
+            type="tel"
+            class="amount-input"
+            id="amountInput"
+            placeholder="0"
+            oninput="onAmountInput(this)"
+          />
+        </div>
+        <div class="amount-hint">
+          <span class="min-lbl"
+            ><i class="fa-solid fa-circle-check" style="font-size: 0.6rem"></i>
+            Min ₹100</span
+          >
+          <span class="max-lbl">Max ₹<span id="maxLabel">50,000</span></span>
+        </div>
+      </div>
+
+      <!-- ══ FEE BREAKDOWN ══ -->
+      <div class="fee-card dimmed" id="feeCard">
+        <div class="fee-header">
+          <div class="fee-header-left">
+            <i class="fa-solid fa-receipt"></i>
+            <span>Transaction Breakdown</span>
+          </div>
+          <div class="fee-badge">10% Fee</div>
+        </div>
+        <div class="fee-rows">
+          <div class="fee-row">
+            <div class="fee-row-left">
+              <i class="fa-solid fa-indian-rupee-sign"></i
+              ><span class="fee-row-label">Withdrawal Amount</span>
+            </div>
+            <span class="fee-row-value" id="feeAmount">₹0</span>
+          </div>
+          <div class="fee-row">
+            <div class="fee-row-left">
+              <i class="fa-solid fa-percent"></i
+              ><span class="fee-row-label">Transaction Fee (10%)</span>
+            </div>
+            <span class="fee-row-value red" id="feeFee">−₹0</span>
+          </div>
+          <div class="fee-row total-row">
+            <div class="fee-row-left">
+              <i class="fa-solid fa-wallet"></i
+              ><span class="fee-row-label">You Will Receive</span>
+            </div>
+            <span class="fee-row-value" id="feeNet">₹0</span>
+          </div>
+          <div class="fee-row net-row">
+            <div class="fee-row-left">
+              <i class="fa-solid fa-building-columns"></i
+              ><span class="fee-row-label">Credited to Bank</span>
+            </div>
+            <span class="fee-row-value green" id="feeCredited">₹0</span>
+          </div>
+          <div class="fee-row">
+            <div class="fee-row-left">
+              <i class="fa-solid fa-clock"></i
+              ><span class="fee-row-label">Processing Time</span>
+            </div>
+            <span class="fee-row-value">1–3 Business Days</span>
+          </div>
+          <div class="fee-row">
+            <div class="fee-row-left">
+              <i class="fa-solid fa-calendar-check"></i
+              ><span class="fee-row-label">Balance After Withdrawal</span>
+            </div>
+            <span class="fee-row-value" id="feeAfter">₹12,480.50</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ LINKED BANK ══ -->
+      <div class="section-label">Withdraw To</div>
+      <div id="bankSection"></div>
+
+      <!-- ══ PIN VERIFY ══ -->
+      <div class="section-label">Confirm with PIN</div>
+      <div class="pin-verify-card">
+        <div class="pvc-header">
+          <i class="fa-solid fa-lock"></i>
+          <span>Enter 4-Digit Withdrawal PIN</span>
+        </div>
+        <div class="pvc-body">
+          <div class="pin-dots-row">
+            <div class="p-dot active" id="pd0">—</div>
+            <div class="p-dot" id="pd1">—</div>
+            <div class="p-dot" id="pd2">—</div>
+            <div class="p-dot" id="pd3">—</div>
+          </div>
+          <div class="np-grid">
+            <button class="npb" onclick="np('1')">1</button>
+            <button class="npb" onclick="np('2')">2</button>
+            <button class="npb" onclick="np('3')">3</button>
+            <button class="npb" onclick="np('4')">4</button>
+            <button class="npb" onclick="np('5')">5</button>
+            <button class="npb" onclick="np('6')">6</button>
+            <button class="npb" onclick="np('7')">7</button>
+            <button class="npb" onclick="np('8')">8</button>
+            <button class="npb" onclick="np('9')">9</button>
+            <button class="npb empty"></button>
+            <button class="npb" onclick="np('0')">0</button>
+            <button class="npb del" onclick="npDel()">
+              <i class="fa-solid fa-delete-left"></i>
+            </button>
+          </div>
+          <div class="pin-attempts" id="pinAttemptsMsg"></div>
+        </div>
+      </div>
+
+      <!-- ══ INFO NOTE ══ -->
+      <div class="info-note">
+        <i class="fa-solid fa-circle-info"></i>
+        Withdrawals are processed within 1–3 business days. A 10% transaction
+        fee applies. Ensure your bank account details are correct before
+        submitting.
+      </div>
+
+      <!-- ══ SUBMIT ══ -->
+      <button
+        class="withdraw-btn"
+        id="withdrawBtn"
+        onclick="submitWithdraw()"
+        disabled
+      >
+        <i class="fa-solid fa-arrow-up-from-bracket"></i> Submit Withdrawal
+        Request
+      </button>
+    </div>
+    <!-- /page-wrap -->
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+      <a href="../home/index.html" class="nav-btn"
+        ><i class="fa-solid fa-house"></i><span>Home</span></a
+      >
+      <a href="../products/index.html" class="nav-btn"
+        ><i class="fa-solid fa-couch"></i><span>Products</span></a
+      >
+      <a href="../referrals/index.html" class="nav-btn"
+        ><i class="fa-solid fa-gift"></i><span>Referrals</span></a
+      >
+      <a href="../profile/index.html" class="nav-btn active"
+        ><i class="fa-solid fa-user"></i><span>Profile</span></a
+      >
+    </nav>
+
+    <script src="../withdrawal/script.js"></script>
+  </body>
+</html>

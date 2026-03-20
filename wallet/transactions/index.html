@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFD700" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>Transaction History | IKEA India</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../transactions/style.css" />
+  </head>
+  <body>
+    <!-- LOADER -->
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+
+    <!-- DRAWER BACKDROP -->
+    <div class="drawer-bg" id="drawerBg" onclick="closeDrawer()"></div>
+
+    <!-- DETAIL DRAWER -->
+    <div class="drawer" id="drawer">
+      <div class="drawer-handle"></div>
+      <div class="drawer-head">
+        <div class="dh-icon" id="dhIcon"></div>
+        <div class="dh-texts">
+          <div class="dh-title" id="dhTitle">Transaction</div>
+          <div class="dh-ref" id="dhRef">—</div>
+        </div>
+        <button class="dh-close" onclick="closeDrawer()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="drawer-amt-box">
+        <div>
+          <div class="dab-lbl">Amount</div>
+          <div class="dab-amt" id="dhAmt">₹0</div>
+        </div>
+        <div id="dhStatus"></div>
+      </div>
+      <div class="drawer-rows" id="dhRows"></div>
+    </div>
+
+    <!-- TOP NAV -->
+    <div class="top-nav">
+      <button class="back-btn" onclick="history.back()">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </button>
+      <span class="nav-title">Transactions</span>
+      <div class="nav-spacer"></div>
+    </div>
+
+    <!-- SUMMARY BANNER -->
+    <div class="summary-banner">
+      <div class="banner-top">
+        <div>
+          <div class="banner-label">Net Credited</div>
+          <div class="banner-total" id="bannerTotal">₹0</div>
+        </div>
+        <div class="banner-count" id="bannerCount">0 Records</div>
+      </div>
+      <div class="banner-stats">
+        <div class="bs-item">
+          <div class="bs-num cr" id="bsIn">₹0</div>
+          <div class="bs-lbl">Total In</div>
+        </div>
+        <div class="bs-item">
+          <div class="bs-num dr" id="bsOut">₹0</div>
+          <div class="bs-lbl">Total Out</div>
+        </div>
+        <div class="bs-item">
+          <div class="bs-num nt" id="bsCnt">0</div>
+          <div class="bs-lbl">Entries</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER CARD -->
+    <div class="filter-wrap">
+      <div class="filter-card">
+        <!-- Search -->
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search type, ref or note…"
+            oninput="applyFilters()"
+            autocomplete="off"
+          />
+          <button class="clear-search" onclick="clearSearch()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Type pills — horizontally scrollable row -->
+        <div class="type-pills-outer">
+          <div class="type-pills">
+            <button class="tp-btn t-all active" onclick="setType('all',this)">
+              <i class="fa-solid fa-border-all"></i> All
+            </button>
+            <button class="tp-btn t-deposit" onclick="setType('deposit',this)">
+              <i class="fa-solid fa-plus"></i> Deposit
+            </button>
+            <button
+              class="tp-btn t-withdraw"
+              onclick="setType('withdraw',this)"
+            >
+              <i class="fa-solid fa-arrow-up"></i> Withdraw
+            </button>
+            <button
+              class="tp-btn t-commission"
+              onclick="setType('commission',this)"
+            >
+              <i class="fa-solid fa-coins"></i> Commission
+            </button>
+            <button class="tp-btn t-gift" onclick="setType('gift',this)">
+              <i class="fa-solid fa-gift"></i> Gift
+            </button>
+            <button class="tp-btn t-invite" onclick="setType('invite',this)">
+              <i class="fa-solid fa-user-plus"></i> Invite
+            </button>
+            <button class="tp-btn t-earning" onclick="setType('earning',this)">
+              <i class="fa-solid fa-chart-line"></i> Earning
+            </button>
+          </div>
+        </div>
+
+        <!-- Date range -->
+        <div class="date-row">
+          <label>From</label>
+          <input type="date" id="dateFrom" onchange="applyFilters()" />
+          <label>To</label>
+          <input type="date" id="dateTo" onchange="applyFilters()" />
+          <button class="date-clear-btn" onclick="clearDates()">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSACTION LIST -->
+    <div class="txn-list" id="txnList"></div>
+
+    <!-- LOAD MORE -->
+    <button
+      class="load-more"
+      id="loadMoreBtn"
+      onclick="loadMore()"
+      style="display: none"
+    >
+      <i class="fa-solid fa-rotate-right"></i> Load More
+    </button>
+
+    <!-- BOTTOM NAV -->
+    <!-- <nav class="bottom-nav">
+      <a href="../home/index.html" class="nav-btn"
+        ><i class="fa-solid fa-house"></i><span>Home</span></a
+      >
+      <a href="../products/index.html" class="nav-btn"
+        ><i class="fa-solid fa-couch"></i><span>Products</span></a
+      >
+      <a href="../referrals/index.html" class="nav-btn"
+        ><i class="fa-solid fa-gift"></i><span>Referrals</span></a
+      >
+      <a href="../profile/index.html" class="nav-btn active"
+        ><i class="fa-solid fa-user"></i><span>Profile</span></a
+      >
+    </nav> -->
+
+    <script src="../transactions/script.js"></script>
+  </body>
+</html>

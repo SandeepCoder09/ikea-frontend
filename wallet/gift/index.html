@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFD700" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>Redeem Gift Code | IKEA India</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../gift/style.css" />
+  </head>
+  <body>
+    <!-- LOADER -->
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+
+    <!-- PROCESSING -->
+    <div class="processing-screen" id="processingScreen">
+      <div class="proc-ring"></div>
+      <p>Verifying Code…</p>
+      <div class="proc-dots"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="toastMsg">Done!</span>
+    </div>
+
+    <!-- SUCCESS / ERROR MODAL -->
+    <div class="modal-overlay" id="modal">
+      <div class="modal-box" id="modalBox">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- HISTORY DRAWER BG -->
+    <div class="drawer-bg" id="drawerBg" onclick="closeHistory()"></div>
+
+    <!-- HISTORY DRAWER -->
+    <div class="history-drawer" id="historyDrawer">
+      <div class="dw-handle"></div>
+      <div class="dw-head">
+        <div class="dw-head-left">
+          <div class="dw-head-icon">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          <div>
+            <div class="dw-head-title">Redeem History</div>
+            <div class="dw-head-sub" id="dwhSub">0 codes redeemed</div>
+          </div>
+        </div>
+        <button class="dw-close" onclick="closeHistory()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="dw-list" id="historyList"></div>
+    </div>
+
+    <!-- TOP NAV -->
+    <div class="top-nav">
+      <button class="back-btn" onclick="history.back()">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </button>
+      <span class="nav-title">Gift Code</span>
+      <button class="history-btn" onclick="openHistory()">
+        <i class="fa-solid fa-clock-rotate-left"></i> History
+        <span class="history-badge" id="historyBadge" style="display: none"
+          >0</span
+        >
+      </button>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-icon"><i class="fa-solid fa-gift"></i></div>
+      <h1>Redeem Your Gift Code</h1>
+      <p>
+        Enter your exclusive code to instantly<br />add rewards to your wallet
+      </p>
+      <div class="hero-stats">
+        <div class="hs-item">
+          <div class="hs-num" id="hsTotalRedeemed">0</div>
+          <div class="hs-lbl">Redeemed</div>
+        </div>
+        <div class="hs-item">
+          <div class="hs-num" id="hsTotalEarned">₹0</div>
+          <div class="hs-lbl">Total Earned</div>
+        </div>
+        <div class="hs-item">
+          <div class="hs-num" id="hsLastCode">—</div>
+          <div class="hs-lbl">Last Code</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REDEEM CARD -->
+    <div class="redeem-wrap">
+      <div class="redeem-card">
+        <div class="rc-header">
+          <div class="rc-header-icon"><i class="fa-solid fa-ticket"></i></div>
+          <div>
+            <div class="rc-header-title">Enter Gift Code</div>
+            <div class="rc-header-sub">Case-insensitive · one-time use</div>
+          </div>
+        </div>
+
+        <div class="rc-body">
+          <!-- Code Input -->
+          <div class="code-field">
+            <label><i class="fa-solid fa-key"></i> Gift Code</label>
+            <div class="code-input-wrap">
+              <input
+                type="text"
+                class="code-input"
+                id="giftCodeInput"
+                placeholder="IKEA - XXXX"
+                maxlength="20"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="characters"
+                oninput="onCodeInput(this)"
+              />
+              <button class="code-paste-btn" onclick="pasteCode()">
+                PASTE
+              </button>
+            </div>
+          </div>
+
+          <!-- How it works -->
+          <div class="how-strip">
+            <div class="hw-item">
+              <div class="hw-num">01</div>
+              <div class="hw-text">Enter your gift code above</div>
+            </div>
+            <div class="hw-item">
+              <div class="hw-num">02</div>
+              <div class="hw-text">Click Redeem to verify</div>
+            </div>
+            <div class="hw-item">
+              <div class="hw-num">03</div>
+              <div class="hw-text">Reward added instantly</div>
+            </div>
+          </div>
+
+          <!-- Terms -->
+          <div class="terms-note">
+            <i class="fa-solid fa-circle-info"></i>
+            Each code can only be used once. Rewards are credited instantly to
+            your wallet balance. Codes are not transferable.
+          </div>
+
+          <!-- Redeem Button -->
+          <button
+            class="redeem-btn"
+            id="redeemBtn"
+            onclick="redeemCode()"
+            disabled
+          >
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Redeem Now
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+      <a href="../home/index.html" class="nav-btn"
+        ><i class="fa-solid fa-house"></i><span>Home</span></a
+      >
+      <a href="../products/index.html" class="nav-btn"
+        ><i class="fa-solid fa-couch"></i><span>Products</span></a
+      >
+      <a href="../referrals/index.html" class="nav-btn"
+        ><i class="fa-solid fa-gift"></i><span>Referrals</span></a
+      >
+      <a href="../profile/index.html" class="nav-btn active"
+        ><i class="fa-solid fa-user"></i><span>Profile</span></a
+      >
+    </nav>
+
+    <script src="../gift/script.js"></script>
+  </body>
+</html>

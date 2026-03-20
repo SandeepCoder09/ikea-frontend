@@ -159,42 +159,6 @@ a {
     margin-top: -4px;
 }
 
-.nav-dots {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-}
-
-.nav-dots span {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--blue);
-    animation: blink-dot 1.6s ease-in-out infinite;
-}
-
-.nav-dots span:nth-child(2) {
-    animation-delay: 0.3s;
-}
-
-.nav-dots span:nth-child(3) {
-    animation-delay: 0.6s;
-}
-
-@keyframes blink-dot {
-
-    0%,
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 0.3;
-        transform: scale(0.7);
-    }
-}
-
 /* ============================================================
        LIVE TRANSACTIONS
     ============================================================ */

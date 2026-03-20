@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFD700" />
+    <title>Set Withdrawal PIN | IKEA India</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../secure/set-pin.css" />
+  </head>
+  <body>
+    <!-- LOADER -->
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+
+    <!-- SUCCESS OVERLAY -->
+    <div class="success-overlay" id="successOverlay">
+      <div class="suc-check"><i class="fa-solid fa-check"></i></div>
+      <div class="suc-title">PIN Set Successfully!</div>
+      <div class="suc-sub">
+        Your withdrawal PIN has been set. Redirecting to withdrawal page…
+      </div>
+      <button class="suc-btn" onclick="goToWithdraw()">
+        <i class="fa-solid fa-arrow-right"></i> Continue to Withdraw
+      </button>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="toastMsg">Done!</span>
+    </div>
+
+    <!-- TOP NAV -->
+    <div class="top-nav">
+      <button class="back-btn" onclick="history.back()">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </button>
+      <span class="nav-title">Set Withdrawal PIN</span>
+      <div class="nav-spacer"></div>
+    </div>
+
+    <div class="page-content">
+      <!-- HERO -->
+      <div class="pin-hero">
+        <div class="ph-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="ph-title">Secure Your Withdrawals</div>
+        <div class="ph-sub">
+          Set a 4-digit PIN to authorize all withdrawal requests. This PIN is
+          required every time you withdraw.
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <div class="form-card">
+        <div class="fc-header">
+          <div class="fc-hicon"><i class="fa-solid fa-lock"></i></div>
+          <div>
+            <div class="fc-htitle">Create 4-Digit PIN</div>
+            <div class="fc-hsub">Enter & confirm your PIN below</div>
+          </div>
+        </div>
+
+        <div class="fc-body">
+          <!-- New PIN -->
+          <div class="pin-section">
+            <div class="pin-label">
+              <i class="fa-solid fa-key"></i> Enter New PIN
+            </div>
+            <div
+              class="pin-dots"
+              id="newPinDots"
+              onclick="focusInput('newPinInput')"
+            >
+              <div class="pin-dot active" id="newDot0">—</div>
+              <div class="pin-dot" id="newDot1">—</div>
+              <div class="pin-dot" id="newDot2">—</div>
+              <div class="pin-dot" id="newDot3">—</div>
+            </div>
+            <input
+              class="pin-real-input"
+              type="tel"
+              id="newPinInput"
+              maxlength="4"
+              inputmode="numeric"
+            />
+          </div>
+
+          <!-- Confirm PIN -->
+          <div class="pin-section">
+            <div class="pin-label">
+              <i class="fa-solid fa-rotate"></i> Confirm PIN
+            </div>
+            <div
+              class="pin-dots"
+              id="confirmPinDots"
+              onclick="focusInput('confirmPinInput')"
+            >
+              <div class="pin-dot" id="confDot0">—</div>
+              <div class="pin-dot" id="confDot1">—</div>
+              <div class="pin-dot" id="confDot2">—</div>
+              <div class="pin-dot" id="confDot3">—</div>
+            </div>
+            <input
+              class="pin-real-input"
+              type="tel"
+              id="confirmPinInput"
+              maxlength="4"
+              inputmode="numeric"
+            />
+          </div>
+
+          <!-- Numpad -->
+          <div class="numpad" id="numpad">
+            <button class="np-btn" onclick="numpadPress('1')">1</button>
+            <button class="np-btn" onclick="numpadPress('2')">2</button>
+            <button class="np-btn" onclick="numpadPress('3')">3</button>
+            <button class="np-btn" onclick="numpadPress('4')">4</button>
+            <button class="np-btn" onclick="numpadPress('5')">5</button>
+            <button class="np-btn" onclick="numpadPress('6')">6</button>
+            <button class="np-btn" onclick="numpadPress('7')">7</button>
+            <button class="np-btn" onclick="numpadPress('8')">8</button>
+            <button class="np-btn" onclick="numpadPress('9')">9</button>
+            <button class="np-btn np-empty"></button>
+            <button class="np-btn" onclick="numpadPress('0')">0</button>
+            <button class="np-btn np-del" onclick="numpadDelete()">
+              <i class="fa-solid fa-delete-left"></i>
+            </button>
+          </div>
+
+          <!-- Security note -->
+          <div class="security-note">
+            <i class="fa-solid fa-lock"></i>
+            Never share your PIN with anyone. IKEA support will never ask for
+            your PIN.
+          </div>
+
+          <!-- Set PIN -->
+          <button
+            class="set-pin-btn"
+            id="setPinBtn"
+            onclick="setPin()"
+            disabled
+          >
+            <i class="fa-solid fa-shield-halved"></i> Set Withdrawal PIN
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../secure/set-pin.js"></script>
+  </body>
+</html>

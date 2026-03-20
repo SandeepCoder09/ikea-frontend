@@ -1,6 +1,6 @@
 /* ── MOCK DATA — replace with real API ── */
 const USER = {
-    name: 'Arjun Kumar',
+    name: 'Testing Account',
     uid: 'IKEA-1042',
     mobile: '+91 98765 43210',
     balance: 12480.50,

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFD700" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>My Bank Account | IKEA India</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../bank/link-bank.css" />
+  </head>
+  <body>
+    <!-- LOADER -->
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+
+    <!-- PROCESSING SCREEN -->
+    <div class="processing-screen" id="processingScreen">
+      <div class="proc-ring"></div>
+      <p>Linking Account…</p>
+      <div class="proc-dots"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="toastMsg">Done!</span>
+    </div>
+
+    <!-- ACTION MODAL -->
+    <div class="modal-overlay" id="actionModal">
+      <div class="modal-box">
+        <div class="modal-icon success" id="modalIcon">
+          <i class="fa-solid fa-check" id="modalIconSym"></i>
+        </div>
+        <div class="modal-title" id="modalTitle">Success!</div>
+        <div class="modal-msg" id="modalMsg">Your account has been saved.</div>
+        <button class="modal-ok" onclick="closeModal()">OK</button>
+      </div>
+    </div>
+
+    <!-- TOP NAV -->
+    <div class="top-nav">
+      <button class="back-btn" onclick="history.back()">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </button>
+      <span class="nav-title">My Bank Account</span>
+      <div class="nav-spacer"></div>
+    </div>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-content">
+      <!-- BANNER -->
+      <div class="account-banner">
+        <div class="ab-icon"><i class="fa-solid fa-building-columns"></i></div>
+        <div class="ab-text">
+          <div class="ab-title">Bank Account</div>
+          <div class="ab-sub">Link your account for fast withdrawals</div>
+        </div>
+        <div class="ab-badge" id="abBadge">Secure</div>
+      </div>
+
+      <!-- ACCOUNT DISPLAY — shown when bound -->
+      <div id="linkedSection" style="display: none">
+        <div class="linked-account">
+          <div class="linked-top">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Bank Account Linked</span>
+            <div class="linked-top-right">Active</div>
+          </div>
+          <div class="linked-body">
+            <div class="linked-row">
+              <div class="linked-row-icon">
+                <i class="fa-solid fa-user"></i>
+              </div>
+              <div class="linked-row-info">
+                <div class="linked-row-label">Account Holder</div>
+                <div class="linked-row-value" id="displayName">—</div>
+              </div>
+            </div>
+            <div class="linked-row">
+              <div class="linked-row-icon">
+                <i class="fa-solid fa-building-columns"></i>
+              </div>
+              <div class="linked-row-info">
+                <div class="linked-row-label">Bank Name</div>
+                <div class="linked-row-value" id="displayBank">—</div>
+              </div>
+            </div>
+            <div class="linked-row">
+              <div class="linked-row-icon">
+                <i class="fa-solid fa-hashtag"></i>
+              </div>
+              <div class="linked-row-info">
+                <div class="linked-row-label">Account Number</div>
+                <div class="linked-row-value" id="displayAccNum">—</div>
+              </div>
+            </div>
+            <div class="linked-row">
+              <div class="linked-row-icon">
+                <i class="fa-solid fa-code"></i>
+              </div>
+              <div class="linked-row-info">
+                <div class="linked-row-label">IFSC Code</div>
+                <div class="linked-row-value" id="displayIfsc">—</div>
+              </div>
+            </div>
+            <!-- Lock notice — no remove or modify -->
+            <div class="locked-notice">
+              <i class="fa-solid fa-lock"></i>
+              <p>
+                Bank account is permanently linked. To make changes, please
+                contact <strong>Customer Support</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NO ACCOUNT STATE — shown when not bound -->
+      <div id="noAccountSection">
+        <div class="no-account">
+          <i class="fa-solid fa-building-columns"></i>
+          <p>
+            No bank account linked yet.<br />Add one below to enable
+            withdrawals.
+          </p>
+        </div>
+      </div>
+
+      <!-- ADD ACCOUNT FORM — hidden once bound -->
+      <div class="form-section" id="formSection">
+        <div class="form-header">
+          <div class="fh-icon"><i class="fa-solid fa-link"></i></div>
+          <div>
+            <div class="fh-title">Link Bank Account</div>
+            <div class="fh-sub">One-time setup — cannot be changed later</div>
+          </div>
+        </div>
+
+        <div class="form-body">
+          <!-- Account Holder Name -->
+          <div class="field">
+            <label><i class="fa-solid fa-user"></i> Account Holder Name</label>
+            <div class="input-wrap">
+              <input
+                type="text"
+                id="holderName"
+                placeholder="Full name as per bank records"
+                autocomplete="name"
+                oninput="validateName(this)"
+              />
+              <i class="fa-solid fa-circle-check input-val-icon"></i>
+            </div>
+          </div>
+
+          <!-- Bank Name -->
+          <div class="field">
+            <label
+              ><i class="fa-solid fa-building-columns"></i> Bank Name</label
+            >
+            <div class="bank-select-wrap">
+              <select id="bankName">
+                <option value="" disabled selected>— Select your bank —</option>
+                <optgroup label="⭐ Popular Banks">
+                  <option value="State Bank of India">
+                    State Bank of India
+                  </option>
+                  <option value="HDFC Bank">HDFC Bank</option>
+                  <option value="ICICI Bank">ICICI Bank</option>
+                  <option value="Axis Bank">Axis Bank</option>
+                  <option value="Kotak Mahindra Bank">
+                    Kotak Mahindra Bank
+                  </option>
+                </optgroup>
+                <optgroup label="🏛 Public Sector Banks">
+                  <option value="Punjab National Bank">
+                    Punjab National Bank
+                  </option>
+                  <option value="Bank of Baroda">Bank of Baroda</option>
+                  <option value="Canara Bank">Canara Bank</option>
+                  <option value="Union Bank of India">
+                    Union Bank of India
+                  </option>
+                  <option value="Bank of India">Bank of India</option>
+                  <option value="Central Bank of India">
+                    Central Bank of India
+                  </option>
+                  <option value="Indian Bank">Indian Bank</option>
+                  <option value="UCO Bank">UCO Bank</option>
+                  <option value="Bank of Maharashtra">
+                    Bank of Maharashtra
+                  </option>
+                </optgroup>
+                <optgroup label="🏦 Private Banks">
+                  <option value="IndusInd Bank">IndusInd Bank</option>
+                  <option value="Yes Bank">Yes Bank</option>
+                  <option value="IDFC First Bank">IDFC First Bank</option>
+                  <option value="Federal Bank">Federal Bank</option>
+                  <option value="RBL Bank">RBL Bank</option>
+                  <option value="South Indian Bank">South Indian Bank</option>
+                  <option value="Karnataka Bank">Karnataka Bank</option>
+                  <option value="Jammu & Kashmir Bank">
+                    Jammu & Kashmir Bank
+                  </option>
+                  <option value="Dhanlaxmi Bank">Dhanlaxmi Bank</option>
+                </optgroup>
+                <optgroup label="📱 Payments Banks">
+                  <option value="Paytm Payments Bank">
+                    Paytm Payments Bank
+                  </option>
+                  <option value="Airtel Payments Bank">
+                    Airtel Payments Bank
+                  </option>
+                  <option value="India Post Payments Bank">
+                    India Post Payments Bank
+                  </option>
+                </optgroup>
+                <optgroup label="🔹 Other">
+                  <option value="Other">Other</option>
+                </optgroup>
+              </select>
+              <i class="fa-solid fa-chevron-down sel-chevron"></i>
+            </div>
+          </div>
+
+          <!-- Account Number -->
+          <div class="field">
+            <label><i class="fa-solid fa-hashtag"></i> Account Number</label>
+            <div class="input-wrap">
+              <input
+                type="tel"
+                id="accountNumber"
+                placeholder="Enter your account number"
+                maxlength="18"
+                oninput="validateAccNum(this)"
+              />
+              <i class="fa-solid fa-circle-check input-val-icon"></i>
+            </div>
+            <span class="field-hint"
+              ><i class="fa-solid fa-info-circle"></i> 9–18 digit account
+              number</span
+            >
+          </div>
+
+          <!-- IFSC Code -->
+          <div class="field">
+            <label><i class="fa-solid fa-code"></i> IFSC Code</label>
+            <div class="input-wrap">
+              <input
+                type="text"
+                id="ifscCode"
+                placeholder="e.g. SBIN0001234"
+                maxlength="11"
+                oninput="validateIFSC(this)"
+              />
+              <i class="fa-solid fa-circle-check input-val-icon"></i>
+            </div>
+            <span class="field-hint"
+              ><i class="fa-solid fa-info-circle"></i> 11-character code found
+              on your cheque book</span
+            >
+          </div>
+
+          <!-- Security Note -->
+          <div class="security-note">
+            <i class="fa-solid fa-lock"></i>
+            Once linked, your bank account
+            <strong>cannot be changed or removed</strong>. All withdrawals will
+            be sent to this account. Make sure the details are correct.
+          </div>
+
+          <!-- Submit -->
+          <button class="submit-btn" onclick="submitAccount()">
+            <i class="fa-solid fa-link"></i> Link Bank Account
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- /page-content -->
+
+    <!-- BOTTOM NAV -->
+    <!-- <nav class="bottom-nav">
+      <a href="../home/index.html" class="nav-btn"
+        ><i class="fa-solid fa-house"></i><span>Home</span></a
+      >
+      <a href="../products/index.html" class="nav-btn"
+        ><i class="fa-solid fa-couch"></i><span>Products</span></a
+      >
+      <a href="../referrals/index.html" class="nav-btn"
+        ><i class="fa-solid fa-gift"></i><span>Referrals</span></a
+      >
+      <a href="../profile/index.html" class="nav-btn active"
+        ><i class="fa-solid fa-user"></i><span>Profile</span></a
+      >
+    </nav> -->
+
+    <script src="../bank/link-bank.js"></script>
+  </body>
+</html>

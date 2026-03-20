@@ -36,9 +36,9 @@
     <!-- NAVBAR -->
     <nav class="navbar">
       <div class="nav-logo">IKEA <span>India – Home & Living</span></div>
-      <button class="logout-btn" onclick="logout()" title="Logout">
+      <!-- <button class="logout-btn" onclick="logout()" title="Logout">
         <i class="fa-solid fa-right-from-bracket"></i>
-      </button>
+      </button> -->
     </nav>
 
     <!-- ══ COVER ══ -->
@@ -92,7 +92,7 @@
             onclick="refreshWallet()"
             title="Refresh"
           >
-            <i class="fa-solid fa-rotate-right"></i>
+            <!-- <i class="fa-solid fa-rotate-right"></i> -->
           </button>
         </div>
         <div class="wallet-balance">
@@ -100,13 +100,13 @@
         </div>
         <div class="wallet-actions">
           <a
-            href="../wallet/recharge.html"
+            href="../wallet/deposit/index.html"
             class="wallet-action-btn btn-deposit"
           >
             <i class="fa-solid fa-plus"></i> Deposit
           </a>
           <a
-            href="../wallet/withdraw.html"
+            href="../wallet/withdrawal/index.html"
             class="wallet-action-btn btn-withdraw"
           >
             <i class="fa-solid fa-arrow-up-from-bracket"></i> Withdraw
@@ -118,15 +118,23 @@
     <!-- ══ QUICK STATS ══ -->
     <div class="quick-stats">
       <div class="qs-item">
-        <div class="qs-icon">🛋️</div>
-        <div class="qs-num" id="qsPlans">0</div>
-        <div class="qs-lbl">Plans</div>
+        <a
+          href="../products/my-products/my-products.html"
+          class="view-team-btn"
+        >
+          <i class="fa-solid fa-box"></i>
+          <div class="qs-num" id="qsPlans">0</div>
+          <div class="qs-lbl">Plans</div>
+        </a>
       </div>
       <div class="qs-item">
-        <div class="qs-icon">👥</div>
-        <div class="qs-num" id="qsTeam">0</div>
-        <div class="qs-lbl">Team</div>
+        <a href="../referrals/my-team/my-team.html" class="view-team-btn">
+          <i class="fa-solid fa-people-group"></i>
+          <div class="qs-num" id="qsTeam">0</div>
+          <div class="qs-lbl">Team</div>
+        </a>
       </div>
+
       <div class="qs-item">
         <div class="qs-icon">💰</div>
         <div class="qs-num" id="qsEarned">₹0</div>
@@ -139,7 +147,7 @@
 
     <div class="menu-list">
       <a
-        href="../wallet/bind-card.html"
+        href="../wallet/bank/link-bank.html"
         class="menu-item"
         style="animation-delay: 0.05s"
       >
@@ -154,7 +162,7 @@
       </a>
 
       <a
-        href="../wallet/transactions.html"
+        href="../wallet/transactions/index.html"
         class="menu-item"
         style="animation-delay: 0.1s"
       >
@@ -169,7 +177,7 @@
       </a>
 
       <a
-        href="../products/my-products.html"
+        href="../products/my-products/my-products.html"
         class="menu-item"
         style="animation-delay: 0.15s"
       >
@@ -184,7 +192,7 @@
       </a>
 
       <a
-        href="../gift/gift.html"
+        href="../wallet/gift/index.html"
         class="menu-item"
         style="animation-delay: 0.2s"
       >
