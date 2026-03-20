@@ -1117,62 +1117,6 @@ input {
     transform: translateX(-50%) translateY(0);
 }
 
-/* ── BOTTOM NAV ── */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: var(--bottom-h);
-    background: var(--white);
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    border-top: 2px solid var(--yellow);
-    box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.08);
-    z-index: 1000;
-}
-
-.nav-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    color: var(--grey);
-    font-size: 0.6rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    transition: color 0.2s;
-    position: relative;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.nav-btn i {
-    font-size: 1.15rem;
-    transition: transform 0.2s;
-}
-
-.nav-btn.active {
-    color: var(--blue);
-}
-
-.nav-btn.active::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 36px;
-    height: 3px;
-    background: var(--yellow);
-    border-radius: 0 0 4px 4px;
-}
-
-.nav-btn.active i {
-    transform: scale(1.1);
-}
-
 /* ── RESPONSIVE ── */
 @media (min-width: 600px) {
     :root {

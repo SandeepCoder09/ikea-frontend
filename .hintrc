@@ -18,7 +18,8 @@
         "ignore": [
           "backdrop-filter",
           "-webkit-text-size-adjust",
-          "user-select"
+          "user-select",
+          "-webkit-overflow-scrolling"
         ]
       }
     ],
@@ -36,6 +37,7 @@
         "select-name": "off"
       }
     ],
-    "disown-opener": "off"
+    "disown-opener": "off",
+    "css-prefix-order": "off"
   }
 }
