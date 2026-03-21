@@ -37,7 +37,7 @@
     <nav class="navbar">
       <div class="nav-logo">IKEA <span>India – Home & Living</span></div>
       <div class="nav-actions">
-        <button class="settings-btn" id="settingsBtn">
+        <button class="settings-btn" id="settingsBtn" title="Settings">
           <i class="fas fa-cog"></i>
         </button>
       </div>
@@ -49,7 +49,7 @@
         <div class="avatar-ring">
           <div class="avatar-circle" id="avatarCircle">
             <img
-              src="../assets/profile.jpg"
+              src="../assets/images/profile.webp"
               onerror="this.style.display='none'; document.getElementById('avatarInitials').style.display='flex';"
               alt="Profile"
               id="avatarImg"
@@ -64,14 +64,14 @@
                 font-weight: 800;
                 color: var(--blue);
               "
-              >AK</span
+              >IK</span
             >
           </div>
         </div>
         <div class="cover-name" id="coverName">Loading…</div>
         <div class="cover-meta">
           <div class="cover-meta-row">
-            <i class="fa-solid fa-fingerprint"></i>UID:
+            <i class="fa-solid fa-fingerprint"></i> UID:
             <span id="coverUid">—</span>
           </div>
           <div class="cover-meta-row">
@@ -120,31 +120,34 @@
 
     <!-- ══ QUICK STATS ══ -->
     <div class="quick-stats">
-      <div class="qs-item">
-        <a href="../products/my-plans/my-products.html" class="view-team-btn">
-          <i class="fa-solid fa-box"></i>
-          <div class="qs-num" id="qsPlans">0</div>
-          <div class="qs-lbl">Plans</div>
-        </a>
-      </div>
-      <div class="qs-item">
-        <a href="../referrals/my-team/my-team.html" class="view-team-btn">
-          <i class="fa-solid fa-people-group"></i>
-          <div class="qs-num" id="qsTeam">0</div>
-          <div class="qs-lbl">Team</div>
-        </a>
-      </div>
+      <!-- Plans — clickable -->
+      <a href="../products/my-plans/my-products.html" class="qs-item qs-link">
+        <div class="qs-icon-wrap ic-blue"><i class="fa-solid fa-box"></i></div>
+        <div class="qs-num" id="qsPlans">0</div>
+        <div class="qs-lbl">Plans</div>
+      </a>
 
+      <!-- Team — clickable -->
+      <a href="../referrals/my-team/my-team.html" class="qs-item qs-link">
+        <div class="qs-icon-wrap ic-yellow">
+          <i class="fa-solid fa-people-group"></i>
+        </div>
+        <div class="qs-num" id="qsTeam">0</div>
+        <div class="qs-lbl">Team</div>
+      </a>
+
+      <!-- Earned — not clickable -->
       <div class="qs-item">
-        <div class="qs-icon">💰</div>
+        <div class="qs-icon-wrap ic-green">
+          <i class="fa-solid fa-coins"></i>
+        </div>
         <div class="qs-num" id="qsEarned">₹0</div>
         <div class="qs-lbl">Earned</div>
       </div>
     </div>
 
-    <!-- ══ MENU ══ -->
+    <!-- ══ MY ACCOUNT MENU ══ -->
     <div class="section-head"><h3>My Account</h3></div>
-
     <div class="menu-list">
       <a
         href="../wallet/bank/link-bank.html"
@@ -203,16 +206,29 @@
         </div>
         <div class="menu-arrow"><i class="fa-solid fa-chevron-right"></i></div>
       </a>
+
+      <a
+        href="../settings/index.html"
+        class="menu-item"
+        style="animation-delay: 0.25s"
+      >
+        <div class="menu-icon ic-black"><i class="fa-solid fa-gear"></i></div>
+        <div class="menu-text">
+          <div class="menu-title">Settings</div>
+          <div class="menu-sub">Change PIN & password</div>
+        </div>
+        <div class="menu-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+      </a>
     </div>
 
+    <!-- ══ SUPPORT MENU ══ -->
     <div class="section-head" style="padding-top: 20px"><h3>Support</h3></div>
-
     <div class="menu-list">
       <a
         href="https://t.me/officialikea"
         target="_blank"
         class="menu-item"
-        style="animation-delay: 0.25s"
+        style="animation-delay: 0.3s"
       >
         <div class="menu-icon ic-teal">
           <i class="fa-brands fa-telegram"></i>
@@ -228,7 +244,7 @@
         href="https://t.me/ikeamanager"
         target="_blank"
         class="menu-item"
-        style="animation-delay: 0.3s"
+        style="animation-delay: 0.35s"
       >
         <div class="menu-icon ic-purple">
           <i class="fa-solid fa-headset"></i>
@@ -253,7 +269,7 @@
       <i class="fa-solid fa-chevron-right logout-arrow"></i>
     </div>
 
-    <!-- version -->
+    <!-- Version -->
     <div class="version-tag">
       IKEA India &nbsp;·&nbsp; <strong>v1.0.0</strong>
     </div>
@@ -274,8 +290,7 @@
       >
     </nav>
 
-    <script src="../profile/script.js"></script>
+    <script src="../shared/js/config.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
-
-<!-- fix deploy -->

@@ -19,7 +19,8 @@
           "backdrop-filter",
           "-webkit-text-size-adjust",
           "user-select",
-          "-webkit-overflow-scrolling"
+          "-webkit-overflow-scrolling",
+          "scrollbar-width"
         ]
       }
     ],

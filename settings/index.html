@@ -3,85 +3,295 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IKEA Settings</title>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="../settings/style.css" />
-
-    <!-- Font Awesome -->
+    <meta name="theme-color" content="#FFD700" />
+    <title>Settings | IKEA India</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
   </head>
-
   <body>
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="toastMsg">Done!</span>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modal">
+      <div class="modal-box">
+        <div class="modal-icon" id="modalIcon">
+          <i class="fa-solid fa-check" id="modalIconSym"></i>
+        </div>
+        <div class="modal-title" id="modalTitle">Done</div>
+        <div class="modal-msg" id="modalMsg"></div>
+        <div class="modal-btns" id="modalBtns">
+          <button class="modal-ok" onclick="closeModal()">OK</button>
+        </div>
+      </div>
+    </div>
+
     <!-- NAVBAR -->
     <div class="navbar">
-      <span class="back-btn" id="backBtn">
-        <i class="fas fa-arrow-left"></i>
+      <span class="back-btn" id="backBtn" onclick="handleBack()">
+        <i class="fa-solid fa-arrow-left"></i>
       </span>
-
-      <div class="logo">IKEA Settings</div>
-
-      <div></div>
+      <div class="logo" id="navTitle">IKEA Settings</div>
+      <div style="width: 38px"></div>
     </div>
 
-    <!-- CONTENT -->
     <div class="container">
-      <h2>Account Settings</h2>
+      <!-- ══════════════════════════
+         MENU VIEW (default)
+    ══════════════════════════ -->
+      <div id="menuView">
+        <h2>Account Settings</h2>
 
-      <!-- PASSWORD -->
-      <div class="card">
-        <h4>Change Password</h4>
+        <div class="menu-list">
+          <div
+            class="menu-item"
+            onclick="showView('passwordView','Change Password')"
+          >
+            <div class="mi-icon mi-blue">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <div class="mi-text">
+              <div class="mi-title">Change Password</div>
+              <div class="mi-sub">Update your account login password</div>
+            </div>
+            <div class="mi-arrow">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
 
-        <input type="password" id="newPassword" placeholder="New Password" />
-        <input
-          type="password"
-          id="confirmPassword"
-          placeholder="Confirm Password"
-        />
+          <div
+            class="menu-item"
+            onclick="showView('pinView','Change Withdraw PIN')"
+          >
+            <div class="mi-icon mi-yellow">
+              <i class="fa-solid fa-grid-2"></i>
+            </div>
+            <div class="mi-text">
+              <div class="mi-title">Change Withdraw PIN</div>
+              <div class="mi-sub">Update your 4-digit withdrawal PIN</div>
+            </div>
+            <div class="mi-arrow">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
 
-        <!-- CAPTCHA -->
-        <div class="captcha-box">
-          <span id="captchaText"></span>
-          <button id="refreshCaptcha">↻</button>
+          <div class="menu-item danger-item" onclick="confirmLogout()">
+            <div class="mi-icon mi-danger">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <div class="mi-text">
+              <div class="mi-title danger-text">Logout</div>
+              <div class="mi-sub">Sign out of your IKEA account</div>
+            </div>
+            <div class="mi-arrow mi-arrow-danger">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
         </div>
-
-        <input
-          type="text"
-          id="captchaInputPassword"
-          placeholder="Enter Captcha"
-        />
-
-        <button class="btn" id="updatePasswordBtn">Update Password</button>
       </div>
 
-      <!-- PIN -->
-      <div class="card">
-        <h4>Change Withdraw PIN</h4>
+      <!-- ══════════════════════════
+         CHANGE PASSWORD VIEW
+    ══════════════════════════ -->
+      <div id="passwordView" class="form-view" style="display: none">
+        <div class="card">
+          <h4><i class="fa-solid fa-lock"></i> Change Password</h4>
+          <div class="card-body">
+            <div class="field-group">
+              <div class="field-label">
+                <i class="fa-solid fa-key"></i> Current Password
+              </div>
+              <div class="input-wrap">
+                <span class="input-icon"><i class="fa-solid fa-key"></i></span>
+                <input
+                  type="password"
+                  id="currentPassword"
+                  placeholder="Enter current password"
+                />
+                <button
+                  class="eye-btn"
+                  onclick="toggleEye('currentPassword',this)"
+                >
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
 
-        <input type="password" id="newPin" placeholder="New PIN (4 digit)" />
+            <div class="field-group">
+              <div class="field-label">
+                <i class="fa-solid fa-lock"></i> New Password
+              </div>
+              <div class="input-wrap">
+                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                <input
+                  type="password"
+                  id="newPassword"
+                  placeholder="Min 6 characters"
+                  oninput="checkPasswordStrength(this.value)"
+                />
+                <button class="eye-btn" onclick="toggleEye('newPassword',this)">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+              <div class="strength-wrap">
+                <div class="strength-bar">
+                  <div class="strength-fill" id="pwStrengthFill"></div>
+                </div>
+                <div class="strength-label" id="pwStrengthLabel"></div>
+              </div>
+            </div>
 
-        <!-- CAPTCHA -->
-        <div class="captcha-box">
-          <span id="captchaTextPin"></span>
-          <button id="refreshCaptchaPin">↻</button>
+            <div class="field-group">
+              <div class="field-label">
+                <i class="fa-solid fa-rotate"></i> Confirm New Password
+              </div>
+              <div class="input-wrap">
+                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="Re-enter new password"
+                />
+                <button
+                  class="eye-btn"
+                  onclick="toggleEye('confirmPassword',this)"
+                >
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="captcha-section">
+              <div class="captcha-hint">
+                <i class="fa-solid fa-shield-halved"></i> Security Verification
+              </div>
+              <div class="captcha-box">
+                <div class="captcha-display" id="pwCaptchaDisplay"></div>
+                <button
+                  class="captcha-refresh"
+                  id="pwRefreshBtn"
+                  onclick="refreshCaptcha('pw')"
+                >
+                  <i class="fa-solid fa-rotate-right"></i>
+                </button>
+              </div>
+              <div class="input-wrap">
+                <span class="input-icon"
+                  ><i class="fa-solid fa-shield-halved"></i
+                ></span>
+                <input
+                  type="text"
+                  id="pwCaptchaInput"
+                  placeholder="Type the characters above"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
+            <div class="security-note">
+              <i class="fa-solid fa-circle-info"></i>
+              Password must be at least 6 characters. You will be logged out
+              after changing.
+            </div>
+
+            <button
+              class="btn"
+              id="updatePasswordBtn"
+              onclick="updatePassword()"
+            >
+              <i class="fa-solid fa-check"></i> Update Password
+            </button>
+          </div>
         </div>
-
-        <input type="text" id="captchaInputPin" placeholder="Enter Captcha" />
-
-        <button class="btn" id="updatePinBtn">Update PIN</button>
       </div>
 
-      <!-- SESSION -->
-      <div class="card">
-        <h4>Session</h4>
-        <button class="btn danger" id="logoutBtn">Logout</button>
+      <!-- ══════════════════════════
+         CHANGE PIN VIEW
+    ══════════════════════════ -->
+      <div id="pinView" class="form-view" style="display: none">
+        <div class="card">
+          <h4><i class="fa-solid fa-grid-2"></i> Change Withdraw PIN</h4>
+          <div class="card-body">
+            <div class="field-group">
+              <div class="field-label">
+                <i class="fa-solid fa-key"></i> Enter New 4-Digit PIN
+              </div>
+              <div class="pin-dots-row">
+                <div class="pin-dot active" id="pinDot0">—</div>
+                <div class="pin-dot" id="pinDot1">—</div>
+                <div class="pin-dot" id="pinDot2">—</div>
+                <div class="pin-dot" id="pinDot3">—</div>
+              </div>
+            </div>
+
+            <div class="numpad">
+              <button class="np-btn" onclick="npPress('1')">1</button>
+              <button class="np-btn" onclick="npPress('2')">2</button>
+              <button class="np-btn" onclick="npPress('3')">3</button>
+              <button class="np-btn" onclick="npPress('4')">4</button>
+              <button class="np-btn" onclick="npPress('5')">5</button>
+              <button class="np-btn" onclick="npPress('6')">6</button>
+              <button class="np-btn" onclick="npPress('7')">7</button>
+              <button class="np-btn" onclick="npPress('8')">8</button>
+              <button class="np-btn" onclick="npPress('9')">9</button>
+              <button class="np-btn np-empty"></button>
+              <button class="np-btn" onclick="npPress('0')">0</button>
+              <button class="np-btn np-del" onclick="npDelete()">
+                <i class="fa-solid fa-delete-left"></i>
+              </button>
+            </div>
+
+            <div class="captcha-section">
+              <div class="captcha-hint">
+                <i class="fa-solid fa-shield-halved"></i> Security Verification
+              </div>
+              <div class="captcha-box">
+                <div class="captcha-display" id="pinCaptchaDisplay"></div>
+                <button
+                  class="captcha-refresh"
+                  id="pinRefreshBtn"
+                  onclick="refreshCaptcha('pin')"
+                >
+                  <i class="fa-solid fa-rotate-right"></i>
+                </button>
+              </div>
+              <div class="input-wrap">
+                <span class="input-icon"
+                  ><i class="fa-solid fa-shield-halved"></i
+                ></span>
+                <input
+                  type="text"
+                  id="pinCaptchaInput"
+                  placeholder="Type the characters above"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
+            <div class="security-note">
+              <i class="fa-solid fa-circle-info"></i>
+              Your new PIN will replace the existing withdrawal PIN immediately.
+            </div>
+
+            <button class="btn" id="updatePinBtn" onclick="updatePin()">
+              <i class="fa-solid fa-grid-2"></i> Update PIN
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- JS -->
-    <script src="../settings/script.js"></script>
+    <script src="../../shared/js/config.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>

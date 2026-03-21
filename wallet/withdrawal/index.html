@@ -13,7 +13,7 @@
       href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../withdrawal/style.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <!-- LOADER -->
@@ -50,17 +50,17 @@
     </div>
 
     <div class="page-wrap">
-      <!-- ══ BALANCE CARD ══ -->
+      <!-- BALANCE CARD -->
       <div class="balance-card">
         <div class="bc-label">
           <i class="fa-solid fa-wallet"></i> Available Balance
         </div>
         <div class="bc-balance">
-          <sup>₹</sup><span id="displayBalance">12,480.50</span>
+          <sup>₹</sup><span id="displayBalance">0.00</span>
         </div>
       </div>
 
-      <!-- ══ QUICK AMOUNTS ══ -->
+      <!-- QUICK AMOUNTS -->
       <div class="section-label">Quick Select Amount</div>
       <div class="quick-amounts">
         <button class="qa-btn" onclick="setQuick(500,this)">₹500</button>
@@ -75,7 +75,7 @@
         </button>
       </div>
 
-      <!-- ══ AMOUNT INPUT ══ -->
+      <!-- AMOUNT INPUT -->
       <div>
         <div class="amount-wrap">
           <span class="amount-prefix">₹</span>
@@ -96,7 +96,7 @@
         </div>
       </div>
 
-      <!-- ══ FEE BREAKDOWN ══ -->
+      <!-- FEE BREAKDOWN -->
       <div class="fee-card dimmed" id="feeCard">
         <div class="fee-header">
           <div class="fee-header-left">
@@ -108,54 +108,54 @@
         <div class="fee-rows">
           <div class="fee-row">
             <div class="fee-row-left">
-              <i class="fa-solid fa-indian-rupee-sign"></i
-              ><span class="fee-row-label">Withdrawal Amount</span>
+              <i class="fa-solid fa-indian-rupee-sign"></i>
+              <span class="fee-row-label">Withdrawal Amount</span>
             </div>
             <span class="fee-row-value" id="feeAmount">₹0</span>
           </div>
           <div class="fee-row">
             <div class="fee-row-left">
-              <i class="fa-solid fa-percent"></i
-              ><span class="fee-row-label">Transaction Fee (10%)</span>
+              <i class="fa-solid fa-percent"></i>
+              <span class="fee-row-label">Transaction Fee (10%)</span>
             </div>
             <span class="fee-row-value red" id="feeFee">−₹0</span>
           </div>
           <div class="fee-row total-row">
             <div class="fee-row-left">
-              <i class="fa-solid fa-wallet"></i
-              ><span class="fee-row-label">You Will Receive</span>
+              <i class="fa-solid fa-wallet"></i>
+              <span class="fee-row-label">You Will Receive</span>
             </div>
             <span class="fee-row-value" id="feeNet">₹0</span>
           </div>
           <div class="fee-row net-row">
             <div class="fee-row-left">
-              <i class="fa-solid fa-building-columns"></i
-              ><span class="fee-row-label">Credited to Bank</span>
+              <i class="fa-solid fa-building-columns"></i>
+              <span class="fee-row-label">Credited to Bank</span>
             </div>
             <span class="fee-row-value green" id="feeCredited">₹0</span>
           </div>
           <div class="fee-row">
             <div class="fee-row-left">
-              <i class="fa-solid fa-clock"></i
-              ><span class="fee-row-label">Processing Time</span>
+              <i class="fa-solid fa-clock"></i>
+              <span class="fee-row-label">Processing Time</span>
             </div>
             <span class="fee-row-value">1–3 Business Days</span>
           </div>
           <div class="fee-row">
             <div class="fee-row-left">
-              <i class="fa-solid fa-calendar-check"></i
-              ><span class="fee-row-label">Balance After Withdrawal</span>
+              <i class="fa-solid fa-calendar-check"></i>
+              <span class="fee-row-label">Balance After Withdrawal</span>
             </div>
-            <span class="fee-row-value" id="feeAfter">₹12,480.50</span>
+            <span class="fee-row-value" id="feeAfter">₹0.00</span>
           </div>
         </div>
       </div>
 
-      <!-- ══ LINKED BANK ══ -->
+      <!-- LINKED BANK -->
       <div class="section-label">Withdraw To</div>
       <div id="bankSection"></div>
 
-      <!-- ══ PIN VERIFY ══ -->
+      <!-- PIN VERIFY -->
       <div class="section-label">Confirm with PIN</div>
       <div class="pin-verify-card">
         <div class="pvc-header">
@@ -189,7 +189,7 @@
         </div>
       </div>
 
-      <!-- ══ INFO NOTE ══ -->
+      <!-- INFO NOTE -->
       <div class="info-note">
         <i class="fa-solid fa-circle-info"></i>
         Withdrawals are processed within 1–3 business days. A 10% transaction
@@ -197,7 +197,7 @@
         submitting.
       </div>
 
-      <!-- ══ SUBMIT ══ -->
+      <!-- SUBMIT -->
       <button
         class="withdraw-btn"
         id="withdrawBtn"
@@ -208,24 +208,8 @@
         Request
       </button>
     </div>
-    <!-- /page-wrap -->
 
-    <!-- BOTTOM NAV -->
-    <!-- <nav class="bottom-nav">
-      <a href="../home/index.html" class="nav-btn"
-        ><i class="fa-solid fa-house"></i><span>Home</span></a
-      >
-      <a href="../products/index.html" class="nav-btn"
-        ><i class="fa-solid fa-couch"></i><span>Products</span></a
-      >
-      <a href="../referrals/index.html" class="nav-btn"
-        ><i class="fa-solid fa-gift"></i><span>Referrals</span></a
-      >
-      <a href="../profile/index.html" class="nav-btn active"
-        ><i class="fa-solid fa-user"></i><span>Profile</span></a
-      >
-    </nav> -->
-
-    <script src="../withdrawal/script.js"></script>
+    <script src="../../shared/js/config.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>

@@ -857,6 +857,32 @@ input {
 /* ─────────────────────────────────────────
        DETAIL DRAWER
     ───────────────────────────────────────── */
+
+.drawer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-radius: var(--radius) var(--radius) 0 0;
+    z-index: 5001;
+    transform: translateY(110%);
+    /* ← 110% ensures fully off screen */
+    transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 82vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    visibility: hidden;
+    /* ← fully hides when not open */
+}
+
+.drawer.open {
+    transform: translateY(0);
+    visibility: visible;
+    /* ← shows when open */
+}
+
 .drawer-bg {
     position: fixed;
     inset: 0;
@@ -865,10 +891,12 @@ input {
     display: none;
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
+    visibility: hidden;
 }
 
 .drawer-bg.open {
     display: block;
+    visibility: visible;
     animation: bgFade 0.25s ease;
 }
 
@@ -1221,4 +1249,148 @@ input {
     .drawer.open {
         transform: translateX(-50%) translateY(0);
     }
+}
+
+/* ── Enhanced drawer detail rows ── */
+.dr-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-size: .68rem;
+    font-weight: 800;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 8px 0 4px;
+    border-bottom: 1px solid var(--light-grey);
+    margin-bottom: 2px;
+}
+
+.dr-section-title i {
+    font-size: .62rem;
+    color: var(--yellow-deep);
+}
+
+.dr-row.highlight-row {
+    background: var(--yellow-soft);
+    border: 1px solid rgba(245, 194, 0, .3);
+}
+
+.dr-row.green-row {
+    background: var(--success-soft);
+    border: 1px solid #86EFAC;
+}
+
+.dr-val.cr {
+    color: var(--success);
+}
+
+.dr-val.dr {
+    color: var(--danger);
+}
+
+.dr-val.red {
+    color: var(--danger);
+}
+
+.dr-val.green {
+    color: var(--success);
+}
+
+.dr-val.bold {
+    font-size: .92rem;
+}
+
+.dr-val.ref-val {
+    font-family: var(--font-body);
+    font-size: .74rem;
+    font-weight: 600;
+    color: var(--blue);
+    background: rgba(0, 48, 135, .07);
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: .5px;
+}
+
+.dr-val.note-val {
+    font-family: var(--font-body);
+    font-size: .76rem;
+    font-weight: 400;
+    color: var(--grey);
+    font-style: italic;
+}
+
+/* ── Copy reference button ── */
+.copy-ref-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 100px;
+    background: var(--yellow-soft);
+    color: var(--blue);
+    border: 1.5px solid var(--yellow-deep);
+    font-family: var(--font-display);
+    font-size: .8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.copy-ref-btn:hover {
+    background: var(--yellow);
+    transform: translateY(-1px);
+}
+
+.copy-ref-btn:active {
+    transform: scale(.96);
+}
+
+.copy-ref-btn i {
+    font-size: .76rem;
+}
+
+/* ── Time icon inside meta ── */
+.ti-time {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.ti-time i {
+    font-size: .58rem;
+}
+
+/* ── Toast ── */
+.toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--blue);
+    color: var(--yellow);
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-family: var(--font-display);
+    font-size: .8rem;
+    font-weight: 700;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity .3s, transform .3s;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .2);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    pointer-events: none;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }

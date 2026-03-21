@@ -17,32 +17,24 @@
     <link rel="stylesheet" href="../home/style.css" />
   </head>
   <body>
-    <!-- PAGE LOADER -->
     <div id="pageLoader">
       <div class="loader-logo">IKEA</div>
       <div class="loader-bar"></div>
     </div>
 
-    <!-- ===== NAVBAR ===== -->
     <nav class="navbar">
-      <div class="nav-logo">
-        IKEA
-        <span>India – Home & Living</span>
-      </div>
+      <div class="nav-logo">IKEA<span>India – Home & Living</span></div>
     </nav>
 
-    <!-- ===== LIVE TRANSACTIONS ===== -->
     <div class="live-card">
       <div class="live-header">
-        <i class="fa-solid fa-bolt"></i>
-        <span>Live Orders</span>
+        <i class="fa-solid fa-bolt"></i><span>Live Orders</span>
       </div>
       <div class="live-ticker">
         <div class="ticker-track" id="tickerTrack"></div>
       </div>
     </div>
 
-    <!-- ===== HERO ===== -->
     <section class="hero">
       <div class="hero-text">
         <div class="hero-badge">
@@ -54,10 +46,9 @@
           accessories built for Indian living — smart, sustainable, and stylish.
         </p>
         <div class="hero-cta">
-          <a href="../products/index.html" class="btn-primary">
-            <i class="fa-solid fa-bag-shopping"></i> Shop Now
-          </a>
-          <!-- <a href="../home/index.html" class="btn-outline">Explore Rooms</a> -->
+          <a href="../products/index.html" class="btn-primary"
+            ><i class="fa-solid fa-bag-shopping"></i> Shop Now</a
+          >
         </div>
       </div>
       <div class="hero-visual">
@@ -70,7 +61,6 @@
       </div>
     </section>
 
-    <!-- ===== STATS STRIP ===== -->
     <div class="stats-strip">
       <div class="stat-item reveal">
         <div class="stat-num">500+</div>
@@ -82,7 +72,7 @@
       </div>
       <div class="stat-item reveal">
         <div class="stat-num">50K+</div>
-        <div class="stat-label">Happy Customers</div>
+        <div class="stat-label">Customers</div>
       </div>
       <div class="stat-item reveal">
         <div class="stat-num">4.8★</div>
@@ -90,7 +80,6 @@
       </div>
     </div>
 
-    <!-- ===== ABOUT ===== -->
     <section class="section">
       <span class="section-tag">Our Story</span>
       <h2 class="section-title">About <span class="highlight">IKEA</span></h2>
@@ -115,32 +104,27 @@
           </ul>
         </div>
         <div class="about-img-wrap reveal">
-          <div
-            style="
-              width: 100%;
-              height: 100%;
-              background: linear-gradient(135deg, #ffd700 0%, #003087 100%);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: white;
-              font-size: 5rem;
-            "
-          >
-            <i class="fa-solid fa-store" style="color: var(--yellow)"></i>
+          <div class="about-img-placeholder">
+            <!-- <i class="fa-solid fa-store"></i> -->
+            <img
+              src="../assets/images/ikea-founder-ingvar-kamprad.jpg"
+              alt="ikea-founder"
+            />
           </div>
           <div class="about-img-tag">Est. 1943 · Sweden</div>
         </div>
       </div>
     </section>
 
-    <!-- ===== PRODUCTS ===== -->
     <section class="products-section">
       <span class="section-tag">Collections</span>
       <h2 class="section-title">Our Home Solutions</h2>
       <div class="segment-grid">
         <div class="segment-card reveal">
-          <div class="segment-img"><i class="fa-solid fa-couch"></i></div>
+          <div class="segment-img">
+            <!-- <i class="fa-solid fa-couch"></i> -->
+            <img src="../assets/images/living-room.avif" alt="livin room" />
+          </div>
           <div class="segment-body">
             <h3>Living Room</h3>
             <p>
@@ -153,7 +137,10 @@
           </div>
         </div>
         <div class="segment-card reveal">
-          <div class="segment-img"><i class="fa-solid fa-bed"></i></div>
+          <div class="segment-img">
+            <!-- <i class="fa-solid fa-bed"></i> -->
+            <img src="../assets/images/bed-room.avif" alt="bed room" />
+          </div>
           <div class="segment-body">
             <h3>Bedroom</h3>
             <p>
@@ -166,7 +153,10 @@
           </div>
         </div>
         <div class="segment-card reveal">
-          <div class="segment-img"><i class="fa-solid fa-utensils"></i></div>
+          <div class="segment-img">
+            <!-- <i class="fa-solid fa-utensils"></i> -->
+            <img src="../assets/images/dinning-room.avif" alt="dinningroom" />
+          </div>
           <div class="segment-body">
             <h3>Kitchen & Dining</h3>
             <p>
@@ -181,38 +171,18 @@
       </div>
     </section>
 
-    <!-- ===== INDIA ===== -->
     <section class="india-section">
       <div class="india-grid">
         <div class="india-img-wrap reveal">
-          <div
-            style="
-              width: 100%;
-              height: 100%;
-              background: var(--blue);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            "
-          >
-            <i
-              class="fa-solid fa-building-columns"
-              style="font-size: 5rem; color: var(--yellow)"
-            ></i>
+          <div class="india-img-placeholder">
+            <!-- <i class="fa-solid fa-building-columns"></i> -->
+            <img src="../assets/images/ikea-india.jpg" alt="ikea india" />
           </div>
         </div>
         <div class="india-text reveal">
           <span class="section-tag">Local Presence</span>
           <h2 class="section-title">IKEA in India</h2>
-          <p
-            style="
-              color: var(--charcoal);
-              line-height: 1.8;
-              font-size: 1rem;
-              margin-bottom: 8px;
-              font-weight: 300;
-            "
-          >
+          <p class="india-desc">
             IKEA continues to expand across India with stores in Hyderabad,
             Mumbai, and Bengaluru — bringing Scandinavian design to Indian homes
             at unbeatable prices.
@@ -239,13 +209,19 @@
       </div>
     </section>
 
-    <!-- ===== LEADERSHIP ===== -->
+    <!-- LEADERSHIP — clean image markup, no inline style overrides -->
     <section class="leadership-section">
       <span class="section-tag">Team</span>
       <h2 class="section-title">Leadership</h2>
       <div class="leader-grid">
         <div class="leader-card reveal">
-          <div class="leader-img"><i class="fa-solid fa-user-tie"></i></div>
+          <div class="leader-img">
+            <img
+              src="../assets/images/jesper-brodin-ceo-ikea.jpg"
+              alt="Jesper Brodin – Group CEO"
+              loading="lazy"
+            />
+          </div>
           <div class="leader-body">
             <h3>Jesper Brodin</h3>
             <div class="role">Group CEO</div>
@@ -255,8 +231,15 @@
             </p>
           </div>
         </div>
+
         <div class="leader-card reveal">
-          <div class="leader-img"><i class="fa-solid fa-user-tie"></i></div>
+          <div class="leader-img">
+            <img
+              src="../assets/images/susanne pulverer-ikea-india-ceo.jpeg"
+              alt="Susanne Pulverer – CEO IKEA India"
+              loading="lazy"
+            />
+          </div>
           <div class="leader-body">
             <h3>Susanne Pulverer</h3>
             <div class="role">CEO, IKEA India</div>
@@ -266,8 +249,15 @@
             </p>
           </div>
         </div>
+
         <div class="leader-card reveal">
-          <div class="leader-img"><i class="fa-solid fa-user-tie"></i></div>
+          <div class="leader-img">
+            <img
+              src="../assets/images/ingrid-johansson.webp"
+              alt="Ingrid Johansson – Chief Sustainability Officer"
+              loading="lazy"
+            />
+          </div>
           <div class="leader-body">
             <h3>Ingrid Johansson</h3>
             <div class="role">Chief Sustainability Officer</div>
@@ -279,7 +269,6 @@
       </div>
     </section>
 
-    <!-- ===== INVESTORS ===== -->
     <section class="investors-section">
       <span class="section-tag">Ownership</span>
       <h2 class="section-title">Behind IKEA</h2>
@@ -309,39 +298,30 @@
       </div>
     </section>
 
-    <!-- ===== PROMO BANNER ===== -->
     <section class="promo-banner">
       <h2>Start Building Your Dream Home Today</h2>
       <p>Explore 500+ products across furniture, decor, kitchen & more</p>
-      <a
-        href="../products/index.html"
-        class="btn-primary"
-        style="display: inline-flex; position: relative; z-index: 1"
-      >
+      <a href="../products/index.html" class="btn-primary">
         <i class="fa-solid fa-bag-shopping"></i> Shop Now
       </a>
     </section>
 
-    <!-- ===== BOTTOM NAV ===== -->
     <nav class="bottom-nav">
-      <a href="../home/index.html" class="nav-btn active">
-        <i class="fa-solid fa-house"></i>
-        <span>Home</span>
-      </a>
-      <a href="../products/index.html" class="nav-btn">
-        <i class="fa-solid fa-couch"></i>
-        <span>Plans</span>
-      </a>
-      <a href="../referrals/index.html" class="nav-btn">
-        <i class="fa-solid fa-user-plus"></i>
-        <span>Team</span>
-      </a>
-      <a href="../profile/index.html" class="nav-btn">
-        <i class="fa-solid fa-circle-user"></i>
-        <span>Me</span>
-      </a>
+      <a href="../home/index.html" class="nav-btn active"
+        ><i class="fa-solid fa-house"></i><span>Home</span></a
+      >
+      <a href="../products/index.html" class="nav-btn"
+        ><i class="fa-solid fa-couch"></i><span>Shop</span></a
+      >
+      <a href="../referrals/index.html" class="nav-btn"
+        ><i class="fa-solid fa-user-plus"></i><span>Team</span></a
+      >
+      <a href="../profile/index.html" class="nav-btn"
+        ><i class="fa-solid fa-circle-user"></i><span>Mine</span></a
+      >
     </nav>
 
+    <script src="../shared/js/config.js"></script>
     <script src="../home/script.js"></script>
   </body>
 </html>

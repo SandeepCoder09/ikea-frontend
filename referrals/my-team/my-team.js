@@ -1,108 +1,128 @@
-/* ── MOCK DATA — replace with real API ── */
-const USER = { name: 'Arjun Kumar', id: 'IKEA-1042' };
+// referrals/my-team.js  — My Team Overview page
+document.addEventListener('DOMContentLoaded', async () => {
+  requireAuth();
+  setTimeout(() => document.getElementById('pageLoader')?.classList.add('hidden'), 1200);
+  await loadTeam();
+});
 
-const TEAM = [
-    { userId: 'IKEA-2841', level: 1, recharge: 5000, commission: 150, joinDate: '2026-01-10' },
-    { userId: 'IKEA-3392', level: 1, recharge: 3000, commission: 90, joinDate: '2026-01-15' },
-    { userId: 'IKEA-4471', level: 1, recharge: 10000, commission: 300, joinDate: '2026-02-01' },
-    { userId: 'IKEA-5512', level: 2, recharge: 2000, commission: 20, joinDate: '2026-02-10' },
-    { userId: 'IKEA-6603', level: 2, recharge: 7500, commission: 75, joinDate: '2026-02-18' },
-    { userId: 'IKEA-7714', level: 2, recharge: 4000, commission: 40, joinDate: '2026-03-01' },
-    { userId: 'IKEA-8825', level: 3, recharge: 1500, commission: 15, joinDate: '2026-03-05' },
-    { userId: 'IKEA-9936', level: 3, recharge: 8000, commission: 80, joinDate: '2026-03-10' },
-];
-
+let TEAM_DATA = [];
 let activeLevel = 'all';
 
-function initHero() {
-    const initials = USER.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-    document.getElementById('heroAvatar').textContent = initials;
-    document.getElementById('heroName').textContent = USER.name;
-    document.getElementById('heroId').textContent = 'ID: ' + USER.id;
-    const totalR = TEAM.reduce((s, m) => s + m.recharge, 0);
-    const totalC = TEAM.reduce((s, m) => s + m.commission, 0);
-    document.getElementById('hsTotalMembers').textContent = TEAM.length;
-    document.getElementById('hsTotalRecharge').textContent = '₹' + totalR.toLocaleString('en-IN');
-    document.getElementById('hsTotalComm').textContent = '₹' + totalC.toLocaleString('en-IN');
+async function loadTeam() {
+  const res = await apiFetch('/referrals/team');
+  if (!res?.success) {
+    showToast('Failed to load team data', 'fa-xmark');
+    return;
+  }
+
+  const user = getUser();
+
+  /* ── Hero Banner ── */
+  const initials = (user?.name || 'IK').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  setText('heroAvatar', initials);
+  setText('heroName', user?.name || 'Member');
+  setText('heroId', 'ID: ' + (user?.uid || '—'));
+  setText('hsTotalMembers', res.summary.totalMembers);
+  setText('hsTotalRecharge', formatINR(res.summary.totalRecharge));
+  setText('hsTotalComm', formatINR(res.summary.totalCommission));
+
+  /* ── Income Overview ── */
+  setText('igTotal', formatINR(res.income.total));
+  setText('igToday', formatINR(res.income.today));
+  setText('igYesterday', formatINR(res.income.yesterday));
+  setText('igWeek', formatINR(res.income.week));
+  setText('igMonth', formatINR(res.income.month || 0));
+
+  /* ── Level Income ── */
+  setText('lvl1Amt', formatINR(res.levelIncome.level1));
+  setText('lvl2Amt', formatINR(res.levelIncome.level2));
+  setText('lvl3Amt', formatINR(res.levelIncome.level3));
+
+  /* ── Qualification Strip ── */
+  const dot = document.getElementById('qualDot');
+  const text = document.getElementById('qualText');
+  const badge = document.getElementById('qualBadge');
+  const l1Count = res.members.filter(m => m.level === 1).length;
+
+  if (res.qualified) {
+    if (dot) dot.className = 'qual-dot qualified';
+    if (text) text.textContent = `Qualified · ${l1Count} direct referrals — level income active`;
+    if (badge) { badge.textContent = 'Qualified'; badge.className = 'qual-badge ok'; }
+  } else {
+    if (dot) dot.className = 'qual-dot unqualified';
+    if (text) text.textContent = `Not qualified yet · ${l1Count}/3 direct referrals needed`;
+    if (badge) { badge.textContent = 'Not Qualified'; badge.className = 'qual-badge no'; }
+  }
+
+  /* ── Members ── */
+  TEAM_DATA = res.members;
+  setText('msCount', TEAM_DATA.length);
+  renderMembers(TEAM_DATA);
 }
 
-function initIncome() {
-    const total = TEAM.reduce((s, m) => s + m.commission, 0);
-    document.getElementById('igTotal').textContent = '₹' + total.toLocaleString('en-IN');
-    document.getElementById('igToday').textContent = '₹320';
-    document.getElementById('igYesterday').textContent = '₹270';
-    document.getElementById('igWeek').textContent = '₹1,480';
-    document.getElementById('igMonth').textContent = '₹4,250';
-    const l1 = TEAM.filter(m => m.level === 1).reduce((s, m) => s + m.commission, 0);
-    const l2 = TEAM.filter(m => m.level === 2).reduce((s, m) => s + m.commission, 0);
-    const l3 = TEAM.filter(m => m.level === 3).reduce((s, m) => s + m.commission, 0);
-    document.getElementById('lvl1Amt').textContent = '₹' + l1.toLocaleString('en-IN');
-    document.getElementById('lvl2Amt').textContent = '₹' + l2.toLocaleString('en-IN');
-    document.getElementById('lvl3Amt').textContent = '₹' + l3.toLocaleString('en-IN');
-}
-
-function initQual() {
-    const direct = TEAM.filter(m => m.level === 1).length;
-    const ok = direct >= 3;
-    document.getElementById('qualDot').className = 'qual-dot ' + (ok ? 'qualified' : 'unqualified');
-    document.getElementById('qualText').textContent = ok
-        ? `Qualified · ${direct} direct referrals — level income active`
-        : `Not qualified yet · ${direct}/3 direct referrals needed`;
-    document.getElementById('qualBadge').textContent = ok ? 'Qualified' : 'Not Qualified';
-    document.getElementById('qualBadge').className = 'qual-badge ' + (ok ? 'ok' : 'no');
-}
-
+/* ── Render member cards ── */
 function renderMembers(list) {
-    const container = document.getElementById('memberList');
-    document.getElementById('msCount').textContent = list.length;
-    if (!list.length) {
-        container.innerHTML = `
-          <div class="empty-members">
-            <div class="e-icon"><i class="fa-solid fa-users-slash"></i></div>
-            <h4>No Members Found</h4>
-            <p>Try a different filter or search term.</p>
-          </div>`;
-        return;
-    }
-    container.innerHTML = list.map((m, i) => {
-        const initials = m.userId.replace('IKEA-', '').slice(-2);
-        const date = new Date(m.joinDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-        return `
-        <div class="member-card" style="animation-delay:${i * 0.05}s">
-          <div class="mc-avatar mc-av-l${m.level}">${initials}</div>
-          <div>
-            <div class="mc-id">${m.userId}</div>
-            <div class="mc-meta">
-              <span class="level-pip pip-l${m.level}">L${m.level}</span>
-              <span class="mc-date">${date}</span>
-            </div>
-          </div>
-          <div class="mc-right">
-            <div class="mc-recharge">₹${m.recharge.toLocaleString('en-IN')}</div>
-            <div class="mc-commission">+₹${m.commission.toLocaleString('en-IN')} comm.</div>
-          </div>
-        </div>`;
-    }).join('');
+  const container = document.getElementById('memberList');
+  if (!container) return;
+
+  setText('msCount', list.length);
+
+  if (!list.length) {
+    container.innerHTML = `
+      <div class="empty-members">
+        <div class="e-icon"><i class="fa-solid fa-users-slash"></i></div>
+        <h4>No Members Found</h4>
+        <p>Try a different filter or search term.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = list.map((m, i) => {
+    const initials = (m.name || m.userId || '??')
+      .split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    const date = formatDate(m.joinDate);
+
+    return `
+    <div class="member-card" style="animation-delay:${i * 0.05}s">
+      <div class="mc-avatar mc-av-l${m.level}">${initials}</div>
+      <div class="mc-info">
+        <div class="mc-id">${m.userId || '—'}</div>
+        <div class="mc-meta">
+          <span class="level-pip pip-l${m.level}">L${m.level}</span>
+          <span class="mc-date">${date}</span>
+        </div>
+      </div>
+      <div class="mc-right">
+        <div class="mc-recharge">${formatINR(m.recharge)}</div>
+        <div class="mc-commission">+${formatINR(m.commission)} comm.</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
+/* ── Search ── */
 function filterMembers() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    let list = activeLevel === 'all' ? TEAM : TEAM.filter(m => String(m.level) === activeLevel);
-    if (q) list = list.filter(m => m.userId.toLowerCase().includes(q));
-    renderMembers(list);
+  const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
+  let list = activeLevel === 'all'
+    ? TEAM_DATA
+    : TEAM_DATA.filter(m => String(m.level) === activeLevel);
+  if (q) list = list.filter(m =>
+    (m.userId || '').toLowerCase().includes(q) ||
+    (m.name || '').toLowerCase().includes(q)
+  );
+  renderMembers(list);
 }
 
+/* ── Level filter pills ── */
 function setLevel(level, el) {
-    activeLevel = level;
-    document.querySelectorAll('.lp-btn').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
-    filterMembers();
+  activeLevel = level;
+  document.querySelectorAll('.lp-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  filterMembers();
 }
 
-window.addEventListener('load', () => {
-    setTimeout(() => document.getElementById('pageLoader').classList.add('hidden'), 1200);
-    initHero();
-    initIncome();
-    initQual();
-    renderMembers(TEAM);
-});
+/* ── Helper ── */
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}

@@ -1,67 +1,116 @@
-/* ── MOCK DATA — replace with real API ── */
-const USER = {
-    name: 'Testing Account',
-    uid: 'IKEA-1042',
-    mobile: '+91 98765 43210',
-    balance: 12480.50,
-    plans: 3,
-    team: 8,
-    earned: 4250,
-};
+// profile/script.js
+document.addEventListener('DOMContentLoaded', async () => {
+    requireAuth();
+    setTimeout(() => document.getElementById('pageLoader')?.classList.add('hidden'), 1200);
 
-/* ── INIT ── */
-function init() {
-    const initials = USER.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-    document.getElementById('avatarInitials').textContent = initials;
-    document.getElementById('coverName').textContent = USER.name;
-    document.getElementById('coverUid').textContent = USER.uid;
-    document.getElementById('coverMobile').textContent = USER.mobile;
-    document.getElementById('walletBalance').textContent = USER.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    document.getElementById('qsPlans').textContent = USER.plans;
-    document.getElementById('qsTeam').textContent = USER.team;
-    document.getElementById('qsEarned').textContent = '₹' + USER.earned.toLocaleString('en-IN');
-}
+    // Settings button
+    const settingsBtn = document.getElementById('settingsBtn');
+    if (settingsBtn) settingsBtn.onclick = () => window.location.href = '../settings/index.html';
 
-document.getElementById("settingsBtn").addEventListener("click", () => {
-    window.location.href = "../settings/index.html";
+    await loadProfile();
 });
 
-/* ── REFRESH WALLET ── */
-function refreshWallet() {
-    const btn = document.getElementById('refreshBtn');
-    btn.classList.add('spinning');
-    setTimeout(() => {
-        btn.classList.remove('spinning');
-        // simulate updated balance
-        const newBal = (USER.balance + Math.random() * 10).toFixed(2);
-        document.getElementById('walletBalance').textContent = parseFloat(newBal).toLocaleString('en-IN', { minimumFractionDigits: 2 });
-        showToast('Balance refreshed!', 'fa-rotate-right');
-    }, 800);
+/* ════════════════════════════════════════
+   LOAD ALL PROFILE DATA
+════════════════════════════════════════ */
+async function loadProfile() {
+    // Fire all requests in parallel for speed
+    const [profileRes, balRes, teamRes, plansRes] = await Promise.all([
+        apiFetch('/user/profile'),
+        apiFetch('/wallet/balance'),
+        apiFetch('/referrals/team'),
+        apiFetch('/products/my-plans/list'),
+    ]);
+
+    /* ── User info ── */
+    if (profileRes?.success) {
+        const user = profileRes.user;
+        localStorage.setItem('ikea_user', JSON.stringify(user));
+
+        // Avatar initials (shown when image fails to load)
+        const initials = (user.name || 'IK')
+            .split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+        const initEl = document.getElementById('avatarInitials');
+        if (initEl) {
+            initEl.textContent = initials;
+            initEl.style.display = 'flex';
+        }
+
+        setText('coverName', user.name || 'Member');
+        setText('coverUid', user.uid || '—');
+        setText('coverMobile', user.mobile || '—');
+        setText('qsEarned', formatINR(user.totalEarned || 0));
+    }
+
+    /* ── Wallet balance ── */
+    if (balRes?.success) {
+        setText('walletBalance',
+            Number(balRes.balance).toLocaleString('en-IN', { minimumFractionDigits: 2 })
+        );
+    }
+
+    /* ── Active plans count ── */
+    if (plansRes?.success) {
+        const active = (plansRes.plans || []).filter(p => p.status === 'active').length;
+        setText('qsPlans', active);
+    }
+
+    /* ── Team member count ── */
+    if (teamRes?.success) {
+        setText('qsTeam', teamRes.summary?.totalMembers || 0);
+    }
 }
 
-/* ── LOGOUT ── */
+/* ════════════════════════════════════════
+   REFRESH WALLET BALANCE
+════════════════════════════════════════ */
+async function refreshWallet() {
+    const btn = document.getElementById('refreshBtn');
+    const icon = btn?.querySelector('i');
+    if (!btn || btn.dataset.loading === 'true') return;
+
+    btn.dataset.loading = 'true';
+
+    // Force spin by replacing the element's style directly
+    if (icon) {
+        icon.style.transition = 'none';
+        icon.style.animation = 'none';
+        void icon.offsetHeight; // force reflow
+        icon.style.animation = 'spin360 0.7s linear infinite';
+    }
+
+    const [res] = await Promise.all([
+        apiFetch('/wallet/balance'),
+        new Promise(r => setTimeout(r, 800)),
+    ]);
+
+    // Stop spin
+    if (icon) icon.style.animation = 'none';
+    btn.dataset.loading = 'false';
+
+    if (res?.success) {
+        setText('walletBalance',
+            Number(res.balance).toLocaleString('en-IN', { minimumFractionDigits: 2 })
+        );
+        showToast('Balance refreshed! ✓', 'fa-rotate-right');
+    } else {
+        showToast('Could not refresh', 'fa-triangle-exclamation');
+    }
+}
+
+/* ════════════════════════════════════════
+   LOGOUT
+════════════════════════════════════════ */
 function logout() {
     showToast('Logging out…', 'fa-right-from-bracket');
     setTimeout(() => {
-        // clear token and redirect
-        localStorage.removeItem('token');
-        window.location.href = '../auth/login.html';
-    }, 1200);
+        clearAuth();
+        window.location.href = '../auth/sign-in/sign-in.html';
+    }, 900);
 }
 
-/* ── TOAST ── */
-let toastTimer;
-function showToast(msg, icon = 'fa-circle-check') {
-    const t = document.getElementById('toast');
-    document.getElementById('toastMsg').textContent = msg;
-    t.querySelector('i').className = `fa-solid ${icon}`;
-    t.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+/* ── Helper ── */
+function setText(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
 }
-
-/* ── BOOT ── */
-window.addEventListener('load', () => {
-    setTimeout(() => document.getElementById('pageLoader').classList.add('hidden'), 1200);
-    init();
-});

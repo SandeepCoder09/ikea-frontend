@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFD700" />
+    <title>Sign In | IKEA India</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../sign-in/sign-in.css" />
+  </head>
+  <body>
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="toastMsg">Done!</span>
+    </div>
+
+    <div class="auth-wrapper">
+      <!-- LEFT — branding -->
+      <div class="auth-left">
+        <div class="auth-left-inner">
+          <div class="brand-logo">IKEA</div>
+          <div class="brand-tag">India – Home & Living</div>
+          <h1 class="brand-headline">
+            Build Your<br /><em>Dream Home</em><br />& Earn Daily
+          </h1>
+          <p class="brand-sub">
+            Join 50,000+ members earning daily returns with IKEA investment
+            plans.
+          </p>
+          <div class="brand-stats">
+            <div class="bs-item">
+              <div class="bs-num">50K+</div>
+              <div class="bs-lbl">Members</div>
+            </div>
+            <div class="bs-item">
+              <div class="bs-num">₹80</div>
+              <div class="bs-lbl">Min Daily</div>
+            </div>
+            <div class="bs-item">
+              <div class="bs-num">100%</div>
+              <div class="bs-lbl">Secure</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT — form -->
+      <div class="auth-right">
+        <div class="auth-card">
+          <!-- top -->
+          <div class="auth-card-top">
+            <div class="auth-logo">IKEA</div>
+            <h2 class="auth-title">Welcome Back 👋</h2>
+            <p class="auth-sub">Sign in to your IKEA account</p>
+          </div>
+
+          <!-- form -->
+          <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+            <div class="field">
+              <label
+                ><i class="fa-solid fa-mobile-screen-button"></i> Mobile
+                Number</label
+              >
+              <div class="input-wrap">
+                <span class="input-prefix">+91</span>
+                <input
+                  type="tel"
+                  id="mobile"
+                  placeholder="Enter your mobile number"
+                  maxlength="10"
+                  inputmode="numeric"
+                  oninput="this.value=this.value.replace(/\D/g,'')"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label><i class="fa-solid fa-lock"></i> Password</label>
+              <div class="input-wrap">
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="eye-btn"
+                  onclick="togglePassword('password', this)"
+                >
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="auth-btn" id="loginBtn">
+              <i class="fa-solid fa-right-to-bracket"></i> Sign In
+            </button>
+          </form>
+
+          <!-- divider -->
+          <div class="auth-divider"><span>Don't have an account?</span></div>
+
+          <!-- switch -->
+          <a href="../sign-up/sign-up.html" class="auth-switch-btn">
+            <i class="fa-solid fa-user-plus"></i> Create Account
+          </a>
+
+          <!-- footer note -->
+          <p class="auth-footer">
+            By signing in you agree to our <a href="#">Terms</a> &
+            <a href="#">Privacy Policy</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../shared/js/config.js"></script>
+    <script src="../sign-in/sign-in.js"></script>
+  </body>
+</html>
