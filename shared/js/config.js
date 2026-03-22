@@ -1,18 +1,22 @@
 // shared/js/config.js
-// ─── IKEA India — Global Frontend Config ───────────────────
 
-/* ════════════════════════════════════════════
-   1. API SETTINGS
-════════════════════════════════════════════ */
+const isLocal =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname.startsWith("10.");
+
 const CONFIG = {
-    BASE_URL: 'http://10.81.143.223:3000',
-    API: 'http://10.81.143.223:3000/api',
+    BASE_URL: isLocal
+        ? "http://10.81.143.223:3000"
+        : "https://ikea-backend-3k8y.onrender.com",
+
+    API: isLocal
+        ? "http://10.81.143.223:3000/api"
+        : "https://ikea-backend-3k8y.onrender.com/api",
 };
 
-// Keep this alias for any code that uses API_URL directly
+// Alias
 const API_URL = CONFIG.API;
-
-// Absolute site root for redirects
 const SITE_ROOT = window.location.origin;
 
 /* ════════════════════════════════════════════

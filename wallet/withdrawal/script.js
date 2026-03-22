@@ -220,10 +220,16 @@ async function submitWithdraw() {
 
     document.getElementById('processingScreen').classList.add('show');
 
-    const res = await apiFetch('/wallet/withdraw', {
+    // Use raw fetch to prevent 401 (wrong PIN) from triggering logout
+    const token = getToken();
+    const res = await fetch(`${CONFIG.API}/wallet/withdraw`, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({ amount: amt, pin: enteredPin }),
-    });
+    }).then(r => r.json()).catch(() => ({ success: false, message: 'Network error.' }));
 
     document.getElementById('processingScreen').classList.remove('show');
 
