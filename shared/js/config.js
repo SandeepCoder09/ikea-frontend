@@ -1,23 +1,33 @@
 // shared/js/config.js
 
+const hostname = window.location.hostname;
+
+// Dynamically check for localhost AND all local network IPs (10., 172., 192.)
 const isLocal =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1" ||
-    window.location.hostname.startsWith("10.");
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname.startsWith("10.") ||
+    hostname.startsWith("172.") ||
+    hostname.startsWith("192.");
+
+// Dynamically use the current IP, just switch the port to 3000
+const localBackendUrl = `http://${hostname}:3000`;
 
 const CONFIG = {
     BASE_URL: isLocal
-        ? "http://10.81.143.223:3000"
+        ? localBackendUrl
         : "https://ikea-backend-3k8y.onrender.com",
 
     API: isLocal
-        ? "http://10.81.143.223:3000/api"
+        ? `${localBackendUrl}/api`
         : "https://ikea-backend-3k8y.onrender.com/api",
 };
 
 // Alias
 const API_URL = CONFIG.API;
 const SITE_ROOT = window.location.origin;
+
+/* ... keep the rest of your config.js exactly the same below this ... */
 
 /* ════════════════════════════════════════════
    2. SESSION HELPERS

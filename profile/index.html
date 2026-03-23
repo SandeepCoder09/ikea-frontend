@@ -37,11 +37,41 @@
     <nav class="navbar">
       <div class="nav-logo">IKEA <span>India – Home & Living</span></div>
       <div class="nav-actions">
-        <button class="settings-btn" id="settingsBtn" title="Settings">
-          <i class="fas fa-cog"></i>
+        <!-- Updated Check-in Button -->
+        <button
+          class="nav-checkin-btn"
+          id="navCheckInBtn"
+          title="Daily Check-in"
+        >
+          <i class="fa-regular fa-calendar-check"></i> Check In
         </button>
       </div>
     </nav>
+
+    <!-- CALENDAR CHECK-IN MODAL (Hidden by default) -->
+    <div class="modal-overlay hidden" id="checkInModal">
+      <div class="checkin-modal-content">
+        <button class="close-modal-btn" id="closeModalBtn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="modal-header">
+          <h2>Daily Rewards</h2>
+          <p class="streak-text">
+            🔥 <span id="streakCount">0</span> Day Streak!
+          </p>
+        </div>
+
+        <!-- 7-Day Calendar Grid -->
+        <div class="calendar-grid" id="calendarGrid">
+          <!-- JavaScript will inject the days here -->
+        </div>
+
+        <button class="claim-reward-btn" id="claimRewardBtn">
+          Claim ₹1 for Today
+        </button>
+      </div>
+    </div>
 
     <!-- ══ COVER ══ -->
     <div class="profile-cover">

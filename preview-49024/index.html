@@ -1,0 +1,132 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IKEA Account Registration</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #f9f9f9;
+      }
+      input,
+      button {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+      button {
+        background: #0058a3;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+      label {
+        display: block;
+        margin: 10px 0 5px;
+        font-weight: bold;
+      }
+      #mathProblem {
+        font-size: 1.2em;
+        color: #0058a3;
+      }
+      .footer {
+        font-size: 0.8em;
+        color: #666;
+        text-align: center;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2 style="color: #0058a3">ðŸ›‹ï¸ IKEA</h2>
+    <p style="color: #666">Join thousands of earners today! âœ¨</p>
+    <form id="regForm" method="POST" action="#">
+      <!-- Replace action with your backend -->
+      <label>Full Name</label>
+      <input type="text" name="full_name" placeholder="Full Name" required />
+      <label>Mobile Number</label>
+      <input
+        type="tel"
+        name="mobile"
+        placeholder="+91"
+        pattern="[0-9]{10,}"
+        required
+      />
+      <label>Password</label>
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        minlength="6"
+        required
+      />
+      <label>Confirm Password</label>
+      <input
+        type="password"
+        name="confirm_password"
+        placeholder="Confirm Password"
+        minlength="6"
+        required
+      />
+      <!-- Custom Math CAPTCHA -->
+      <label for="captchaInput"
+        >Solve for security: <span id="mathProblem"></span> = ?</label
+      >
+      <input
+        type="number"
+        id="captchaInput"
+        placeholder="Enter answer"
+        required
+      />
+      <button type="submit" id="submitBtn" disabled>Create Account</button>
+    </form>
+    <div class="footer">
+      Already have an account? <a href="#" style="color: #0058a3">Sign in</a
+      ><br />
+      By creating an account you agree to our
+      <a href="#" style="color: #0058a3">Terms</a> &
+      <a href="#" style="color: #0058a3">Privacy Policy</a>
+    </div>
+    <script>
+      function generateMath() {
+        const num1 = Math.floor(Math.random() * 20) + 1;
+        const num2 = Math.floor(Math.random() * 20) + 1;
+        const answer = num1 + num2;
+        document.getElementById(
+          "mathProblem"
+        ).textContent = `${num1} + ${num2}`;
+        document.getElementById("submitBtn").dataset.answer = answer;
+      }
+      document
+        .getElementById("captchaInput")
+        .addEventListener("input", function () {
+          const userAnswer = parseInt(this.value);
+          const correct = parseInt(
+            document.getElementById("submitBtn").dataset.answer
+          );
+          document.getElementById("submitBtn").disabled =
+            isNaN(userAnswer) || userAnswer !== correct;
+        });
+      generateMath();
+      const pass1 = document.querySelector('input[name="password"]');
+      const pass2 = document.querySelector('input[name="confirm_password"]');
+      pass2.addEventListener("input", function () {
+        if (pass1.value !== pass2.value) {
+          pass2.setCustomValidity("Passwords must match");
+        } else {
+          pass2.setCustomValidity("");
+        }
+      });
+    </script>
+  </body>
+</html>

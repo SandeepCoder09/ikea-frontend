@@ -164,7 +164,7 @@ button {
     align-items: center;
 }
 
-.settings-btn {
+/* .settings-btn {
     width: 42px;
     height: 42px;
     border-radius: 50%;
@@ -187,6 +187,165 @@ button {
 
 .settings-btn:active {
     transform: scale(.95);
+} */
+
+/* Navbar Button */
+.nav-checkin-btn {
+    background: #0058a3;
+    /* IKEA Blue */
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+}
+
+.nav-checkin-btn:hover {
+    background: #00407a;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Modal Content */
+.checkin-modal-content {
+    background: #fff;
+    width: 90%;
+    max-width: 380px;
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.hidden .checkin-modal-content {
+    transform: translateY(20px);
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    color: #666;
+    cursor: pointer;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #0058a3;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.streak-text {
+    color: #ffaa00;
+    font-weight: bold;
+    margin-top: 5px;
+    font-size: 1.1rem;
+}
+
+/* Calendar Grid */
+.calendar-grid {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    background: #f5f5f5;
+    padding: 15px 10px;
+    border-radius: 12px;
+}
+
+.cal-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: #555;
+    position: relative;
+}
+
+.cal-circle {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #888;
+    transition: 0.3s;
+}
+
+/* Today styling */
+.cal-day.today .cal-circle {
+    border-color: #0058a3;
+    color: #0058a3;
+    box-shadow: 0 0 8px rgba(0, 88, 163, 0.3);
+}
+
+/* Checked-in styling */
+.cal-day.checked .cal-circle {
+    background: #4caf50;
+    /* Green check */
+    border-color: #4caf50;
+    color: #fff;
+}
+
+/* Big Claim Button */
+.claim-reward-btn {
+    width: 100%;
+    background: #FBD914;
+    /* IKEA Yellow */
+    color: #000;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.claim-reward-btn:hover {
+    background: #e5c30b;
+}
+
+.claim-reward-btn:disabled {
+    background: #e0e0e0;
+    color: #888;
+    cursor: not-allowed;
 }
 
 /* ── COVER ── */
