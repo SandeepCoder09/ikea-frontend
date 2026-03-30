@@ -129,11 +129,17 @@ function renderUPI() {
     const p = currentTxn.payment;
 
     box.innerHTML = `
-        <p><b>UPI ID:</b> ${p.upiId}</p>
-        <img src="${getQR(p.qr)}" width="180"/>
-        <p>Amount: ${formatINR(currentTxn.amount)}</p>
-        <p>Ref: ${currentTxn.ref}</p>
-    `;
+    <div style="text-align:center; padding: 10px 0;">
+        <p style="margin:0 0 8px 0;"><b>UPI ID:</b> ${p.upiId}</p>
+
+        <div style="display:flex; justify-content:center; margin: 10px 0;">
+            <img src="${getQR(p.qr)}" width="180" height="180" style="border-radius:12px; background:#fff; padding:10px;" />
+        </div>
+
+        <p style="margin:6px 0;"><b>Amount:</b> ${formatINR(currentTxn.amount)}</p>
+        <p style="margin:6px 0;"><b>Ref:</b> ${currentTxn.ref}</p>
+    </div>
+`;
 }
 
 function renderCrypto() {
@@ -147,11 +153,17 @@ function renderCrypto() {
     const p = currentTxn.payment;
 
     box.innerHTML = `
-        <p><b>Address:</b> ${p.address}</p>
-        <img src="${getQR(p.address)}" width="180"/>
-        <p>Network: ${p.network}</p>
-        <p>Ref: ${currentTxn.ref}</p>
-    `;
+    <div style="text-align:center; padding: 10px 0;">
+        <p style="margin:0 0 8px 0; word-break:break-all;"><b>Address:</b> ${p.address}</p>
+
+        <div style="display:flex; justify-content:center; margin: 10px 0;">
+            <img src="${getQR(p.address)}" width="180" height="180" style="border-radius:12px; background:#fff; padding:10px;" />
+        </div>
+
+        <p style="margin:6px 0;"><b>Network:</b> ${p.network}</p>
+        <p style="margin:6px 0;"><b>Ref:</b> ${currentTxn.ref}</p>
+    </div>
+`;
 }
 
 /* ===============================
