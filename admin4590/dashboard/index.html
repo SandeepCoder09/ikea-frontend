@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | IKEA Admin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/admin.css" />
+  </head>
+  <body>
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+    <div class="toast" id="adminToast"></div>
+
+    <!-- Confirm modal -->
+    <div class="modal-overlay" id="confirmModal">
+      <div class="modal-box" style="max-width: 360px">
+        <div class="modal-header">
+          <div class="modal-title">Confirm Action</div>
+        </div>
+        <div class="modal-body">
+          <p
+            id="confirmMsg"
+            style="font-size: 0.88rem; color: var(--text-second)"
+          >
+            Are you sure?
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-outline btn-sm"
+            onclick="closeModal('confirmModal')"
+          >
+            Cancel
+          </button>
+          <button class="btn btn-danger btn-sm" id="confirmOkBtn">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-layout">
+      <!-- SIDEBAR -->
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-text">IKEA</div>
+          <div class="logo-sub">India – Home & Living</div>
+          <div class="admin-badge">⚙ Admin Panel</div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a href="index.html" class="nav-item active"
+            ><i class="fa-solid fa-chart-pie"></i> Dashboard</a
+          >
+          <a href="../users/users.html" class="nav-item"
+            ><i class="fa-solid fa-users"></i> Users</a
+          >
+          <div class="nav-section-label">Transactions</div>
+          <a href="../deposits/deposits.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-down"></i> Deposits
+            <span class="nav-badge" id="sbDepositBadge" style="display: none"
+              >0</span
+            ></a
+          >
+          <a href="../withdrawals/withdrawals.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-up"></i> Withdrawals
+            <span class="nav-badge" id="sbWithdrawBadge" style="display: none"
+              >0</span
+            ></a
+          >
+          <a href="../transactions/transactions.html" class="nav-item"
+            ><i class="fa-solid fa-clock-rotate-left"></i> All Transactions</a
+          >
+          <div class="nav-section-label">Products</div>
+          <a href="../plans/plans.html" class="nav-item"
+            ><i class="fa-solid fa-box"></i> Plans / Products</a
+          >
+          <a href="../gifts/gift-codes.html" class="nav-item"
+            ><i class="fa-solid fa-gift"></i> Gift Codes</a
+          >
+          <div class="nav-section-label">Reports</div>
+          <a href="../reports/reports.html" class="nav-item"
+            ><i class="fa-solid fa-chart-line"></i> Profit & Loss</a
+          >
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sidebar-logout" onclick="adminLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <div class="main-area">
+        <header class="admin-header">
+          <div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="header-title">Dashboard</div>
+            <div class="header-sub">
+              Welcome back, <span id="adminName">Admin</span>
+            </div>
+          </div>
+          <div class="header-right">
+            <button
+              class="theme-toggle"
+              id="themeToggle"
+              onclick="toggleTheme()"
+            ></button>
+            <div class="admin-user-pill">
+              <div class="aup-avatar">AD</div>
+              <span class="aup-name" id="adminName2">Admin</span>
+            </div>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <!-- STATS GRID -->
+          <div class="stats-grid" id="statsGrid">
+            <!-- filled by JS -->
+            <div
+              class="stat-card sc-users"
+              style="min-height: 120px; animation: pulse 1.5s ease infinite"
+            >
+              <div
+                style="height: 80px; background: var(--bg); border-radius: 8px"
+              ></div>
+            </div>
+            <div
+              class="stat-card sc-deposit"
+              style="
+                min-height: 120px;
+                animation: pulse 1.5s ease infinite 0.1s;
+              "
+            >
+              <div
+                style="height: 80px; background: var(--bg); border-radius: 8px"
+              ></div>
+            </div>
+            <div
+              class="stat-card sc-withdraw"
+              style="
+                min-height: 120px;
+                animation: pulse 1.5s ease infinite 0.2s;
+              "
+            >
+              <div
+                style="height: 80px; background: var(--bg); border-radius: 8px"
+              ></div>
+            </div>
+            <div
+              class="stat-card sc-plans"
+              style="
+                min-height: 120px;
+                animation: pulse 1.5s ease infinite 0.3s;
+              "
+            >
+              <div
+                style="height: 80px; background: var(--bg); border-radius: 8px"
+              ></div>
+            </div>
+            <div
+              class="stat-card sc-profit"
+              style="
+                min-height: 120px;
+                animation: pulse 1.5s ease infinite 0.4s;
+              "
+            >
+              <div
+                style="height: 80px; background: var(--bg); border-radius: 8px"
+              ></div>
+            </div>
+          </div>
+
+          <!-- PENDING ACTIONS + RECENT USERS -->
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 20px;
+              margin-bottom: 20px;
+            "
+            class="two-col"
+          >
+            <!-- Pending Deposits -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-circle-arrow-down"></i> Pending Deposits
+                </div>
+                <a href="../deposits/deposits.html" class="btn btn-outline btn-xs"
+                  >View All</a
+                >
+              </div>
+              <div id="pendingDepositsTable">
+                <div class="empty-state">
+                  <div class="empty-icon">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pending Withdrawals -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-circle-arrow-up"></i> Pending
+                  Withdrawals
+                </div>
+                <a href="../withdrawals/withdrawals.html" class="btn btn-outline btn-xs"
+                  >View All</a
+                >
+              </div>
+              <div id="pendingWithdrawTable">
+                <div class="empty-state">
+                  <div class="empty-icon">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROFIT / LOSS SUMMARY -->
+          <div class="card" style="margin-bottom: 20px">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-chart-line"></i> Platform Profit & Loss
+              </div>
+              <a href="../reports/reports.html" class="btn btn-outline btn-xs"
+                >Full Report</a
+              >
+            </div>
+            <div class="card-body">
+              <div class="pl-summary" id="plSummary">
+                <div class="pl-item pl-profit">
+                  <div class="pl-label">Total Deposited</div>
+                  <div class="pl-value" id="plDeposit">—</div>
+                </div>
+                <div class="pl-item pl-loss">
+                  <div class="pl-label">Total Withdrawn</div>
+                  <div class="pl-value" id="plWithdraw">—</div>
+                </div>
+                <div class="pl-item pl-net">
+                  <div class="pl-label">Net Balance</div>
+                  <div class="pl-value" id="plNet">—</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECENT USERS -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-users"></i> Recent Registrations
+              </div>
+              <a href="../users/users.html" class="btn btn-outline btn-xs">View All</a>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>UID</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>Balance</th>
+                    <th>Joined</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recentUsersBody">
+                  <tr>
+                    <td
+                      colspan="6"
+                      style="
+                        text-align: center;
+                        padding: 30px;
+                        color: var(--text-muted);
+                      "
+                    >
+                      <i class="fa-solid fa-spinner fa-spin"></i> Loading…
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+      .two-col {
+      }
+      @media (max-width: 900px) {
+        .two-col {
+          grid-template-columns: 1fr !important;
+        }
+      }
+    </style>
+
+    <script src="../shared/admin.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        requireAdmin();
+        setTimeout(
+          () => document.getElementById("pageLoader")?.classList.add("hidden"),
+          900
+        );
+
+        const user = getAdminUser();
+        if (user) {
+          document.getElementById("adminName").textContent =
+            user.name || "Admin";
+          document.getElementById("adminName2").textContent =
+            user.name || "Admin";
+          document.querySelector(".aup-avatar").textContent = (
+            user.name || "AD"
+          )
+            .slice(0, 2)
+            .toUpperCase();
+        }
+
+        await Promise.all([
+          loadStats(),
+          loadPendingDeposits(),
+          loadPendingWithdrawals(),
+          loadRecentUsers(),
+        ]);
+      });
+
+      async function loadStats() {
+        const res = await adminFetch("/admin/dashboard");
+        if (!res?.success) return;
+
+        const s = res.stats;
+
+        // Update sidebar badges
+        if (s.pendingDeposits > 0) {
+          const el = document.getElementById("sbDepositBadge");
+          if (el) {
+            el.style.display = "inline";
+            el.textContent = s.pendingDeposits;
+          }
+        }
+        if (s.pendingWithdraws > 0) {
+          const el = document.getElementById("sbWithdrawBadge");
+          if (el) {
+            el.style.display = "inline";
+            el.textContent = s.pendingWithdraws;
+          }
+        }
+
+        document.getElementById("statsGrid").innerHTML = `
+    <div class="stat-card sc-users">
+      <div class="stat-icon si-blue"><i class="fa-solid fa-users"></i></div>
+      <div><div class="stat-label">Total Users</div><div class="stat-value">${fmtNum(
+        s.users
+      )}</div></div>
+    </div>
+    <div class="stat-card sc-deposit">
+      <div class="stat-icon si-green"><i class="fa-solid fa-circle-arrow-down"></i></div>
+      <div><div class="stat-label">Pending Deposits</div><div class="stat-value">${
+        s.pendingDeposits
+      }</div></div>
+    </div>
+    <div class="stat-card sc-withdraw">
+      <div class="stat-icon si-red"><i class="fa-solid fa-circle-arrow-up"></i></div>
+      <div><div class="stat-label">Pending Withdrawals</div><div class="stat-value">${
+        s.pendingWithdraws
+      }</div></div>
+    </div>
+    <div class="stat-card sc-plans">
+      <div class="stat-icon si-yellow"><i class="fa-solid fa-box"></i></div>
+      <div><div class="stat-label">Active Plans</div><div class="stat-value">${fmtNum(
+        s.activePlans
+      )}</div></div>
+    </div>
+    <div class="stat-card sc-profit">
+      <div class="stat-icon si-teal"><i class="fa-solid fa-chart-pie"></i></div>
+      <div><div class="stat-label">Total Transactions</div><div class="stat-value">${fmtNum(
+        s.transactions
+      )}</div></div>
+    </div>`;
+      }
+
+      async function loadPendingDeposits() {
+        const res = await adminFetch(
+          "/admin/transactions?type=deposit&status=pending&limit=5"
+        );
+        const el = document.getElementById("pendingDepositsTable");
+        if (!res?.success || !res.transactions.length) {
+          el.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-check-circle"></i></div><div class="empty-sub">No pending deposits</div></div>`;
+          return;
+        }
+        el.innerHTML = `<div class="table-wrap"><table><thead><tr><th>UID</th><th>Amount</th><th>Date</th><th>Action</th></tr></thead><tbody>
+    ${res.transactions
+      .map(
+        (t) => `<tr>
+      <td class="td-primary">${t.user?.uid || "—"}</td>
+      <td>${fmtINR(t.amount)}</td>
+      <td>${fmtDate(t.createdAt)}</td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-success btn-xs" onclick="approveTxn('${
+          t._id
+        }','deposit')"><i class="fa-solid fa-check"></i></button>
+        <button class="btn btn-danger btn-xs"  onclick="rejectTxn('${
+          t._id
+        }','deposit')"><i class="fa-solid fa-xmark"></i></button>
+      </td>
+    </tr>`
+      )
+      .join("")}
+  </tbody></table></div>`;
+      }
+
+      async function loadPendingWithdrawals() {
+        const res = await adminFetch(
+          "/admin/transactions?type=withdraw&status=pending&limit=5"
+        );
+        const el = document.getElementById("pendingWithdrawTable");
+        if (!res?.success || !res.transactions.length) {
+          el.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-check-circle"></i></div><div class="empty-sub">No pending withdrawals</div></div>`;
+          return;
+        }
+        el.innerHTML = `<div class="table-wrap"><table><thead><tr><th>UID</th><th>Amount</th><th>Net</th><th>Action</th></tr></thead><tbody>
+    ${res.transactions
+      .map(
+        (t) => `<tr>
+      <td class="td-primary">${t.user?.uid || "—"}</td>
+      <td>${fmtINR(t.amount)}</td>
+      <td class="badge badge-success">${fmtINR(t.netAmount || t.amount)}</td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-success btn-xs" onclick="approveTxn('${
+          t._id
+        }','withdraw')"><i class="fa-solid fa-check"></i></button>
+        <button class="btn btn-danger btn-xs"  onclick="rejectTxn('${
+          t._id
+        }','withdraw')"><i class="fa-solid fa-xmark"></i></button>
+      </td>
+    </tr>`
+      )
+      .join("")}
+  </tbody></table></div>`;
+      }
+
+      async function loadRecentUsers() {
+        const res = await adminFetch("/admin/users?limit=10");
+        const tb = document.getElementById("recentUsersBody");
+        if (!res?.success) {
+          tb.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted)">Failed to load</td></tr>`;
+          return;
+        }
+        tb.innerHTML = res.users
+          .map(
+            (u) => `<tr>
+    <td class="td-mono td-primary">${u.uid}</td>
+    <td>${u.name}</td>
+    <td>${u.mobile}</td>
+    <td>${fmtINR(u.walletBalance)}</td>
+    <td>${fmtDate(u.createdAt)}</td>
+    <td><span class="badge ${u.isActive ? "badge-success" : "badge-danger"}">${
+              u.isActive ? "Active" : "Suspended"
+            }</span></td>
+  </tr>`
+          )
+          .join("");
+
+        // P&L
+        const totalDep = res.users.reduce(
+          (s, u) => s + (u.totalDeposited || 0),
+          0
+        );
+        const totalWit = res.users.reduce(
+          (s, u) => s + (u.totalWithdrawn || 0),
+          0
+        );
+        document.getElementById("plDeposit").textContent = fmtINR(totalDep);
+        document.getElementById("plWithdraw").textContent = fmtINR(totalWit);
+        document.getElementById("plNet").textContent = fmtINR(
+          totalDep - totalWit
+        );
+      }
+
+      async function approveTxn(id, type) {
+        adminConfirm("Approve this transaction?", async () => {
+          const res = await adminFetch(`/admin/transactions/${id}/approve`, {
+            method: "PUT",
+          });
+          if (res?.success) {
+            showAdminToast("Transaction approved ✓", "success");
+            loadPendingDeposits();
+            loadPendingWithdrawals();
+            loadStats();
+          } else showAdminToast(res?.message || "Failed", "error");
+        });
+      }
+
+      async function rejectTxn(id, type) {
+        adminConfirm(
+          "Reject this transaction? Amount will be refunded if withdrawal.",
+          async () => {
+            const res = await adminFetch(`/admin/transactions/${id}/reject`, {
+              method: "PUT",
+            });
+            if (res?.success) {
+              showAdminToast("Transaction rejected", "info");
+              loadPendingDeposits();
+              loadPendingWithdrawals();
+              loadStats();
+            } else showAdminToast(res?.message || "Failed", "error");
+          }
+        );
+      }
+    </script>
+  </body>
+</html>

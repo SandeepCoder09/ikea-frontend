@@ -10,6 +10,7 @@
     />
     <meta name="mobile-web-app-capable" content="yes" />
     <title>Deposit | IKEA India</title>
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -54,20 +55,20 @@
       <div class="nav-spacer"></div>
     </div>
 
-    <!-- ══ BALANCE CARD ══ -->
+    <!-- BALANCE CARD -->
     <div class="balance-card">
       <div class="bc-label">
         <i class="fa-solid fa-wallet"></i> Current Balance
       </div>
       <div class="bc-balance">
-        <sup>₹</sup><span id="currentBalance">12,480.50</span>
+        <sup>₹</sup><span id="currentBalance">0.00</span>
       </div>
       <div class="bc-after">
-        After deposit: <span id="balanceAfter">₹12,480.50</span>
+        After deposit: <span id="balanceAfter">₹0.00</span>
       </div>
     </div>
 
-    <!-- ══ QUICK AMOUNTS ══ -->
+    <!-- QUICK AMOUNTS -->
     <div class="section-title">Quick Select Amount</div>
     <div class="quick-amounts">
       <button class="qa-btn" onclick="setQuickAmount(500, this)">
@@ -90,7 +91,7 @@
       </button>
     </div>
 
-    <!-- ══ DEPOSIT FORM ══ -->
+    <!-- DEPOSIT FORM -->
     <div class="section-title" style="margin-top: 4px">Deposit Details</div>
 
     <div class="form-card">
@@ -105,9 +106,9 @@
       <div class="form-body">
         <!-- Amount -->
         <div class="field">
-          <label
-            ><i class="fa-solid fa-indian-rupee-sign"></i> Deposit Amount</label
-          >
+          <label>
+            <i class="fa-solid fa-indian-rupee-sign"></i> Deposit Amount
+          </label>
           <div class="amount-input-wrap">
             <span class="amount-prefix">₹</span>
             <input
@@ -119,13 +120,13 @@
             />
           </div>
           <div class="amount-hint">
-            <span class="min"
-              ><i
+            <span class="min">
+              <i
                 class="fa-solid fa-circle-check"
                 style="font-size: 0.65rem"
               ></i>
-              Min ₹100</span
-            >
+              Min ₹100
+            </span>
             <span class="max">Max ₹50,000</span>
           </div>
         </div>
@@ -145,178 +146,41 @@
               <div class="pm-radio"></div>
             </div>
 
-            <div class="pm-option" onclick="selectMethod('neft', this)">
-              <div class="pm-icon pm-neft">
-                <i class="fa-solid fa-building-columns"></i>
-              </div>
-              <div class="pm-text">
-                <div class="pm-name">Bank Transfer (NEFT/IMPS)</div>
-                <div class="pm-desc">Transfer from any Indian bank account</div>
-              </div>
-              <div class="pm-radio"></div>
-            </div>
-
             <div class="pm-option" onclick="selectMethod('crypto', this)">
               <div class="pm-icon pm-crypto">
                 <i class="fa-solid fa-coins"></i>
               </div>
               <div class="pm-text">
                 <div class="pm-name">USDT (Crypto)</div>
-                <div class="pm-desc">TRC-20 · BEP-20 network supported</div>
+                <div class="pm-desc">TRC-20 supported</div>
               </div>
               <div class="pm-radio"></div>
             </div>
           </div>
         </div>
 
-        <!-- UPI Details Box -->
-        <div class="payment-box show" id="boxUpi">
-          <div class="pb-header">
-            <i class="fa-solid fa-qrcode" style="color: var(--yellow)"></i>
-            <span>Pay via UPI</span>
-          </div>
-          <div class="pb-body">
-            <div class="upi-id-row">
-              <div>
-                <div class="upi-id-label">UPI ID</div>
-                <div class="upi-id-value">ikea.india@upi</div>
-              </div>
-              <button class="copy-btn" onclick="copyText('ikea.india@upi')">
-                COPY
-              </button>
-            </div>
-            <div class="qr-box">
-              <i class="fa-solid fa-qrcode"></i>
-              <strong>Scan to Pay</strong>
-              <p>
-                Open any UPI app, scan this QR code and pay the exact amount.<br />Then
-                enter the UTR number below.
-              </p>
-            </div>
-            <div class="note-strip">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-              Pay the <strong>exact amount</strong> you entered above. Incorrect
-              amounts will delay processing.
-            </div>
-          </div>
-        </div>
+        <!-- STEP 1 BUTTON -->
+        <button
+          class="submit-btn"
+          type="button"
+          onclick="createDepositSession()"
+          style="margin-bottom: 14px"
+        >
+          <i class="fa-solid fa-qrcode"></i> Generate Payment
+        </button>
 
-        <!-- NEFT Details Box -->
-        <div class="payment-box" id="boxNeft">
-          <div class="pb-header">
-            <i
-              class="fa-solid fa-building-columns"
-              style="color: var(--yellow)"
-            ></i>
-            <span>Bank Transfer Details</span>
-          </div>
-          <div class="pb-body">
-            <div class="bank-row">
-              <div class="bank-detail-item">
-                <div class="bd-left">
-                  <i class="fa-solid fa-user"></i
-                  ><span class="bd-label">Account Name</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px">
-                  <div class="bd-value">IKEA India Pvt Ltd</div>
-                  <button
-                    class="copy-btn"
-                    onclick="copyText('IKEA India Pvt Ltd')"
-                  >
-                    COPY
-                  </button>
-                </div>
-              </div>
-              <div class="bank-detail-item">
-                <div class="bd-left">
-                  <i class="fa-solid fa-hashtag"></i
-                  ><span class="bd-label">Account Number</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px">
-                  <div class="bd-value">0012345678901</div>
-                  <button class="copy-btn" onclick="copyText('0012345678901')">
-                    COPY
-                  </button>
-                </div>
-              </div>
-              <div class="bank-detail-item">
-                <div class="bd-left">
-                  <i class="fa-solid fa-code"></i
-                  ><span class="bd-label">IFSC Code</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px">
-                  <div class="bd-value">HDFC0001234</div>
-                  <button class="copy-btn" onclick="copyText('HDFC0001234')">
-                    COPY
-                  </button>
-                </div>
-              </div>
-              <div class="bank-detail-item">
-                <div class="bd-left">
-                  <i class="fa-solid fa-building-columns"></i
-                  ><span class="bd-label">Bank</span>
-                </div>
-                <div class="bd-value">HDFC Bank</div>
-              </div>
-            </div>
-            <div class="note-strip" style="margin-top: 12px">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-              Use your <strong>registered mobile number</strong> as payment
-              remarks. Enter UTR/reference number below after transfer.
-            </div>
-          </div>
-        </div>
+        <!-- UPI BOX -->
+        <div class="payment-box show" id="boxUpi"></div>
 
-        <!-- USDT Details Box -->
-        <div class="payment-box" id="boxCrypto">
-          <div class="pb-header">
-            <i class="fa-solid fa-coins" style="color: var(--yellow)"></i>
-            <span>USDT Deposit</span>
-          </div>
-          <div class="pb-body">
-            <div class="upi-id-row">
-              <div>
-                <div class="upi-id-label">TRC-20 Wallet Address</div>
-                <div
-                  class="upi-id-value"
-                  style="
-                    font-size: 0.75rem;
-                    letter-spacing: 0;
-                    word-break: break-all;
-                  "
-                >
-                  TXk9mP2fQ3rNvYu7Jd4sLwBhC8eR6oKi
-                </div>
-              </div>
-              <button
-                class="copy-btn"
-                onclick="copyText('TXk9mP2fQ3rNvYu7Jd4sLwBhC8eR6oKi')"
-              >
-                COPY
-              </button>
-            </div>
-            <div class="qr-box">
-              <i class="fa-solid fa-qrcode"></i>
-              <strong>Scan Wallet Address</strong>
-              <p>
-                Send USDT (TRC-20 or BEP-20 only) to the address above.<br />Enter
-                transaction hash below after sending.
-              </p>
-            </div>
-            <div class="note-strip">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-              Only send <strong>USDT on TRC-20 or BEP-20</strong> network. Other
-              tokens will be permanently lost.
-            </div>
-          </div>
-        </div>
+        <!-- CRYPTO BOX -->
+        <div class="payment-box" id="boxCrypto"></div>
 
-        <!-- UTR / Reference Number -->
+        <!-- UTR / HASH -->
         <div class="field" id="utrField">
-          <label
-            ><i class="fa-solid fa-receipt"></i>
-            <span id="utrLabel">UTR / Reference Number</span></label
-          >
+          <label>
+            <i class="fa-solid fa-receipt"></i>
+            <span id="utrLabel">UTR / Reference Number</span>
+          </label>
           <input
             type="text"
             class="ref-input"
@@ -338,23 +202,23 @@
               class="fa-solid fa-info-circle"
               style="color: var(--blue); font-size: 0.65rem"
             ></i>
-            Found in your payment app after a successful transfer
+            Enter UTR for UPI or transaction hash for USDT after payment
           </div>
         </div>
 
-        <!-- Submit -->
+        <!-- STEP 2 BUTTON -->
         <button
           class="submit-btn"
           id="submitBtn"
+          type="button"
           onclick="submitDeposit()"
           disabled
         >
-          <i class="fa-solid fa-paper-plane"></i> Submit Deposit Request
+          <i class="fa-solid fa-paper-plane"></i> Submit Payment Proof
         </button>
       </div>
     </div>
 
-    <!-- spacer -->
     <div style="height: 12px"></div>
 
     <script src="../../shared/js/config.js"></script>

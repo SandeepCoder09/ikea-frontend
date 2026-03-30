@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profit & Loss | IKEA Admin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/admin.css" />
+  </head>
+  <body>
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+    <div class="toast" id="adminToast"></div>
+
+    <div class="admin-layout">
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-text">IKEA</div>
+          <div class="logo-sub">India – Home & Living</div>
+          <div class="admin-badge">⚙ Admin</div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a href="../dashboard/index.html" class="nav-item"
+            ><i class="fa-solid fa-chart-pie"></i> Dashboard</a
+          >
+          <a href="../users/users.html" class="nav-item"
+            ><i class="fa-solid fa-users"></i> Users</a
+          >
+          <div class="nav-section-label">Transactions</div>
+          <a href="../deposits/deposits.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-down"></i> Deposits</a
+          >
+          <a href="../withdrawals/withdrawals.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-up"></i> Withdrawals</a
+          >
+          <a href="../transactions/transactions.html" class="nav-item"
+            ><i class="fa-solid fa-clock-rotate-left"></i> All Transactions</a
+          >
+          <div class="nav-section-label">Products</div>
+          <a href="../plans/plans.html" class="nav-item"
+            ><i class="fa-solid fa-box"></i> Plans / Products</a
+          >
+          <a href="../gifts/gift-codes.html" class="nav-item"
+            ><i class="fa-solid fa-gift"></i> Gift Codes</a
+          >
+          <div class="nav-section-label">Reports</div>
+          <a href="../reports/reports.html" class="nav-item active"
+            ><i class="fa-solid fa-chart-line"></i> Profit & Loss</a
+          >
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sidebar-logout" onclick="adminLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </div>
+        </div>
+      </aside>
+
+      <div class="main-area">
+        <header class="admin-header">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="sidebar-toggle" id="sidebarToggle">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <div>
+              <div class="header-title">Profit & Loss Report</div>
+              <div class="header-sub">Complete financial overview</div>
+            </div>
+          </div>
+          <div class="header-right">
+            <button
+              class="theme-toggle"
+              id="themeToggle"
+              onclick="toggleTheme()"
+            ></button>
+            <button class="btn btn-outline btn-sm" onclick="loadReport()">
+              <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <!-- MAIN P&L CARDS -->
+          <div
+            class="stats-grid"
+            style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px"
+            id="plCards"
+          >
+            <div class="stat-card" style="animation: pulse 1.5s ease infinite">
+              <div
+                style="height: 80px; background: var(--bg); border-radius: 8px"
+              ></div>
+            </div>
+            <div
+              class="stat-card"
+              style="animation: pulse 1.5s ease infinite 0.1s"
+            >
+              <div
+                style="height: 80px; background: var(--bg); border-radius: 8px"
+              ></div>
+            </div>
+            <div
+              class="stat-card"
+              style="animation: pulse 1.5s ease infinite 0.2s"
+            >
+              <div
+                style="height: 80px; background: var(--bg); border-radius: 8px"
+              ></div>
+            </div>
+            <div
+              class="stat-card"
+              style="animation: pulse 1.5s ease infinite 0.3s"
+            >
+              <div
+                style="height: 80px; background: var(--bg); border-radius: 8px"
+              ></div>
+            </div>
+          </div>
+
+          <!-- BREAKDOWN GRID -->
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 20px;
+              margin-bottom: 20px;
+            "
+            class="two-col"
+          >
+            <!-- Income breakdown -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i
+                    class="fa-solid fa-circle-arrow-down"
+                    style="color: var(--success)"
+                  ></i>
+                  Income (Deposits)
+                </div>
+              </div>
+              <div class="card-body" id="incomeBreakdown">
+                <div
+                  style="
+                    text-align: center;
+                    padding: 20px;
+                    color: var(--text-muted);
+                  "
+                >
+                  <i class="fa-solid fa-spinner fa-spin"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Expense breakdown -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i
+                    class="fa-solid fa-circle-arrow-up"
+                    style="color: var(--danger)"
+                  ></i>
+                  Expenses (Withdrawals)
+                </div>
+              </div>
+              <div class="card-body" id="expenseBreakdown">
+                <div
+                  style="
+                    text-align: center;
+                    padding: 20px;
+                    color: var(--text-muted);
+                  "
+                >
+                  <i class="fa-solid fa-spinner fa-spin"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PER USER P&L TABLE -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-users"></i> Per User Financial Summary
+              </div>
+              <div class="search-wrap" style="max-width: 220px">
+                <i class="fa-solid fa-magnifying-glass"></i
+                ><input
+                  type="text"
+                  class="search-input"
+                  id="userSearch"
+                  placeholder="Search user…"
+                  oninput="renderUserTable()"
+                />
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>UID</th>
+                    <th>Name</th>
+                    <th>Deposited</th>
+                    <th>Withdrawn</th>
+                    <th>Earned</th>
+                    <th>Fees Paid</th>
+                    <th>Balance</th>
+                    <th>Net (Platform)</th>
+                  </tr>
+                </thead>
+                <tbody id="userPlBody">
+                  <tr>
+                    <td
+                      colspan="8"
+                      style="
+                        text-align: center;
+                        padding: 30px;
+                        color: var(--text-muted);
+                      "
+                    >
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              <span id="uPageInfo">—</span>
+              <div class="page-btns">
+                <button class="page-btn" id="upPrev" onclick="uChangePage(-1)">
+                  <i class="fa-solid fa-chevron-left"></i></button
+                ><button class="page-btn" id="upNext" onclick="uChangePage(1)">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+      .two-col {
+      }
+      @media (max-width: 900px) {
+        .two-col {
+          grid-template-columns: 1fr !important;
+        }
+      }
+      .pl-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--card-border);
+      }
+      .pl-row:last-child {
+        border-bottom: none;
+      }
+      .pl-row-label {
+        font-size: 0.82rem;
+        color: var(--text-second);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .pl-row-value {
+        font-family: var(--font-display);
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+    </style>
+
+    <script src="../shared/admin.js"></script>
+    <script>
+      let allUsers = [],
+        uPage = 1,
+        uPer = 20;
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        requireAdmin();
+        setTimeout(
+          () => document.getElementById("pageLoader")?.classList.add("hidden"),
+          900
+        );
+        await loadReport();
+      });
+
+      async function loadReport() {
+        const [userRes, txRes] = await Promise.all([
+          adminFetch("/admin/users?limit=500"),
+          adminFetch("/admin/transactions?limit=1000"),
+        ]);
+
+        if (!userRes?.success || !txRes?.success)
+          return showAdminToast("Failed to load", "error");
+
+        allUsers = userRes.users;
+        const txns = txRes.transactions;
+
+        // Compute totals
+        const dep = txns
+          .filter((t) => t.type === "deposit" && t.status === "success")
+          .reduce((s, t) => s + t.amount, 0);
+        const wit = txns
+          .filter((t) => t.type === "withdraw" && t.status === "success")
+          .reduce((s, t) => s + t.amount, 0);
+        const fees = txns
+          .filter((t) => t.type === "withdraw" && t.status === "success")
+          .reduce((s, t) => s + (t.fee || 0), 0);
+        const earn = txns
+          .filter((t) => t.type === "earning" && t.status === "success")
+          .reduce((s, t) => s + t.amount, 0);
+        const gift = txns
+          .filter((t) => t.type === "gift" && t.status === "success")
+          .reduce((s, t) => s + t.amount, 0);
+        const net = dep - wit;
+
+        // Main P&L cards
+        document.getElementById("plCards").innerHTML = `
+    <div class="stat-card sc-deposit"><div class="stat-icon si-green"><i class="fa-solid fa-circle-arrow-down"></i></div><div><div class="stat-label">Total Deposits</div><div class="stat-value">${fmtINR(
+      dep
+    )}</div></div></div>
+    <div class="stat-card sc-withdraw"><div class="stat-icon si-red"><i class="fa-solid fa-circle-arrow-up"></i></div><div><div class="stat-label">Total Withdrawals</div><div class="stat-value">${fmtINR(
+      wit
+    )}</div></div></div>
+    <div class="stat-card sc-profit"><div class="stat-icon si-yellow"><i class="fa-solid fa-percent"></i></div><div><div class="stat-label">Fees Collected</div><div class="stat-value">${fmtINR(
+      fees
+    )}</div></div></div>
+    <div class="stat-card sc-plans" style="border:2px solid ${
+      net >= 0 ? "var(--success)" : "var(--danger)"
+    }">
+      <div class="stat-icon ${
+        net >= 0 ? "si-green" : "si-red"
+      }"><i class="fa-solid fa-scale-balanced"></i></div>
+      <div><div class="stat-label">Net Platform Balance</div><div class="stat-value" style="color:${
+        net >= 0 ? "var(--success)" : "var(--danger)"
+      }">${fmtINR(net)}</div></div>
+    </div>`;
+
+        // Income breakdown
+        document.getElementById("incomeBreakdown").innerHTML = `
+    <div class="pl-row"><div class="pl-row-label"><i class="fa-solid fa-circle-arrow-down" style="color:var(--success)"></i> Approved Deposits</div><div class="pl-row-value" style="color:var(--success)">${fmtINR(
+      dep
+    )}</div></div>
+    <div class="pl-row"><div class="pl-row-label"><i class="fa-solid fa-percent" style="color:var(--blue)"></i> Withdrawal Fees</div><div class="pl-row-value" style="color:var(--blue)">${fmtINR(
+      fees
+    )}</div></div>
+    <div class="pl-row" style="border-top:2px solid var(--card-border);margin-top:6px;padding-top:12px"><div class="pl-row-label" style="font-weight:700;color:var(--text-primary)">Total Income</div><div class="pl-row-value" style="color:var(--success);font-size:1rem">${fmtINR(
+      dep + fees
+    )}</div></div>`;
+
+        // Expense breakdown
+        document.getElementById("expenseBreakdown").innerHTML = `
+    <div class="pl-row"><div class="pl-row-label"><i class="fa-solid fa-circle-arrow-up" style="color:var(--danger)"></i> Withdrawals Paid</div><div class="pl-row-value" style="color:var(--danger)">${fmtINR(
+      wit
+    )}</div></div>
+    <div class="pl-row"><div class="pl-row-label"><i class="fa-solid fa-chart-line" style="color:var(--info)"></i> Plan Earnings Paid</div><div class="pl-row-value" style="color:var(--info)">${fmtINR(
+      earn
+    )}</div></div>
+    <div class="pl-row"><div class="pl-row-label"><i class="fa-solid fa-gift" style="color:var(--warning)"></i> Gift Credits</div><div class="pl-row-value" style="color:var(--warning)">${fmtINR(
+      gift
+    )}</div></div>
+    <div class="pl-row" style="border-top:2px solid var(--card-border);margin-top:6px;padding-top:12px"><div class="pl-row-label" style="font-weight:700;color:var(--text-primary)">Total Expenses</div><div class="pl-row-value" style="color:var(--danger);font-size:1rem">${fmtINR(
+      wit + earn + gift
+    )}</div></div>`;
+
+        uPage = 1;
+        renderUserTable();
+      }
+
+      function renderUserTable() {
+        const q = document.getElementById("userSearch").value.toLowerCase();
+        const filtered = allUsers.filter(
+          (u) =>
+            !q ||
+            u.name?.toLowerCase().includes(q) ||
+            u.uid?.toLowerCase().includes(q)
+        );
+        const start = (uPage - 1) * uPer;
+        const page = filtered.slice(start, start + uPer);
+        document.getElementById("uPageInfo").textContent = `${
+          start + 1
+        }–${Math.min(start + uPer, filtered.length)} of ${filtered.length}`;
+        document.getElementById("upPrev").disabled = uPage === 1;
+        document.getElementById("upNext").disabled =
+          start + uPer >= filtered.length;
+
+        const tb = document.getElementById("userPlBody");
+        if (!page.length) {
+          tb.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="empty-title">No users found</div></div></td></tr>`;
+          return;
+        }
+
+        tb.innerHTML = page
+          .map((u) => {
+            const dep = u.totalDeposited || 0;
+            const wit = u.totalWithdrawn || 0;
+            const earn = u.totalEarned || 0;
+            const fees = parseFloat((wit * 0.1).toFixed(2));
+            const netPlatform = dep - (wit - fees); // platform keeps fees
+            const isProfit = netPlatform >= 0;
+            return `<tr>
+      <td class="td-mono td-primary">${u.uid}</td>
+      <td class="td-primary">${u.name}</td>
+      <td style="color:var(--success);font-weight:600">${fmtINR(dep)}</td>
+      <td style="color:var(--danger);font-weight:600">${fmtINR(wit)}</td>
+      <td>${fmtINR(earn)}</td>
+      <td style="color:var(--blue);font-weight:600">${fmtINR(fees)}</td>
+      <td>${fmtINR(u.walletBalance || 0)}</td>
+      <td><span class="badge ${isProfit ? "badge-success" : "badge-danger"}">${
+              isProfit ? "+" : ""
+            } ${fmtINR(netPlatform)}</span></td>
+    </tr>`;
+          })
+          .join("");
+      }
+
+      function uChangePage(d) {
+        uPage += d;
+        renderUserTable();
+      }
+    </script>
+  </body>
+</html>

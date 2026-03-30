@@ -154,7 +154,7 @@ async function confirmPurchase() {
      Earn <strong>₹${selectedPlan.daily.toLocaleString('en-IN')}/day</strong> for ${selectedPlan.validity} days.<br>
      Total return: <strong>₹${(selectedPlan.daily * selectedPlan.validity).toLocaleString('en-IN')}</strong>`,
     'Go to My Plans',
-    () => window.location.href = '../products/my-products.html'
+    () => window.location.href = '../products/my-plans/my-products.html'
   );
 
   selectedPlan = null;

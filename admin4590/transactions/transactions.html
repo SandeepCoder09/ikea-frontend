@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Transactions | IKEA Admin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/admin.css" />
+  </head>
+  <body>
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+    <div class="toast" id="adminToast"></div>
+
+    <div class="admin-layout">
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-text">IKEA</div>
+          <div class="logo-sub">India – Home & Living</div>
+          <div class="admin-badge">⚙ Admin</div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a href="../dashboard/index.html" class="nav-item"
+            ><i class="fa-solid fa-chart-pie"></i> Dashboard</a
+          >
+          <a href="../users/users.html" class="nav-item"
+            ><i class="fa-solid fa-users"></i> Users</a
+          >
+          <div class="nav-section-label">Transactions</div>
+          <a href="../deposits/deposits.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-down"></i> Deposits</a
+          >
+          <a href="../withdrawals/withdrawals.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-up"></i> Withdrawals</a
+          >
+          <a href="../transactions/transactions.html" class="nav-item active"
+            ><i class="fa-solid fa-clock-rotate-left"></i> All Transactions</a
+          >
+          <div class="nav-section-label">Products</div>
+          <a href="../plans/plans.html" class="nav-item"
+            ><i class="fa-solid fa-box"></i> Plans / Products</a
+          >
+          <a href="../gifts/gift-codes.html" class="nav-item"
+            ><i class="fa-solid fa-gift"></i> Gift Codes</a
+          >
+          <div class="nav-section-label">Reports</div>
+          <a href="../reports/reports.html" class="nav-item"
+            ><i class="fa-solid fa-chart-line"></i> Profit & Loss</a
+          >
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sidebar-logout" onclick="adminLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </div>
+        </div>
+      </aside>
+
+      <div class="main-area">
+        <header class="admin-header">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="sidebar-toggle" id="sidebarToggle">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <div>
+              <div class="header-title">All Transactions</div>
+              <div class="header-sub" id="txCount">Loading…</div>
+            </div>
+          </div>
+          <div class="header-right">
+            <button
+              class="theme-toggle"
+              id="themeToggle"
+              onclick="toggleTheme()"
+            ></button>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <div class="card">
+            <div class="filters-row">
+              <div class="search-wrap" style="max-width: 240px">
+                <i class="fa-solid fa-magnifying-glass"></i
+                ><input
+                  type="text"
+                  class="search-input"
+                  id="searchInput"
+                  placeholder="Search ref, UID…"
+                  oninput="renderTable()"
+                />
+              </div>
+              <select
+                class="form-control"
+                style="width: 130px"
+                id="typeFilter"
+                onchange="loadTxns()"
+              >
+                <option value="all">All Types</option>
+                <option value="deposit">Deposit</option>
+                <option value="withdraw">Withdrawal</option>
+                <option value="earning">Earning</option>
+                <option value="commission">Commission</option>
+                <option value="gift">Gift Code</option>
+              </select>
+              <select
+                class="form-control"
+                style="width: 130px"
+                id="statusFilt"
+                onchange="loadTxns()"
+              >
+                <option value="all">All Status</option>
+                <option value="success">Success</option>
+                <option value="pending">Pending</option>
+                <option value="failed">Failed</option>
+              </select>
+              <button class="btn btn-outline btn-sm" onclick="loadTxns()">
+                <i class="fa-solid fa-rotate-right"></i>
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Ref</th>
+                    <th>User</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Fee</th>
+                    <th>Net</th>
+                    <th>Balance After</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="txBody">
+                  <tr>
+                    <td
+                      colspan="9"
+                      style="
+                        text-align: center;
+                        padding: 30px;
+                        color: var(--text-muted);
+                      "
+                    >
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              <span id="pageInfo">—</span>
+              <div class="page-btns">
+                <button class="page-btn" id="prevBtn" onclick="changePage(-1)">
+                  <i class="fa-solid fa-chevron-left"></i></button
+                ><button class="page-btn" id="nextBtn" onclick="changePage(1)">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../shared/admin.js"></script>
+    <script>
+      let allTx = [],
+        currentPage = 1,
+        perPage = 25;
+
+      const TYPE_CFG = {
+        deposit: { label: "Deposit", cls: "badge-success", dir: "cr" },
+        withdraw: { label: "Withdrawal", cls: "badge-danger", dir: "dr" },
+        earning: { label: "Earning", cls: "badge-info", dir: "cr" },
+        commission: { label: "Commission", cls: "badge-warning", dir: "cr" },
+        gift: { label: "Gift Code", cls: "badge-blue", dir: "cr" },
+        invite: { label: "Invite", cls: "badge-blue", dir: "cr" },
+      };
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        requireAdmin();
+        setTimeout(
+          () => document.getElementById("pageLoader")?.classList.add("hidden"),
+          900
+        );
+        await loadTxns();
+      });
+
+      async function loadTxns() {
+        const type = document.getElementById("typeFilter").value;
+        const status = document.getElementById("statusFilt").value;
+        let url = "/admin/transactions?limit=500";
+        if (type !== "all") url += `&type=${type}`;
+        if (status !== "all") url += `&status=${status}`;
+        const res = await adminFetch(url);
+        if (!res?.success) return showAdminToast("Failed", "error");
+        allTx = res.transactions;
+        document.getElementById(
+          "txCount"
+        ).textContent = `${allTx.length} transactions`;
+        currentPage = 1;
+        renderTable();
+      }
+
+      function renderTable() {
+        const q = document.getElementById("searchInput").value.toLowerCase();
+        const filtered = allTx.filter(
+          (t) =>
+            !q ||
+            t.ref?.toLowerCase().includes(q) ||
+            t.user?.uid?.toLowerCase().includes(q) ||
+            t.user?.name?.toLowerCase().includes(q)
+        );
+        const start = (currentPage - 1) * perPage;
+        const page = filtered.slice(start, start + perPage);
+        document.getElementById("pageInfo").textContent = `${
+          start + 1
+        }–${Math.min(start + perPage, filtered.length)} of ${filtered.length}`;
+        document.getElementById("prevBtn").disabled = currentPage === 1;
+        document.getElementById("nextBtn").disabled =
+          start + perPage >= filtered.length;
+
+        const tb = document.getElementById("txBody");
+        if (!page.length) {
+          tb.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-receipt"></i></div><div class="empty-title">No transactions</div></div></td></tr>`;
+          return;
+        }
+
+        tb.innerHTML = page
+          .map((t) => {
+            const cfg = TYPE_CFG[t.type] || {
+              label: t.type,
+              cls: "badge-grey",
+              dir: "cr",
+            };
+            const sign = cfg.dir === "cr" ? "+" : "−";
+            const amtCls =
+              cfg.dir === "cr" ? "color:var(--success)" : "color:var(--danger)";
+            return `<tr>
+      <td class="td-mono" style="font-size:.7rem">${t.ref || "—"}</td>
+      <td><div class="td-primary">${
+        t.user?.name || "—"
+      }</div><div style="font-size:.65rem;color:var(--text-muted)">${
+              t.user?.uid || "—"
+            }</div></td>
+      <td><span class="badge ${cfg.cls}">${cfg.label}</span></td>
+      <td style="${amtCls};font-family:var(--font-display);font-weight:700">${sign}${fmtINR(
+              t.amount
+            )}</td>
+      <td>${t.fee ? fmtINR(t.fee) : "—"}</td>
+      <td>${t.netAmount ? fmtINR(t.netAmount) : "—"}</td>
+      <td>${fmtINR(t.balanceAfter || 0)}</td>
+      <td><span class="badge ${
+        t.status === "success"
+          ? "badge-success"
+          : t.status === "pending"
+          ? "badge-warning"
+          : "badge-danger"
+      }">${t.status}</span></td>
+      <td>${fmtDateTime(t.createdAt)}</td>
+    </tr>`;
+          })
+          .join("");
+      }
+
+      function changePage(d) {
+        currentPage += d;
+        renderTable();
+      }
+    </script>
+  </body>
+</html>

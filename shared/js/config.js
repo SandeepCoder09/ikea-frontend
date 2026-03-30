@@ -2,7 +2,7 @@
 
 const hostname = window.location.hostname;
 
-// Dynamically check for localhost AND all local network IPs (10., 172., 192.)
+// Detect localhost and local network IPs
 const isLocal =
     hostname === "localhost" ||
     hostname === "127.0.0.1" ||
@@ -10,8 +10,8 @@ const isLocal =
     hostname.startsWith("172.") ||
     hostname.startsWith("192.");
 
-// Dynamically use the current IP, just switch the port to 3000
-const localBackendUrl = `http://${hostname}:3000`;
+// Use backend on port 5000 locally
+const localBackendUrl = `http://${hostname}:5001`;
 
 const CONFIG = {
     BASE_URL: isLocal
@@ -20,10 +20,9 @@ const CONFIG = {
 
     API: isLocal
         ? `${localBackendUrl}/api`
-        : "https://ikea-backend-3k8y.onrender.com/api",
+        : "https://ikea-backend-3k8y.onrender.com/api"
 };
 
-// Alias
 const API_URL = CONFIG.API;
 const SITE_ROOT = window.location.origin;
 

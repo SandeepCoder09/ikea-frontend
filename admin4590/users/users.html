@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users | IKEA Admin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/admin.css" />
+  </head>
+  <body>
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+    <div class="toast" id="adminToast"></div>
+    <div class="modal-overlay" id="confirmModal">
+      <div class="modal-box" style="max-width: 360px">
+        <div class="modal-header"><div class="modal-title">Confirm</div></div>
+        <div class="modal-body">
+          <p
+            id="confirmMsg"
+            style="font-size: 0.88rem; color: var(--text-second)"
+          ></p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-outline btn-sm"
+            onclick="closeModal('confirmModal')"
+          >
+            Cancel
+          </button>
+          <button class="btn btn-danger btn-sm" id="confirmOkBtn">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- USER DETAIL MODAL -->
+    <div class="modal-overlay" id="userModal">
+      <div class="modal-box" style="max-width: 560px">
+        <div class="modal-header">
+          <div class="modal-title" id="umTitle">User Details</div>
+          <button class="modal-close" onclick="closeModal('userModal')">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body" id="umBody"></div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-outline btn-sm"
+            onclick="closeModal('userModal')"
+          >
+            Close
+          </button>
+          <button class="btn btn-sm" id="umActionBtn"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-layout">
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-text">IKEA</div>
+          <div class="logo-sub">India – Home & Living</div>
+          <div class="admin-badge">⚙ Admin Panel</div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a href="../dashboard/index.html" class="nav-item"
+            ><i class="fa-solid fa-chart-pie"></i> Dashboard</a
+          >
+          <a href="../users/users.html" class="nav-item active"
+            ><i class="fa-solid fa-users"></i> Users</a
+          >
+          <div class="nav-section-label">Transactions</div>
+          <a href="../deposits/deposits.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-down"></i> Deposits</a
+          >
+          <a href="../withdrawals/withdrawals.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-up"></i> Withdrawals</a
+          >
+          <a href="../transactions/transactions.html" class="nav-item"
+            ><i class="fa-solid fa-clock-rotate-left"></i> All Transactions</a
+          >
+          <div class="nav-section-label">Products</div>
+          <a href="../plans/plans.html" class="nav-item"
+            ><i class="fa-solid fa-box"></i> Plans / Products</a
+          >
+          <a href="../gifts/gift-codes.html" class="nav-item"
+            ><i class="fa-solid fa-gift"></i> Gift Codes</a
+          >
+          <div class="nav-section-label">Reports</div>
+          <a href="../reports/reports.html" class="nav-item"
+            ><i class="fa-solid fa-chart-line"></i> Profit & Loss</a
+          >
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sidebar-logout" onclick="adminLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </div>
+        </div>
+      </aside>
+
+      <div class="main-area">
+        <header class="admin-header">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="sidebar-toggle" id="sidebarToggle">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <div>
+              <div class="header-title">User Management</div>
+              <div class="header-sub" id="userCount">Loading…</div>
+            </div>
+          </div>
+          <div class="header-right">
+            <button
+              class="theme-toggle"
+              id="themeToggle"
+              onclick="toggleTheme()"
+            ></button>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <div class="card">
+            <div class="filters-row">
+              <div class="search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                  type="text"
+                  class="search-input"
+                  id="searchInput"
+                  placeholder="Search by name, mobile or UID…"
+                  oninput="filterUsers()"
+                />
+              </div>
+              <select
+                class="form-control"
+                style="width: 140px"
+                id="statusFilter"
+                onchange="filterUsers()"
+              >
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="suspended">Suspended</option>
+              </select>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>UID</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>Balance</th>
+                    <th>Deposited</th>
+                    <th>Withdrawn</th>
+                    <th>Earned</th>
+                    <th>Joined</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersBody">
+                  <tr>
+                    <td
+                      colspan="10"
+                      style="
+                        text-align: center;
+                        padding: 30px;
+                        color: var(--text-muted);
+                      "
+                    >
+                      <i class="fa-solid fa-spinner fa-spin"></i> Loading users…
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              <span id="pageInfo">—</span>
+              <div class="page-btns">
+                <button class="page-btn" id="prevBtn" onclick="changePage(-1)">
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button class="page-btn" id="nextBtn" onclick="changePage(1)">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../shared/admin.js"></script>
+    <script>
+      let allUsers = [],
+        currentPage = 1,
+        perPage = 20;
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        requireAdmin();
+        setTimeout(
+          () => document.getElementById("pageLoader")?.classList.add("hidden"),
+          900
+        );
+        await loadUsers();
+      });
+
+      async function loadUsers() {
+        const res = await adminFetch("/admin/users?limit=200");
+        if (!res?.success)
+          return showAdminToast("Failed to load users", "error");
+        allUsers = res.users;
+        document.getElementById(
+          "userCount"
+        ).textContent = `${allUsers.length} total users`;
+        renderUsers();
+      }
+
+      function filterUsers() {
+        currentPage = 1;
+        renderUsers();
+      }
+
+      function getFiltered() {
+        const q = document.getElementById("searchInput").value.toLowerCase();
+        const st = document.getElementById("statusFilter").value;
+        return allUsers.filter((u) => {
+          const matchQ =
+            !q ||
+            u.name?.toLowerCase().includes(q) ||
+            u.mobile?.includes(q) ||
+            u.uid?.toLowerCase().includes(q);
+          const matchSt =
+            st === "all" ||
+            (st === "active" && u.isActive) ||
+            (st === "suspended" && !u.isActive);
+          return matchQ && matchSt;
+        });
+      }
+
+      function renderUsers() {
+        const filtered = getFiltered();
+        const total = filtered.length;
+        const start = (currentPage - 1) * perPage;
+        const page = filtered.slice(start, start + perPage);
+        const tb = document.getElementById("usersBody");
+
+        document.getElementById("pageInfo").textContent = `Showing ${
+          start + 1
+        }–${Math.min(start + perPage, total)} of ${total}`;
+        document.getElementById("prevBtn").disabled = currentPage === 1;
+        document.getElementById("nextBtn").disabled = start + perPage >= total;
+
+        if (!page.length) {
+          tb.innerHTML = `<tr><td colspan="10"><div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-users-slash"></i></div><div class="empty-title">No users found</div></div></td></tr>`;
+          return;
+        }
+
+        tb.innerHTML = page
+          .map(
+            (u) => `
+    <tr>
+      <td class="td-mono td-primary">${u.uid}</td>
+      <td class="td-primary">${u.name}</td>
+      <td>${u.mobile}</td>
+      <td>${fmtINR(u.walletBalance)}</td>
+      <td class="badge badge-success" style="display:inline-flex">${fmtINR(
+        u.totalDeposited || 0
+      )}</td>
+      <td class="badge badge-danger"  style="display:inline-flex">${fmtINR(
+        u.totalWithdrawn || 0
+      )}</td>
+      <td>${fmtINR(u.totalEarned || 0)}</td>
+      <td>${fmtDate(u.createdAt)}</td>
+      <td><span class="badge ${
+        u.isActive ? "badge-success" : "badge-danger"
+      }">${u.isActive ? "Active" : "Suspended"}</span></td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-outline btn-xs" onclick="viewUser('${
+          u._id
+        }')"><i class="fa-solid fa-eye"></i></button>
+        <button class="btn btn-xs ${
+          u.isActive ? "btn-warning" : "btn-success"
+        }" onclick="toggleUser('${u._id}','${u.name}',${u.isActive})">
+          <i class="fa-solid ${u.isActive ? "fa-ban" : "fa-circle-check"}"></i>
+        </button>
+      </td>
+    </tr>`
+          )
+          .join("");
+      }
+
+      function changePage(dir) {
+        currentPage += dir;
+        renderUsers();
+      }
+
+      function viewUser(id) {
+        const u = allUsers.find((x) => x._id === id);
+        if (!u) return;
+        document.getElementById("umTitle").textContent = `${u.name} — ${u.uid}`;
+        document.getElementById("umBody").innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      ${infoRow("fa-fingerprint", "UID", u.uid)}
+      ${infoRow("fa-mobile", "Mobile", u.mobile)}
+      ${infoRow("fa-wallet", "Balance", fmtINR(u.walletBalance))}
+      ${infoRow(
+        "fa-circle-arrow-down",
+        "Total Deposited",
+        fmtINR(u.totalDeposited || 0)
+      )}
+      ${infoRow(
+        "fa-circle-arrow-up",
+        "Total Withdrawn",
+        fmtINR(u.totalWithdrawn || 0)
+      )}
+      ${infoRow("fa-coins", "Total Earned", fmtINR(u.totalEarned || 0))}
+      ${infoRow("fa-calendar", "Joined", fmtDateTime(u.createdAt))}
+      ${infoRow("fa-share-nodes", "Referral Code", u.referralCode || "—")}
+      ${infoRow(
+        "fa-building-columns",
+        "Bank Linked",
+        u.hasBank ? "Yes ✓" : "No"
+      )}
+      ${infoRow("fa-shield-halved", "PIN Set", u.hasPin ? "Yes ✓" : "No")}
+    </div>`;
+        const btn = document.getElementById("umActionBtn");
+        btn.className = `btn btn-sm ${
+          u.isActive ? "btn-warning" : "btn-success"
+        }`;
+        btn.innerHTML = u.isActive
+          ? '<i class="fa-solid fa-ban"></i> Suspend User'
+          : '<i class="fa-solid fa-circle-check"></i> Activate User';
+        btn.onclick = () => {
+          closeModal("userModal");
+          toggleUser(u._id, u.name, u.isActive);
+        };
+        openModal("userModal");
+      }
+
+      function infoRow(icon, label, val) {
+        return `<div style="padding:10px 12px;background:var(--bg);border-radius:8px;border:1px solid var(--card-border)">
+    <div style="font-size:.62rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px"><i class="fa-solid ${icon}" style="margin-right:4px;color:var(--blue)"></i>${label}</div>
+    <div style="font-family:var(--font-display);font-size:.88rem;font-weight:700;color:var(--text-primary)">${val}</div>
+  </div>`;
+      }
+
+      async function toggleUser(id, name, isActive) {
+        adminConfirm(
+          `${isActive ? "Suspend" : "Activate"} user "${name}"?`,
+          async () => {
+            const res = await adminFetch(`/admin/users/${id}/toggle`, {
+              method: "PUT",
+            });
+            if (res?.success) {
+              const u = allUsers.find((x) => x._id === id);
+              if (u) u.isActive = !u.isActive;
+              renderUsers();
+              showAdminToast(res.message, "success");
+            } else showAdminToast(res?.message || "Failed", "error");
+          }
+        );
+      }
+    </script>
+  </body>
+</html>

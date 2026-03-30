@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plans | IKEA Admin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/admin.css" />
+  </head>
+  <body>
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+    <div class="toast" id="adminToast"></div>
+    <div class="modal-overlay" id="confirmModal">
+      <div class="modal-box" style="max-width: 360px">
+        <div class="modal-header"><div class="modal-title">Confirm</div></div>
+        <div class="modal-body">
+          <p
+            id="confirmMsg"
+            style="font-size: 0.88rem; color: var(--text-second)"
+          ></p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-outline btn-sm"
+            onclick="closeModal('confirmModal')"
+          >
+            Cancel</button
+          ><button class="btn btn-danger btn-sm" id="confirmOkBtn">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAN FORM MODAL -->
+    <div class="modal-overlay" id="planModal">
+      <div class="modal-box" style="max-width: 520px">
+        <div class="modal-header">
+          <div class="modal-title" id="planModalTitle">Add Plan</div>
+          <button class="modal-close" onclick="closeModal('planModal')">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px">
+            <div class="form-group" style="grid-column: 1/-1">
+              <label class="form-label">Plan Name</label
+              ><input
+                class="form-control"
+                id="fName"
+                placeholder="e.g. IKEA Starter Plan"
+              />
+            </div>
+            <div class="form-group" style="grid-column: 1/-1">
+              <label class="form-label">Description</label
+              ><input
+                class="form-control"
+                id="fDesc"
+                placeholder="Short description"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Price (₹)</label
+              ><input
+                class="form-control"
+                id="fPrice"
+                type="number"
+                placeholder="500"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Daily Return (₹)</label
+              ><input
+                class="form-control"
+                id="fDaily"
+                type="number"
+                placeholder="80"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Validity (Days)</label
+              ><input
+                class="form-control"
+                id="fValidity"
+                type="number"
+                placeholder="10"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select class="form-control" id="fCat">
+                <option value="starter">Starter</option>
+                <option value="basic">Basic</option>
+                <option value="plus">Plus</option>
+                <option value="pro">Pro</option>
+                <option value="elite">Elite</option>
+                <option value="premium">Premium</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Icon (FA class)</label
+              ><input class="form-control" id="fIcon" placeholder="fa-box" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Sort Order</label
+              ><input
+                class="form-control"
+                id="fSort"
+                type="number"
+                placeholder="1"
+              />
+            </div>
+            <div
+              class="form-group"
+              style="
+                grid-column: 1/-1;
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+              "
+            >
+              <input
+                type="checkbox"
+                id="fPopular"
+                style="width: 16px; height: 16px"
+              />
+              <label
+                for="fPopular"
+                class="form-label"
+                style="
+                  text-transform: none;
+                  letter-spacing: 0;
+                  font-size: 0.84rem;
+                "
+                >Mark as Popular</label
+              >
+            </div>
+          </div>
+          <div
+            id="planCalc"
+            style="
+              margin-top: 12px;
+              padding: 12px;
+              background: var(--bg);
+              border-radius: 8px;
+              font-size: 0.8rem;
+              color: var(--text-second);
+              display: none;
+            "
+          >
+            Total Return: <strong id="calcTotal">—</strong> &nbsp;|&nbsp; ROI:
+            <strong id="calcROI">—</strong>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-outline btn-sm"
+            onclick="closeModal('planModal')"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-primary btn-sm"
+            id="planSaveBtn"
+            onclick="savePlan()"
+          >
+            <i class="fa-solid fa-check"></i> Save Plan
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-layout">
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-text">IKEA</div>
+          <div class="logo-sub">India – Home & Living</div>
+          <div class="admin-badge">⚙ Admin</div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a href="../dashboard/index.html" class="nav-item"
+            ><i class="fa-solid fa-chart-pie"></i> Dashboard</a
+          >
+          <a href="../users/users.html" class="nav-item"
+            ><i class="fa-solid fa-users"></i> Users</a
+          >
+          <div class="nav-section-label">Transactions</div>
+          <a href="../deposits/deposits.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-down"></i> Deposits</a
+          >
+          <a href="../withdrawals/withdrawals.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-up"></i> Withdrawals</a
+          >
+          <a href="../transactions/transactions.html" class="nav-item"
+            ><i class="fa-solid fa-clock-rotate-left"></i> All Transactions</a
+          >
+          <div class="nav-section-label">Products</div>
+          <a href="../plans/plans.html" class="nav-item active"
+            ><i class="fa-solid fa-box"></i> Plans / Products</a
+          >
+          <a href="../gifts/gift-codes.html" class="nav-item"
+            ><i class="fa-solid fa-gift"></i> Gift Codes</a
+          >
+          <div class="nav-section-label">Reports</div>
+          <a href="../reports/reports.html" class="nav-item"
+            ><i class="fa-solid fa-chart-line"></i> Profit & Loss</a
+          >
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sidebar-logout" onclick="adminLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </div>
+        </div>
+      </aside>
+
+      <div class="main-area">
+        <header class="admin-header">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="sidebar-toggle" id="sidebarToggle">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <div>
+              <div class="header-title">Plans / Products</div>
+              <div class="header-sub" id="planCount">Loading…</div>
+            </div>
+          </div>
+          <div class="header-right">
+            <button
+              class="theme-toggle"
+              id="themeToggle"
+              onclick="toggleTheme()"
+            ></button>
+            <button class="btn btn-primary btn-sm" onclick="openAddPlan()">
+              <i class="fa-solid fa-plus"></i> Add Plan
+            </button>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <div class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Daily</th>
+                    <th>Validity</th>
+                    <th>Total Return</th>
+                    <th>ROI %</th>
+                    <th>Buyers</th>
+                    <th>Popular</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="plansBody">
+                  <tr>
+                    <td
+                      colspan="11"
+                      style="
+                        text-align: center;
+                        padding: 30px;
+                        color: var(--text-muted);
+                      "
+                    >
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../shared/admin.js"></script>
+    <script>
+      let plans = [],
+        editingId = null;
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        requireAdmin();
+        setTimeout(
+          () => document.getElementById("pageLoader")?.classList.add("hidden"),
+          900
+        );
+        await loadPlans();
+        ["fPrice", "fDaily", "fValidity"].forEach((id) =>
+          document.getElementById(id).addEventListener("input", calcPreview)
+        );
+      });
+
+      async function loadPlans() {
+        const res = await adminFetch("/products");
+        if (!res?.success) return showAdminToast("Failed", "error");
+        plans = res.products;
+        document.getElementById(
+          "planCount"
+        ).textContent = `${plans.length} plans`;
+        renderPlans();
+      }
+
+      function renderPlans() {
+        const tb = document.getElementById("plansBody");
+        if (!plans.length) {
+          tb.innerHTML = `<tr><td colspan="11"><div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-box-open"></i></div><div class="empty-title">No plans yet</div><button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="openAddPlan()">Add First Plan</button></div></td></tr>`;
+          return;
+        }
+        tb.innerHTML = plans
+          .map((p) => {
+            const total = p.daily * p.validity;
+            const roi = (((total - p.price) / p.price) * 100).toFixed(1);
+            return `<tr>
+      <td><div class="td-primary"><i class="fa-solid ${
+        p.icon || "fa-box"
+      }" style="margin-right:6px;color:var(--blue)"></i>${
+              p.name
+            }</div><div style="font-size:.68rem;color:var(--text-muted)">${
+              p.description || ""
+            }</div></td>
+      <td><span class="badge badge-blue">${p.category}</span></td>
+      <td class="td-primary">${fmtINR(p.price)}</td>
+      <td style="color:var(--success);font-weight:700">${fmtINR(p.daily)}</td>
+      <td>${p.validity} days</td>
+      <td class="td-primary">${fmtINR(total)}</td>
+      <td><span class="badge ${
+        parseFloat(roi) > 0 ? "badge-success" : "badge-danger"
+      }">${roi}%</span></td>
+      <td>${p.totalBuyers || 0}</td>
+      <td>${
+        p.isPopular
+          ? '<span class="badge badge-warning">⭐ Popular</span>'
+          : "—"
+      }</td>
+      <td><span class="badge ${
+        p.isActive ? "badge-success" : "badge-danger"
+      }">${p.isActive ? "Active" : "Inactive"}</span></td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-outline btn-xs" onclick="openEditPlan('${
+          p._id
+        }')"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn btn-danger btn-xs"  onclick="deactivatePlan('${
+          p._id
+        }','${p.name}')"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>`;
+          })
+          .join("");
+      }
+
+      function openAddPlan() {
+        editingId = null;
+        document.getElementById("planModalTitle").textContent = "Add New Plan";
+        [
+          "fName",
+          "fDesc",
+          "fPrice",
+          "fDaily",
+          "fValidity",
+          "fIcon",
+          "fSort",
+        ].forEach((id) => (document.getElementById(id).value = ""));
+        document.getElementById("fCat").value = "starter";
+        document.getElementById("fPopular").checked = false;
+        document.getElementById("planCalc").style.display = "none";
+        openModal("planModal");
+      }
+
+      function openEditPlan(id) {
+        const p = plans.find((x) => x._id === id);
+        if (!p) return;
+        editingId = id;
+        document.getElementById("planModalTitle").textContent = "Edit Plan";
+        document.getElementById("fName").value = p.name;
+        document.getElementById("fDesc").value = p.description || "";
+        document.getElementById("fPrice").value = p.price;
+        document.getElementById("fDaily").value = p.daily;
+        document.getElementById("fValidity").value = p.validity;
+        document.getElementById("fCat").value = p.category;
+        document.getElementById("fIcon").value = p.icon || "fa-box";
+        document.getElementById("fSort").value = p.sortOrder || 0;
+        document.getElementById("fPopular").checked = p.isPopular || false;
+        calcPreview();
+        openModal("planModal");
+      }
+
+      function calcPreview() {
+        const price = parseFloat(document.getElementById("fPrice").value) || 0;
+        const daily = parseFloat(document.getElementById("fDaily").value) || 0;
+        const validity =
+          parseFloat(document.getElementById("fValidity").value) || 0;
+        if (price && daily && validity) {
+          const total = daily * validity;
+          const roi = (((total - price) / price) * 100).toFixed(1);
+          document.getElementById("calcTotal").textContent = fmtINR(total);
+          document.getElementById("calcROI").textContent = roi + "%";
+          document.getElementById("planCalc").style.display = "block";
+        }
+      }
+
+      async function savePlan() {
+        const body = {
+          name: document.getElementById("fName").value.trim(),
+          description: document.getElementById("fDesc").value.trim(),
+          price: parseFloat(document.getElementById("fPrice").value),
+          daily: parseFloat(document.getElementById("fDaily").value),
+          validity: parseInt(document.getElementById("fValidity").value),
+          category: document.getElementById("fCat").value,
+          icon: document.getElementById("fIcon").value.trim() || "fa-box",
+          sortOrder: parseInt(document.getElementById("fSort").value) || 0,
+          isPopular: document.getElementById("fPopular").checked,
+        };
+        if (!body.name || !body.price || !body.daily || !body.validity)
+          return showAdminToast("Fill all required fields", "error");
+
+        const btn = document.getElementById("planSaveBtn");
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+        const url = editingId
+          ? `/products/admin/${editingId}`
+          : "/products/admin/create";
+        const method = editingId ? "PUT" : "POST";
+        const res = await adminFetch(url, {
+          method,
+          body: JSON.stringify(body),
+        });
+
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Plan';
+
+        if (res?.success) {
+          showAdminToast(
+            editingId ? "Plan updated ✓" : "Plan created ✓",
+            "success"
+          );
+          closeModal("planModal");
+          loadPlans();
+        } else showAdminToast(res?.message || "Failed", "error");
+      }
+
+      async function deactivatePlan(id, name) {
+        adminConfirm(
+          `Deactivate plan "${name}"? Users with active plans will not be affected.`,
+          async () => {
+            const res = await adminFetch(`/products/admin/${id}`, {
+              method: "DELETE",
+            });
+            if (res?.success) {
+              showAdminToast("Plan deactivated", "info");
+              loadPlans();
+            } else showAdminToast(res?.message || "Failed", "error");
+          }
+        );
+      }
+    </script>
+  </body>
+</html>

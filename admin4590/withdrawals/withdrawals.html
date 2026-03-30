@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Withdrawals | IKEA Admin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/admin.css" />
+  </head>
+  <body>
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+    <div class="toast" id="adminToast"></div>
+    <div class="modal-overlay" id="confirmModal">
+      <div class="modal-box" style="max-width: 360px">
+        <div class="modal-header"><div class="modal-title">Confirm</div></div>
+        <div class="modal-body">
+          <p
+            id="confirmMsg"
+            style="font-size: 0.88rem; color: var(--text-second)"
+          ></p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-outline btn-sm"
+            onclick="closeModal('confirmModal')"
+          >
+            Cancel
+          </button>
+          <button class="btn btn-danger btn-sm" id="confirmOkBtn">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-layout">
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-text">IKEA</div>
+          <div class="logo-sub">India – Home & Living</div>
+          <div class="admin-badge">⚙ Admin</div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a href="../dashboard/index.html" class="nav-item"
+            ><i class="fa-solid fa-chart-pie"></i> Dashboard</a
+          >
+          <a href="../users/users.html" class="nav-item"
+            ><i class="fa-solid fa-users"></i> Users</a
+          >
+          <div class="nav-section-label">Transactions</div>
+          <a href="../deposits/deposits.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-down"></i> Deposits</a
+          >
+          <a href="../withdrawals/withdrawals.html" class="nav-item active"
+            ><i class="fa-solid fa-circle-arrow-up"></i> Withdrawals</a
+          >
+          <a href="../transactions/transactions.html" class="nav-item"
+            ><i class="fa-solid fa-clock-rotate-left"></i> All Transactions</a
+          >
+          <div class="nav-section-label">Products</div>
+          <a href="../plans/plans.html" class="nav-item"
+            ><i class="fa-solid fa-box"></i> Plans / Products</a
+          >
+          <a href="../gifts/gift-codes.html" class="nav-item"
+            ><i class="fa-solid fa-gift"></i> Gift Codes</a
+          >
+          <div class="nav-section-label">Reports</div>
+          <a href="../reports/reports.html" class="nav-item"
+            ><i class="fa-solid fa-chart-line"></i> Profit & Loss</a
+          >
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sidebar-logout" onclick="adminLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </div>
+        </div>
+      </aside>
+
+      <div class="main-area">
+        <header class="admin-header">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="sidebar-toggle" id="sidebarToggle">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <div>
+              <div class="header-title">Withdrawal Approvals</div>
+              <div class="header-sub" id="witCount">Loading…</div>
+            </div>
+          </div>
+          <div class="header-right">
+            <button
+              class="theme-toggle"
+              id="themeToggle"
+              onclick="toggleTheme()"
+            ></button>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <div
+            class="stats-grid"
+            style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px"
+          >
+            <div class="stat-card sc-withdraw">
+              <div class="stat-icon si-yellow">
+                <i class="fa-solid fa-clock"></i>
+              </div>
+              <div>
+                <div class="stat-label">Pending</div>
+                <div class="stat-value" id="sumPending">—</div>
+              </div>
+            </div>
+            <div class="stat-card sc-withdraw">
+              <div class="stat-icon si-green">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div>
+                <div class="stat-label">Approved</div>
+                <div class="stat-value" id="sumApproved">—</div>
+              </div>
+            </div>
+            <div class="stat-card sc-withdraw">
+              <div class="stat-icon si-red">
+                <i class="fa-solid fa-xmark"></i>
+              </div>
+              <div>
+                <div class="stat-label">Rejected</div>
+                <div class="stat-value" id="sumRejected">—</div>
+              </div>
+            </div>
+            <div class="stat-card sc-withdraw">
+              <div class="stat-icon si-blue">
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+              </div>
+              <div>
+                <div class="stat-label">Total Net Paid</div>
+                <div class="stat-value" id="sumNetPaid">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="filters-row">
+              <div class="search-wrap" style="max-width: 260px">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                  type="text"
+                  class="search-input"
+                  id="searchInput"
+                  placeholder="Search UID, ref…"
+                  oninput="renderTable()"
+                />
+              </div>
+              <select
+                class="form-control"
+                style="width: 140px"
+                id="statusFilter"
+                onchange="loadWithdrawals()"
+              >
+                <option value="pending">Pending</option>
+                <option value="success">Approved</option>
+                <option value="failed">Rejected</option>
+                <option value="all">All</option>
+              </select>
+              <button
+                class="btn btn-outline btn-sm"
+                onclick="loadWithdrawals()"
+              >
+                <i class="fa-solid fa-rotate-right"></i> Refresh
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Ref</th>
+                    <th>User</th>
+                    <th>Amount</th>
+                    <th>Fee (10%)</th>
+                    <th>Net Paid</th>
+                    <th>Bank</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="withdrawBody">
+                  <tr>
+                    <td
+                      colspan="9"
+                      style="
+                        text-align: center;
+                        padding: 30px;
+                        color: var(--text-muted);
+                      "
+                    >
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              <span id="pageInfo">—</span>
+              <div class="page-btns">
+                <button class="page-btn" id="prevBtn" onclick="changePage(-1)">
+                  <i class="fa-solid fa-chevron-left"></i></button
+                ><button class="page-btn" id="nextBtn" onclick="changePage(1)">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../shared/admin.js"></script>
+    <script>
+      let allWit = [],
+        currentPage = 1,
+        perPage = 20;
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        requireAdmin();
+        setTimeout(
+          () => document.getElementById("pageLoader")?.classList.add("hidden"),
+          900
+        );
+        await loadWithdrawals();
+      });
+
+      async function loadWithdrawals() {
+        const status = document.getElementById("statusFilter").value;
+        const url =
+          status === "all"
+            ? "/admin/transactions?type=withdraw&limit=200"
+            : `/admin/transactions?type=withdraw&status=${status}&limit=200`;
+        const res = await adminFetch(url);
+        if (!res?.success) return showAdminToast("Failed", "error");
+        allWit = res.transactions;
+
+        document.getElementById("sumPending").textContent = allWit.filter(
+          (t) => t.status === "pending"
+        ).length;
+        document.getElementById("sumApproved").textContent = allWit.filter(
+          (t) => t.status === "success"
+        ).length;
+        document.getElementById("sumRejected").textContent = allWit.filter(
+          (t) => t.status === "failed"
+        ).length;
+        document.getElementById("sumNetPaid").textContent = fmtINR(
+          allWit
+            .filter((t) => t.status === "success")
+            .reduce((s, t) => s + (t.netAmount || 0), 0)
+        );
+        document.getElementById(
+          "witCount"
+        ).textContent = `${allWit.length} records`;
+        currentPage = 1;
+        renderTable();
+      }
+
+      function renderTable() {
+        const q = document.getElementById("searchInput").value.toLowerCase();
+        const filtered = allWit.filter(
+          (t) =>
+            !q ||
+            t.ref?.toLowerCase().includes(q) ||
+            t.user?.uid?.toLowerCase().includes(q)
+        );
+        const start = (currentPage - 1) * perPage;
+        const page = filtered.slice(start, start + perPage);
+        document.getElementById("pageInfo").textContent = `${
+          start + 1
+        }–${Math.min(start + perPage, filtered.length)} of ${filtered.length}`;
+        document.getElementById("prevBtn").disabled = currentPage === 1;
+        document.getElementById("nextBtn").disabled =
+          start + perPage >= filtered.length;
+
+        const tb = document.getElementById("withdrawBody");
+        if (!page.length) {
+          tb.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-inbox"></i></div><div class="empty-title">No withdrawals found</div></div></td></tr>`;
+          return;
+        }
+
+        tb.innerHTML = page
+          .map((t) => {
+            const bank = t.meta?.bank || {};
+            const fee = t.fee || parseFloat(((t.amount || 0) * 0.1).toFixed(2));
+            const net =
+              t.netAmount || parseFloat(((t.amount || 0) - fee).toFixed(2));
+            return `<tr>
+      <td class="td-mono" style="font-size:.72rem">${t.ref || "—"}</td>
+      <td><div class="td-primary">${
+        t.user?.name || "—"
+      }</div><div style="font-size:.68rem;color:var(--text-muted)">${
+              t.user?.uid || "—"
+            }</div></td>
+      <td class="td-primary">${fmtINR(t.amount)}</td>
+      <td class="badge badge-danger" style="display:inline-flex">−${fmtINR(
+        fee
+      )}</td>
+      <td class="badge badge-success" style="display:inline-flex">${fmtINR(
+        net
+      )}</td>
+      <td><div style="font-size:.78rem">${
+        bank.name || "—"
+      }</div><div style="font-size:.68rem;color:var(--text-muted)">XXXX${
+              bank.accLast4 || "????"
+            } · ${bank.ifsc || ""}</div></td>
+      <td>${fmtDateTime(t.createdAt)}</td>
+      <td><span class="badge ${
+        t.status === "success"
+          ? "badge-success"
+          : t.status === "pending"
+          ? "badge-warning"
+          : "badge-danger"
+      }">${t.status}</span></td>
+      <td style="display:flex;gap:6px">
+        ${
+          t.status === "pending"
+            ? `
+          <button class="btn btn-success btn-xs" onclick="approve('${t._id}')"><i class="fa-solid fa-check"></i> Pay</button>
+          <button class="btn btn-danger btn-xs"  onclick="reject('${t._id}')"><i class="fa-solid fa-xmark"></i> Reject</button>
+        `
+            : '<span style="font-size:.72rem;color:var(--text-muted)">Done</span>'
+        }
+      </td>
+    </tr>`;
+          })
+          .join("");
+      }
+
+      function changePage(d) {
+        currentPage += d;
+        renderTable();
+      }
+
+      async function approve(id) {
+        adminConfirm("Mark this withdrawal as paid?", async () => {
+          const res = await adminFetch(`/admin/transactions/${id}/approve`, {
+            method: "PUT",
+          });
+          if (res?.success) {
+            showAdminToast("Withdrawal approved ✓", "success");
+            loadWithdrawals();
+          } else showAdminToast(res?.message || "Failed", "error");
+        });
+      }
+      async function reject(id) {
+        adminConfirm(
+          "Reject this withdrawal? Amount will be refunded to user wallet.",
+          async () => {
+            const res = await adminFetch(`/admin/transactions/${id}/reject`, {
+              method: "PUT",
+            });
+            if (res?.success) {
+              showAdminToast("Rejected & refunded", "info");
+              loadWithdrawals();
+            } else showAdminToast(res?.message || "Failed", "error");
+          }
+        );
+      }
+    </script>
+  </body>
+</html>

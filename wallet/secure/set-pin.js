@@ -77,4 +77,4 @@ async function setPin() {
     }, 400);
 }
 
-function goToWithdraw() { window.location.href = '../wallet/withdraw.html'; }
+function goToWithdraw() { window.location.href = '/wallet/withdrawal/index.html'; }

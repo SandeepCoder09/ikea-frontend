@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gift Codes | IKEA Admin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../shared/admin.css" />
+  </head>
+  <body>
+    <div id="pageLoader">
+      <div class="loader-logo">IKEA</div>
+      <div class="loader-bar"></div>
+    </div>
+    <div class="toast" id="adminToast"></div>
+    <div class="modal-overlay" id="confirmModal">
+      <div class="modal-box" style="max-width: 360px">
+        <div class="modal-header"><div class="modal-title">Confirm</div></div>
+        <div class="modal-body">
+          <p
+            id="confirmMsg"
+            style="font-size: 0.88rem; color: var(--text-second)"
+          ></p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-outline btn-sm"
+            onclick="closeModal('confirmModal')"
+          >
+            Cancel</button
+          ><button class="btn btn-danger btn-sm" id="confirmOkBtn">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD GIFT CODE MODAL -->
+    <div class="modal-overlay" id="giftModal">
+      <div class="modal-box" style="max-width: 440px">
+        <div class="modal-header">
+          <div class="modal-title">Create Gift Code</div>
+          <button class="modal-close" onclick="closeModal('giftModal')">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <div class="form-group">
+              <label class="form-label">Code</label>
+              <div style="display: flex; gap: 8px">
+                <input
+                  class="form-control"
+                  id="gCode"
+                  placeholder="e.g. IKEA2026"
+                  oninput="this.value=this.value.toUpperCase()"
+                />
+                <button class="btn btn-outline btn-sm" onclick="genCode()">
+                  <i class="fa-solid fa-dice"></i>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Amount (₹)</label
+              ><input
+                class="form-control"
+                id="gAmount"
+                type="number"
+                placeholder="500"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Description</label
+              ><input
+                class="form-control"
+                id="gDesc"
+                placeholder="e.g. Welcome Gift"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Max Uses</label
+              ><input
+                class="form-control"
+                id="gMaxUses"
+                type="number"
+                value="1"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Expires At (optional)</label
+              ><input class="form-control" id="gExpiry" type="date" />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-outline btn-sm"
+            onclick="closeModal('giftModal')"
+          >
+            Cancel
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="createGiftCode()">
+            <i class="fa-solid fa-gift"></i> Create Code
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-layout">
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-text">IKEA</div>
+          <div class="logo-sub">India – Home & Living</div>
+          <div class="admin-badge">⚙ Admin</div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <a href="../dashboard/index.html" class="nav-item"
+            ><i class="fa-solid fa-chart-pie"></i> Dashboard</a
+          >
+          <a href="../users/users.html" class="nav-item"
+            ><i class="fa-solid fa-users"></i> Users</a
+          >
+          <div class="nav-section-label">Transactions</div>
+          <a href="../deposits/deposits.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-down"></i> Deposits</a
+          >
+          <a href="../withdrawals/withdrawals.html" class="nav-item"
+            ><i class="fa-solid fa-circle-arrow-up"></i> Withdrawals</a
+          >
+          <a href="../transactions/transactions.html" class="nav-item"
+            ><i class="fa-solid fa-clock-rotate-left"></i> All Transactions</a
+          >
+          <div class="nav-section-label">Products</div>
+          <a href="../plans/plans.html" class="nav-item"
+            ><i class="fa-solid fa-box"></i> Plans / Products</a
+          >
+          <a href="../gifts/gift-codes.html" class="nav-item active"
+            ><i class="fa-solid fa-gift"></i> Gift Codes</a
+          >
+          <div class="nav-section-label">Reports</div>
+          <a href="../reports/reports.html" class="nav-item"
+            ><i class="fa-solid fa-chart-line"></i> Profit & Loss</a
+          >
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sidebar-logout" onclick="adminLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </div>
+        </div>
+      </aside>
+
+      <div class="main-area">
+        <header class="admin-header">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <button class="sidebar-toggle" id="sidebarToggle">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <div>
+              <div class="header-title">Gift Code Management</div>
+              <div class="header-sub" id="gcCount">Loading…</div>
+            </div>
+          </div>
+          <div class="header-right">
+            <button
+              class="theme-toggle"
+              id="themeToggle"
+              onclick="toggleTheme()"
+            ></button>
+            <button
+              class="btn btn-primary btn-sm"
+              onclick="openModal('giftModal')"
+            >
+              <i class="fa-solid fa-plus"></i> New Code
+            </button>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <!-- Stats -->
+          <div
+            class="stats-grid"
+            style="grid-template-columns: repeat(3, 1fr); margin-bottom: 20px"
+          >
+            <div class="stat-card">
+              <div class="stat-icon si-yellow">
+                <i class="fa-solid fa-gift"></i>
+              </div>
+              <div>
+                <div class="stat-label">Total Codes</div>
+                <div class="stat-value" id="sTotalCodes">—</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon si-green">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div>
+                <div class="stat-label">Active Codes</div>
+                <div class="stat-value" id="sActiveCodes">—</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon si-blue">
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+              </div>
+              <div>
+                <div class="stat-label">Total Gifted</div>
+                <div class="stat-value" id="sTotalGifted">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th>Uses</th>
+                    <th>Max Uses</th>
+                    <th>Expires</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="giftBody">
+                  <tr>
+                    <td
+                      colspan="9"
+                      style="
+                        text-align: center;
+                        padding: 30px;
+                        color: var(--text-muted);
+                      "
+                    >
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../shared/admin.js"></script>
+    <script>
+      let giftCodes = [];
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        requireAdmin();
+        setTimeout(
+          () => document.getElementById("pageLoader")?.classList.add("hidden"),
+          900
+        );
+        await loadGiftCodes();
+      });
+
+      async function loadGiftCodes() {
+        const res = await adminFetch("/admin/gift-codes");
+        if (!res?.success) return showAdminToast("Failed", "error");
+        giftCodes = res.gifts;
+        const active = giftCodes.filter((g) => g.isActive).length;
+        const gifted = giftCodes.reduce(
+          (s, g) => s + g.amount * (g.usedCount || 0),
+          0
+        );
+        document.getElementById("sTotalCodes").textContent = giftCodes.length;
+        document.getElementById("sActiveCodes").textContent = active;
+        document.getElementById("sTotalGifted").textContent = fmtINR(gifted);
+        document.getElementById(
+          "gcCount"
+        ).textContent = `${giftCodes.length} codes`;
+        renderGift();
+      }
+
+      function renderGift() {
+        const tb = document.getElementById("giftBody");
+        if (!giftCodes.length) {
+          tb.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-gift"></i></div><div class="empty-title">No gift codes yet</div><button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="openModal('giftModal')">Create First Code</button></div></td></tr>`;
+          return;
+        }
+        tb.innerHTML = giftCodes
+          .map(
+            (g) => `<tr>
+    <td><span style="font-family:monospace;font-size:.88rem;font-weight:800;background:var(--yellow-soft);color:var(--blue);padding:3px 10px;border-radius:6px">${
+      g.code
+    }</span></td>
+    <td class="td-primary">${fmtINR(g.amount)}</td>
+    <td>${g.description || "—"}</td>
+    <td><span class="badge ${g.usedCount > 0 ? "badge-blue" : "badge-grey"}">${
+              g.usedCount || 0
+            } used</span></td>
+    <td>${g.maxUses}</td>
+    <td>${
+      g.expiresAt
+        ? fmtDate(g.expiresAt)
+        : '<span style="color:var(--text-muted)">Never</span>'
+    }</td>
+    <td><span class="badge ${g.isActive ? "badge-success" : "badge-danger"}">${
+              g.isActive ? "Active" : "Inactive"
+            }</span></td>
+    <td>${fmtDate(g.createdAt)}</td>
+    <td>
+      <button class="btn btn-xs" onclick="copyCode('${
+        g.code
+      }')" style="background:var(--bg);border:1px solid var(--card-border)"><i class="fa-solid fa-copy"></i></button>
+      ${
+        g.isActive
+          ? `<button class="btn btn-danger btn-xs" onclick="deactivateCode('${g._id}','${g.code}')"><i class="fa-solid fa-ban"></i></button>`
+          : ""
+      }
+    </td>
+  </tr>`
+          )
+          .join("");
+      }
+
+      function genCode() {
+        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        let code = "IKEA";
+        for (let i = 0; i < 6; i++)
+          code += chars[Math.floor(Math.random() * chars.length)];
+        document.getElementById("gCode").value = code;
+      }
+
+      async function createGiftCode() {
+        const code = document
+          .getElementById("gCode")
+          .value.trim()
+          .toUpperCase();
+        const amount = parseFloat(document.getElementById("gAmount").value);
+        const desc = document.getElementById("gDesc").value.trim();
+        const maxUses =
+          parseInt(document.getElementById("gMaxUses").value) || 1;
+        const expiry = document.getElementById("gExpiry").value;
+
+        if (!code || code.length < 4)
+          return showAdminToast("Enter a valid code (min 4 chars)", "error");
+        if (!amount || amount < 1)
+          return showAdminToast("Enter a valid amount", "error");
+
+        const res = await adminFetch("/admin/gift-codes", {
+          method: "POST",
+          body: JSON.stringify({
+            code,
+            amount,
+            description: desc,
+            maxUses,
+            expiresAt: expiry || null,
+          }),
+        });
+        if (res?.success) {
+          showAdminToast("Gift code created ✓", "success");
+          closeModal("giftModal");
+          loadGiftCodes();
+        } else showAdminToast(res?.message || "Failed", "error");
+      }
+
+      async function deactivateCode(id, code) {
+        adminConfirm(`Deactivate gift code "${code}"?`, async () => {
+          const res = await adminFetch(`/admin/gift-codes/${id}`, {
+            method: "DELETE",
+          });
+          if (res?.success) {
+            showAdminToast("Code deactivated", "info");
+            loadGiftCodes();
+          } else showAdminToast(res?.message || "Failed", "error");
+        });
+      }
+
+      function copyCode(code) {
+        navigator.clipboard
+          ?.writeText(code)
+          .then(() => showAdminToast(`Copied: ${code}`, "info"));
+      }
+    </script>
+  </body>
+</html>

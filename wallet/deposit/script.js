@@ -1,109 +1,249 @@
-// wallet/recharge.js  — Deposit page
+// wallet/deposit/script.js — FINAL SECURE VERSION
+
 document.addEventListener('DOMContentLoaded', async () => {
     requireAuth();
-    setTimeout(() => document.getElementById('pageLoader')?.classList.add('hidden'), 1200);
 
-    // Load live balance
+    setTimeout(() => {
+        document.getElementById('pageLoader')?.classList.add('hidden');
+    }, 1200);
+
     const res = await apiFetch('/wallet/balance');
     if (res?.success) {
+        walletBalance = Number(res.balance || 0);
+
         document.getElementById('currentBalance').textContent =
-            Number(res.balance).toLocaleString('en-IN', { minimumFractionDigits: 2 });
-        updateBalanceAfter(0, res.balance);
+            walletBalance.toLocaleString('en-IN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+        updateBalanceAfter(0, walletBalance);
     }
+
+    updateReferenceLabel();
+    renderBoxes();
+    checkSubmitReady();
 });
 
+/* ===============================
+   STATE
+================================ */
 let walletBalance = 0;
 let depositAmount = 0;
 let depositMethod = 'upi';
+let currentTxn = null;
 
-function updateBalanceAfter(amt, bal) {
-    walletBalance = bal || walletBalance;
-    const after = walletBalance + (parseFloat(amt) || 0);
-    const el = document.getElementById('balanceAfter');
-    if (el) el.textContent = formatINR(after);
+/* ===============================
+   HELPERS
+================================ */
+function getQR(data) {
+    return `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(data)}`;
 }
 
+function updateBalanceAfter(amt, bal) {
+    walletBalance = typeof bal === 'number' ? bal : walletBalance;
+    const after = walletBalance + (parseFloat(amt) || 0);
+    document.getElementById('balanceAfter').textContent = formatINR(after);
+}
+
+/* ===============================
+   AMOUNT
+================================ */
 function setQuickAmount(amount, el) {
     document.querySelectorAll('.qa-btn').forEach(b => b.classList.remove('active'));
     el.classList.add('active');
+
     depositAmount = amount;
-    const input = document.getElementById('amountInput');
-    if (input) { input.value = amount; input.classList.remove('invalid'); }
-    updateBalanceAfter(amount);
-    checkSubmitReady();
+    document.getElementById('amountInput').value = amount;
+
+    resetSession();
 }
 
 function onAmountInput(input) {
     input.value = input.value.replace(/[^0-9]/g, '');
     depositAmount = parseInt(input.value) || 0;
-    input.classList.remove('invalid');
+
     document.querySelectorAll('.qa-btn').forEach(b => b.classList.remove('active'));
+
+    resetSession();
+}
+
+function resetSession() {
+    currentTxn = null;
     updateBalanceAfter(depositAmount);
+    renderBoxes();
     checkSubmitReady();
 }
 
+/* ===============================
+   METHOD
+================================ */
 function selectMethod(method, el) {
     depositMethod = method;
+
     document.querySelectorAll('.pm-option').forEach(o => o.classList.remove('active'));
     el.classList.add('active');
-    ['boxUpi', 'boxNeft', 'boxCrypto'].forEach(id => document.getElementById(id)?.classList.remove('show'));
-    const boxMap = { upi: 'boxUpi', neft: 'boxNeft', crypto: 'boxCrypto' };
-    document.getElementById(boxMap[method])?.classList.add('show');
+
+    ['boxUpi', 'boxCrypto'].forEach(id =>
+        document.getElementById(id)?.classList.remove('show')
+    );
+
+    document.getElementById(method === 'upi' ? 'boxUpi' : 'boxCrypto').classList.add('show');
+
+    updateReferenceLabel();
+    resetSession();
+}
+
+/* ===============================
+   LABEL
+================================ */
+function updateReferenceLabel() {
+    const label = document.getElementById('utrLabel');
+    const input = document.getElementById('utrInput');
+
+    if (depositMethod === 'crypto') {
+        label.textContent = 'Transaction Hash';
+        input.placeholder = 'Enter USDT tx hash';
+    } else {
+        label.textContent = 'UTR Number';
+        input.placeholder = 'Enter UPI reference';
+    }
+}
+
+/* ===============================
+   RENDER
+================================ */
+function renderBoxes() {
+    renderUPI();
+    renderCrypto();
+}
+
+function renderUPI() {
+    const box = document.getElementById('boxUpi');
+
+    if (!currentTxn || currentTxn.payment.type !== 'upi') {
+        box.innerHTML = `<p>Create deposit first</p>`;
+        return;
+    }
+
+    const p = currentTxn.payment;
+
+    box.innerHTML = `
+        <p><b>UPI ID:</b> ${p.upiId}</p>
+        <img src="${getQR(p.qr)}" width="180"/>
+        <p>Amount: ${formatINR(currentTxn.amount)}</p>
+        <p>Ref: ${currentTxn.ref}</p>
+    `;
+}
+
+function renderCrypto() {
+    const box = document.getElementById('boxCrypto');
+
+    if (!currentTxn || currentTxn.payment.type !== 'crypto') {
+        box.innerHTML = `<p>Create deposit first</p>`;
+        return;
+    }
+
+    const p = currentTxn.payment;
+
+    box.innerHTML = `
+        <p><b>Address:</b> ${p.address}</p>
+        <img src="${getQR(p.address)}" width="180"/>
+        <p>Network: ${p.network}</p>
+        <p>Ref: ${currentTxn.ref}</p>
+    `;
+}
+
+/* ===============================
+   CREATE SESSION
+================================ */
+async function createDepositSession() {
+    if (depositAmount < 100 || depositAmount > 50000) {
+        showToast("Invalid amount", "fa-triangle-exclamation");
+        return;
+    }
+
+    const res = await apiFetch('/wallet/create-deposit', {
+        method: 'POST',
+        body: JSON.stringify({
+            amount: depositAmount,
+            method: depositMethod
+        })
+    });
+
+    if (!res.success) {
+        showToast(res.message, "fa-xmark");
+        return;
+    }
+
+    currentTxn = res;
+    depositAmount = res.amount;
+
+    document.getElementById('amountInput').value = depositAmount;
+
+    updateBalanceAfter(depositAmount);
+    renderBoxes();
+    checkSubmitReady();
+
+    showToast("Payment generated", "fa-check");
+}
+
+/* ===============================
+   SUBMIT
+================================ */
+async function submitDeposit() {
+    const ref = document.getElementById('utrInput').value.trim();
+
+    if (!currentTxn) {
+        showToast("Generate payment first", "fa-triangle-exclamation");
+        return;
+    }
+
+    if (ref.length < 6) {
+        showToast("Invalid reference", "fa-triangle-exclamation");
+        return;
+    }
+
+    const res = await apiFetch('/wallet/submit-proof', {
+        method: 'POST',
+        body: JSON.stringify({
+            transactionId: currentTxn.transactionId,
+            reference: ref
+        })
+    });
+
+    if (!res.success) {
+        showToast(res.message, "fa-xmark");
+        return;
+    }
+
+    showToast("Submitted for approval", "fa-clock");
+
+    document.getElementById('amountInput').value = '';
+    document.getElementById('utrInput').value = '';
+
+    currentTxn = null;
+    depositAmount = 0;
+
+    renderBoxes();
     checkSubmitReady();
 }
 
+/* ===============================
+   VALIDATION
+================================ */
 function checkSubmitReady() {
-    const amt = depositAmount;
-    const utr = document.getElementById('utrInput')?.value.trim() || '';
-    const btn = document.getElementById('submitBtn');
-    if (btn) btn.disabled = !(amt >= 100 && amt <= 50000 && utr.length >= 6);
+    const ref = document.getElementById('utrInput')?.value.trim() || '';
+    document.getElementById('submitBtn').disabled =
+        !currentTxn || ref.length < 6;
 }
 
 document.getElementById('utrInput')?.addEventListener('input', checkSubmitReady);
 
-async function submitDeposit() {
-    const amt = depositAmount;
-    const utr = document.getElementById('utrInput')?.value.trim();
-
-    if (amt < 100) { document.getElementById('amountInput').classList.add('invalid'); showToast('Min deposit ₹100', 'fa-triangle-exclamation'); return; }
-    if (amt > 50000) { document.getElementById('amountInput').classList.add('invalid'); showToast('Max deposit ₹50,000', 'fa-triangle-exclamation'); return; }
-    if (!utr || utr.length < 6) { showToast('Enter a valid reference number', 'fa-triangle-exclamation'); return; }
-
-    document.getElementById('processingScreen').classList.add('show');
-
-    const res = await apiFetch('/wallet/deposit', {
-        method: 'POST',
-        body: JSON.stringify({ amount: amt, method: depositMethod, utr }),
-    });
-
-    document.getElementById('processingScreen').classList.remove('show');
-
-    if (!res || !res.success) { showModal('error', 'Failed', res?.message || 'Deposit failed'); return; }
-
-    showModal('pending', 'Request Submitted! ⏳',
-        `Deposit of <strong>${formatINR(amt)}</strong> via <strong>${depositMethod.toUpperCase()}</strong> submitted.<br>
-       Reference: <strong>${utr}</strong><br>
-       Will be credited within 30 minutes after verification.`);
-
-    document.getElementById('amountInput').value = '';
-    document.getElementById('utrInput').value = '';
-    document.querySelectorAll('.qa-btn').forEach(b => b.classList.remove('active'));
-    depositAmount = 0;
-    updateBalanceAfter(0);
-    checkSubmitReady();
-}
-
+/* ===============================
+   UTIL
+================================ */
 function copyText(text) {
-    navigator.clipboard?.writeText(text).then(() => showToast('Copied!', 'fa-clipboard'));
+    navigator.clipboard.writeText(text);
+    showToast("Copied!", "fa-clipboard");
 }
-
-function showModal(type, title, msg) {
-    const icons = { success: 'fa-check', pending: 'fa-clock', error: 'fa-xmark' };
-    document.getElementById('modalBox').innerHTML = `
-      <div class="modal-icon ${type}"><i class="fa-solid ${icons[type]}"></i></div>
-      <div class="modal-title">${title}</div>
-      <div class="modal-msg">${msg}</div>
-      <button class="modal-ok" onclick="closeModal()">OK, Got it</button>`;
-    document.getElementById('modal').classList.add('show');
-}
-function closeModal() { document.getElementById('modal').classList.remove('show'); }

@@ -39,6 +39,7 @@
       }
     ],
     "disown-opener": "off",
-    "css-prefix-order": "off"
+    "css-prefix-order": "off",
+    "meta-viewport": "off"
   }
 }

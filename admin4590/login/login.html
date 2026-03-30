@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login | IKEA India</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../login/login.css" />
+  </head>
+  <body>
+    <button class="theme-float" id="themeToggle" onclick="toggleThemeLogin()">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+
+    <div class="login-wrap">
+      <!-- LEFT -->
+      <div class="login-left">
+        <div>
+          <div class="ll-logo">IKEA</div>
+          <div class="ll-sub">India – Home & Living</div>
+          <div class="ll-badge">Admin Panel</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 20px">
+          <div class="ll-title">
+            Full Control<br /><em>Dashboard</em><br />at Your Fingertips
+          </div>
+          <div class="ll-features">
+            <div class="ll-feat">
+              <i class="fa-solid fa-chart-line"></i> Real-time stats & analytics
+            </div>
+            <div class="ll-feat">
+              <i class="fa-solid fa-users"></i> Complete user management
+            </div>
+            <div class="ll-feat">
+              <i class="fa-solid fa-money-bill-transfer"></i> Approve deposits &
+              withdrawals
+            </div>
+            <div class="ll-feat">
+              <i class="fa-solid fa-box"></i> Manage investment plans
+            </div>
+            <div class="ll-feat">
+              <i class="fa-solid fa-gift"></i> Gift code generation
+            </div>
+          </div>
+        </div>
+        <div class="ll-feat">
+          <i class="fa-solid fa-shield-halved"></i> Secure admin access only
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="login-right">
+        <div class="lr-header">
+          <div class="lr-title">Admin Login 🔐</div>
+          <div class="lr-sub">Enter your admin credentials to continue</div>
+        </div>
+
+        <div id="errorMsg" class="error-msg">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span id="errorText">Invalid credentials</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <div class="form-group">
+            <div class="form-label">
+              <i class="fa-solid fa-mobile-screen-button"></i> Mobile Number
+            </div>
+            <div class="input-wrap">
+              <span class="input-prefix">+91</span>
+              <input
+                type="tel"
+                id="mobile"
+                placeholder="Admin mobile number"
+                maxlength="10"
+                inputmode="numeric"
+                oninput="this.value=this.value.replace(/\D/g,'')"
+                onkeydown="if(event.key==='Enter')handleLogin()"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">
+              <i class="fa-solid fa-lock"></i> Password
+            </div>
+            <div class="input-wrap">
+              <input
+                type="password"
+                id="password"
+                placeholder="Admin password"
+                onkeydown="if(event.key==='Enter')handleLogin()"
+              />
+              <button class="eye-btn" onclick="togglePw(this)">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button class="login-btn" id="loginBtn" onclick="handleLogin()">
+          <i class="fa-solid fa-right-to-bracket"></i> Sign In to Admin
+        </button>
+
+        <div class="lr-footer">
+          This area is restricted to authorised administrators only.<br />
+          <a href="../../home/index.html">← Back to site</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const hostname = window.location.hostname;
+
+      const isLocal =
+        hostname === "localhost" ||
+        hostname === "127.0.0.1" ||
+        hostname.startsWith("10.") ||
+        hostname.startsWith("172.") ||
+        hostname.startsWith("192.");
+
+      const ADMIN_LOGIN_API = isLocal
+        ? `http://${hostname}:5001/api/auth/login`
+        : "https://ikea-backend-3k8y.onrender.com/api/auth/login";
+
+      (function () {
+        const t = localStorage.getItem("ikea_admin_theme") || "light";
+        document.documentElement.setAttribute("data-theme", t);
+        document.getElementById("themeToggle").innerHTML =
+          t === "dark"
+            ? '<i class="fa-solid fa-sun"></i>'
+            : '<i class="fa-solid fa-moon"></i>';
+      })();
+
+      function toggleThemeLogin() {
+        const cur =
+          document.documentElement.getAttribute("data-theme") || "light";
+        const next = cur === "light" ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", next);
+        localStorage.setItem("ikea_admin_theme", next);
+        document.getElementById("themeToggle").innerHTML =
+          next === "dark"
+            ? '<i class="fa-solid fa-sun"></i>'
+            : '<i class="fa-solid fa-moon"></i>';
+      }
+
+      function togglePw(btn) {
+        const inp = document.getElementById("password");
+        inp.type = inp.type === "password" ? "text" : "password";
+        btn.querySelector("i").className =
+          inp.type === "password" ? "fa-solid fa-eye" : "fa-solid fa-eye-slash";
+      }
+
+      async function handleLogin() {
+        const mobile = document.getElementById("mobile").value.trim();
+        const password = document.getElementById("password").value;
+        const btn = document.getElementById("loginBtn");
+        const errBox = document.getElementById("errorMsg");
+        const errTxt = document.getElementById("errorText");
+
+        errBox.classList.remove("show");
+
+        if (!mobile || mobile.length < 10) {
+          showErr("Enter valid 10-digit mobile");
+          return;
+        }
+
+        if (!password) {
+          showErr("Enter your password");
+          return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML =
+          '<i class="fa-solid fa-spinner fa-spin"></i> Signing in…';
+
+        try {
+          const res = await fetch(ADMIN_LOGIN_API, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mobile: "+91" + mobile, password }),
+          });
+
+          const data = await res.json();
+
+          if (!data.success) {
+            showErr(data.message || "Login failed");
+            return;
+          }
+
+          if (!data.user?.isAdmin) {
+            showErr("Access denied. Admin privileges required.");
+            return;
+          }
+
+          localStorage.setItem("ikea_admin_token", data.token);
+          localStorage.setItem("ikea_admin_user", JSON.stringify(data.user));
+          window.location.href = "../dashboard/index.html";
+        } catch (err) {
+          showErr("Network error. Check your connection.");
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML =
+            '<i class="fa-solid fa-right-to-bracket"></i> Sign In to Admin';
+        }
+      }
+
+      function showErr(msg) {
+        document.getElementById("errorText").textContent = msg;
+        document.getElementById("errorMsg").classList.add("show");
+      }
+
+      if (localStorage.getItem("ikea_admin_token")) {
+        const u = JSON.parse(localStorage.getItem("ikea_admin_user") || "{}");
+        if (u.isAdmin) window.location.href = "../dashboard/index.html";
+      }
+    </script>
+  </body>
+</html>
